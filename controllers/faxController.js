@@ -34,14 +34,15 @@ exports.searchByDatesAdmin=catchAsync(async(req,res,next)=>{
 
     const data = await Fax.find({
        
-        invoiceDate: {
+        date: {
             $gte: startDate,
             $lte: endDate
         }
     });
-    if (!data) return next(new AppError(`No data found`, 404))
+    if (!data||data.length===0) return next(new AppError(`No data found`, 404))
     res.status(200).json({
         status: true,
+        length:data.length,
         data
 
     })
@@ -88,12 +89,12 @@ exports.searchByDatesUser=catchAsync(async(req,res,next)=>{
 
     const data = await Fax.find({
         user:req.user.id,
-        invoiceDate: {
+        date: {
             $gte: startDate,
             $lte: endDate
         }
     });
-    if (!data) return next(new AppError(`No data found`, 404))
+    if (!data||data.length===0) return next(new AppError(`No data found`, 404))
     res.status(200).json({
         status: true,
         data
