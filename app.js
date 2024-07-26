@@ -10,10 +10,10 @@ const xss = require("xss-clean"); // security
 const cors = require("cors");
 const AppError = require("../Arshief/utils/appError");
 const globalErrorHandler = require("../Arshief/controllers/errorController");
+const userRouter = require("../Arshief/routes/userRouter");
 const destinationRoutes = require("../Arshief/routes/destinationRouter");
 const subjectRoutes = require("../Arshief/routes/subjectRouter");
 const aboutRoutes = require("../Arshief/routes/aboutRouter");
-const userRouter = require(`./routes/userRouter`);
 
 const app = express();
 
