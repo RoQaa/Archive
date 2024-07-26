@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const aboutSchema = new mongoose.Schema({
+const subjectSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -8,19 +8,19 @@ const aboutSchema = new mongoose.Schema({
     trim: true,
   },
 
-  aboutSerialNumber: {
+  subjectSerialNumber: {
     type: String,
     required: true,
     trim: true,
   },
 
-  subject: {
+  destination: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Subject",
+    ref: "Destination",
     required: true,
   },
 });
 
-const About = mongoose.model("About", aboutSchema);
+const Subject = mongoose.model("Subject", subjectSchema);
 
-module.exports = About;
+module.exports = Subject;
