@@ -2,7 +2,8 @@ const generateRandomCode = require("../utils/generateRandomCode");
 const Destination = require("../models/destinationNameModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
-
+const Subject = require("../models/subjectModel");
+const About =require('../models/aboutModel')
 exports.createDestination = catchAsync(async (req, res, next) => {
 
 
@@ -64,10 +65,23 @@ exports.updateDestination = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteDestination = catchAsync(async (req, res, next) => {
-  await Destination.findByIdAndDelete(req.params.id);
+  const subjects = await Subject.find({ destination: req.params.id });
 
-  res.status(200).json({
-    status: true,
-    message: "deleted Successfully",
-  });
+    // Delete all related About documents
+    await Promise.all(
+      subjects.map(async (sub) => {
+        await About.deleteMany({ subject: sub._id });
+      })
+    );
+
+    // Delete all related Subject documents
+    await Subject.deleteMany({ destination: req.params.id });
+
+    // Delete the Destination document
+    await Destination.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      status: true,
+      message: "Deleted successfully",
+    });
 });

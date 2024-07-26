@@ -64,10 +64,15 @@ exports.updateSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteSubject = catchAsync(async (req, res, next) => {
-  await Subject.findByIdAndDelete(req.params.id);
+  
+    // Delete all related About documents
+    await About.deleteMany({ subject: req.params.id });
 
-  res.status(200).json({
-    status: true,
-    message: "deleted Successfully",
-  });
+    // Delete the Subject document
+    await Subject.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      status: true,
+      message: "Deleted successfully",
+    });
 });
