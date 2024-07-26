@@ -9,7 +9,7 @@ const mongoSanitize = require("express-mongo-sanitize"); // security
 const xss = require("xss-clean"); // security
 const cors = require("cors");
 const AppError = require("../Arshief/utils/appError");
-
+const globalErrorHandler = require("../Arshief/controllers/errorController");
 const userRouter = require(`${__dirname}/routes/userRouter`);
 
 const app = express();
