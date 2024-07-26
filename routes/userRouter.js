@@ -21,10 +21,5 @@ router.use(authController.restrictTo('admin'));
 
 
 
-
-
-
-
-
 module.exports=router;
 
