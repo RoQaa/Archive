@@ -86,6 +86,61 @@ const handleFileUpload = catchAsync(async (req, res, next) => {
   next();
 });
 
+//
+
+const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
+  if (!req.files || req.files.length === 0) return next();
+
+  const userId = req.user.id;
+  const userDir = ensureUserDirExists(userId);
+  const timestamp = Date.now();
+
+  const filesProcessed = await Promise.all(
+    req.files.map(async (file, index) => {
+      let filename;
+
+      if (file.mimetype.startsWith("image")) {
+        filename = `user-${userId}-${timestamp}-${index}.jpeg`;
+        await sharp(file.buffer)
+          .resize(150, 150)
+          .toFormat("jpeg")
+          .jpeg({ quality: 90 })
+          .toFile(path.join(userDir, filename));
+
+        //
+      } else if (file.mimetype === "application/pdf") {
+        filename = `user-${userId}-${timestamp}-${index}.pdf`;
+        fs.writeFileSync(path.join(userDir, filename), file.buffer);
+
+        //
+      } else if (
+        file.mimetype === "application/msword" ||
+        file.mimetype ===
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ) {
+        filename = `user-${userId}-${timestamp}-${index}.docx`;
+        fs.writeFileSync(path.join(userDir, filename), file.buffer);
+
+        //
+      } else {
+        return next(new AppError("Unsupported file type!", 400));
+
+        //
+      }
+
+      return {
+        filename,
+        path: path.join("public", "uploads", userId, filename),
+        mimetype: file.mimetype,
+        size: file.size,
+      };
+    }),
+  );
+
+  req.filesProcessed = filesProcessed;
+  next();
+});
+
 const uploadMultipleFiles = (fieldName, maxCount) =>
   upload.array(fieldName, maxCount);
 
@@ -93,4 +148,5 @@ module.exports = {
   uploadSingle: uploadFile,
   uploadMultiple: uploadMultipleFiles,
   handleFileUpload,
+  handleMultipleFileUpload,
 };

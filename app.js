@@ -14,6 +14,7 @@ const userRouter = require("../Arshief/routes/userRouter");
 const destinationRoutes = require("../Arshief/routes/destinationRouter");
 const subjectRoutes = require("../Arshief/routes/subjectRouter");
 const aboutRoutes = require("../Arshief/routes/aboutRouter");
+const uploadRoutes = require("../Arshief/routes/uploadsRouter");
 
 const app = express();
 
@@ -53,7 +54,7 @@ app.use(xss());
 //app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
 app.use("/api/public", express.static(path.join(__dirname, "public")));
 
-app.use(express.json({ limit: "15mb" }));
+app.use(express.json({ limit: "50mb" }));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -65,7 +66,9 @@ app.use("/api/v1/destinations", destinationRoutes);
 app.use("/api/v1/subjects", subjectRoutes);
 app.use("/api/v1/about", aboutRoutes);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/uploads", uploadRoutes);
 
+//
 app.all("*", (req, res, next) => {
   next(
     new AppError(`Can't find the url ${req.originalUrl} on this server`, 404),
