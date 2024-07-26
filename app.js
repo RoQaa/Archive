@@ -3,10 +3,10 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const morganBody = require("morgan-body");
 const path = require("path");
-const rateLimit = require("express-rate-limit"); // security
+const rateLimit = require("express-rate-limit");
 const helmet = require("helmet"); // security
-const mongoSanitize = require("express-mongo-sanitize"); // security
-const xss = require("xss-clean"); // security
+const mongoSanitize = require("express-mongo-sanitize");
+const xss = require("xss-clean");
 const cors = require("cors");
 const AppError = require("../Arshief/utils/appError");
 const globalErrorHandler = require("../Arshief/controllers/errorController");
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 const corsOptions = {
-  origin: "http://localhost:5001",
+  origin: "http://localhost:5173",
   optionsSuccessStatus: 200, // For legacy browser support
 };
 app.use(cors(corsOptions));
