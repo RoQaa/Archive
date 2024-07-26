@@ -1,8 +1,8 @@
 const mongoose= require('mongoose');
 const multer=require('multer')
 const sharp=require('sharp');
-
-
+const fs =require('fs')
+const path=require('path')
 const { catchAsync } = require(`./../utils/catchAsync`);
 const AppError = require(`./../utils/appError`);
 const User=require(`./../models/userModel`);
@@ -53,10 +53,10 @@ exports.resizeUserFile = catchAsync(async (req, res, next) => {
       .toFile(`public/img/users/${filename}`);
   } else if (req.file.mimetype === 'application/pdf') {
     filename = `user-Test-${timestamp}.pdf`;
-    fs.writeFileSync(path.join(__dirname, `public/files/${filename}`), req.file.buffer);
+    fs.writeFileSync(path.join(`H:\\test\\Arshief`, `public/files/${filename}`), req.file.buffer);
   } else if (req.file.mimetype === 'application/msword' || req.file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
     filename = `user-Test-${timestamp}.docx`;
-    fs.writeFileSync(path.join(__dirname, `public/files/${filename}`), req.file.buffer);
+    fs.writeFileSync(path.join('H:\\test\\Arshief', `public/files/${filename}`), req.file.buffer);
   } else {
     return next(new AppError('Unsupported file type!', 400));
   }
@@ -68,6 +68,7 @@ exports.resizeUserFile = catchAsync(async (req, res, next) => {
 
 
 exports.testPdfFiles=catchAsync(async(req,res,next)=>{
+  console.log(req.body)
   console.log(req.file.filename)
   res.status(200).json({
     filePath:req.file.filename

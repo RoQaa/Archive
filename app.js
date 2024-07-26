@@ -57,7 +57,9 @@ app.use((req, res, next) => {
 
   next();
 });
-
+app.get('/',(req,res)=>{
+  res.send("Hello world")
+})
 app.use("/api/auth", userRouter);
 
 app.all("*", (req, res, next) => {
