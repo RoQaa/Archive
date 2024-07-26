@@ -57,7 +57,7 @@ app.use(xss());
 //app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
 app.use("/api/public", express.static(path.join(__dirname, "public")));
 
-//app.use(express.json({limit:'10kb'})); => limit of data in body not more than 10 KB
+app.use(express.json({ limit: "10mb" }));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
