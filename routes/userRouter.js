@@ -8,7 +8,7 @@ router.post('/login', authController.login);
 // Protect all routes after this middleware
 router.use(authController.protect)
     router.get('/logout',authController.logOut)
-
+    router.get('/myProfile',userController.getMyProfile)
 
 //Just Admin routes
 router.use(authController.restrictTo('admin'));

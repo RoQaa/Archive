@@ -67,23 +67,7 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
 
 
-/*
-exports.search = catchAsync(async (req, res, next) => {
-  const searchTerm = req.query.user;
 
-  const results = await User.find({
-    username: { $regex: searchTerm, $options: "i" }
-  }).limit(10);
-
-  if (!results) {
-    return next(new AppError(`Data n't found`, 404));
-  }
-  res.status(200).json({
-    status: true,
-    results,
-  });
-});
-*/
 exports.creataAccount = catchAsync(async (req, res, next) => {
   //restirct to admin
   console.log(req.body)
@@ -95,5 +79,13 @@ exports.creataAccount = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: true,
     message: "Account Create Successfully"
+  })
+})
+
+exports.getMyProfile=catchAsync(async (req,res,next)=>{
+  
+  res.status(200).json({
+    status:true,
+    data:req.user
   })
 })
