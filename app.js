@@ -9,11 +9,9 @@ const mongoSanitize = require('express-mongo-sanitize'); // security
 const xss = require('xss-clean'); // security
 const cors =require('cors')
 const AppError = require(`${__dirname}/utils/appError`);
+
 const userRouter=require(`${__dirname}/routes/userRouter`)
-const categoryRouter=require(`${__dirname}/routes/categoryRouter`)
-const itemsRouter=require(`${__dirname}/routes/itemRouter`)
-const reviewRouter=require(`${__dirname}/routes/reviewRouter`)
-const globalErrorHandler = require(`${__dirname}/controllers/errorController`);
+
 const app = express();
 
 // Global MiddleWares
@@ -41,7 +39,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 //Limit requests from same API
-// hna bn3ml limitng l3dd el mrat elly log in 34an  el brute force attacks
+
 const limiter = rateLimit({
   max: 1000,
   windowMs: 60 * 60 * 1000,
@@ -62,15 +60,12 @@ app.use(xss());
 
 
 
-//serving static files
-//app.use(express.static(`${__dirname}/public`));
-//app.use('/static', express.static('public'));
+
 //app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
 app.use('/api/public',express.static(path.join(__dirname, 'public')));
 
 //app.use(express.json({limit:'10kb'})); => limit of data in body not more than 10 KB
-// asdsfasdfsa
-//request time of API
+
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
 
@@ -81,13 +76,9 @@ app.use((req, res, next) => {
 
 
 app.use('/api/auth',userRouter)
-app.use('/api/cats',categoryRouter)
-app.use('/api/items',itemsRouter)
-app.use('/api/reviews',reviewRouter)
+
 app.all('*', (req, res, next) => {
-  // const err = new Error(`Can't find the url ${req.originalUrl} on this server`);
-  // err.status='fail';
-  // err.statusCode=404;
+
   next(
     new AppError(`Can't find the url ${req.originalUrl} on this server`, 404)
   );
