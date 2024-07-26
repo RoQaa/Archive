@@ -15,7 +15,7 @@ const destinationRoutes = require("../Arshief/routes/destinationRouter");
 const subjectRoutes = require("../Arshief/routes/subjectRouter");
 const aboutRoutes = require("../Arshief/routes/aboutRouter");
 const uploadRoutes = require("../Arshief/routes/uploadsRouter");
-
+const faxRoutes = require("../Arshief/routes/faxRouter");
 const app = express();
 
 // Global MiddleWares
@@ -67,6 +67,7 @@ app.use("/api/v1/subjects", subjectRoutes);
 app.use("/api/v1/about", aboutRoutes);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/uploads", uploadRoutes);
+app.use("/api/v1/faxes", faxRoutes);
 
 //
 app.all("*", (req, res, next) => {
