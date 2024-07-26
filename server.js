@@ -7,10 +7,10 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-dotenv.config({ path: `${__dirname}/config.env` });
+dotenv.config({ path: `./config.env` });
 
 const http = require('http');
-const app = require(`${__dirname}/app`);
+const app = require(`./app`);
 const server = http.createServer(app);
 
 

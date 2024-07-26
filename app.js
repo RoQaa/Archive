@@ -8,9 +8,9 @@ const helmet = require('helmet'); // security
 const mongoSanitize = require('express-mongo-sanitize'); // security
 const xss = require('xss-clean'); // security
 const cors =require('cors')
-const AppError = require(`${__dirname}/utils/appError`);
-
-const userRouter=require(`${__dirname}/routes/userRouter`)
+const AppError = require(`./utils/appError`);
+const globalErrorHandler=require('./controllers/errorController')
+const userRouter=require(`./routes/userRouter`)
 
 const app = express();
 

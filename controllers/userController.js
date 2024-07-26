@@ -2,10 +2,10 @@ const mongoose= require('mongoose');
 const multer=require('multer')
 const sharp=require('sharp');
 
-const Review = require('../models/reviewModel');
-const { catchAsync } = require(`${__dirname}/../utils/catchAsync`);
-const AppError = require(`${__dirname}/../utils/appError`);
-const User=require(`${__dirname}/../models/userModel`);
+
+const { catchAsync } = require(`./../utils/catchAsync`);
+const AppError = require(`./../utils/appError`);
+const User=require(`./../models/userModel`);
 
 
 const filterObj = (obj, ...allowedFields) => {
@@ -16,78 +16,65 @@ const filterObj = (obj, ...allowedFields) => {
     return newObj;
   };
 
- /*const multerStorage = multer.diskStorage({
-   destination: (req, file, cb) => {
-     cb(null, 'public/img/users');
-   },
-   filename: (req, file, cb) => {
-     const ext = file.mimetype.split('/')[1];
-     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-   }
- });
+  const multerFilter = (req, file, cb) => {
+    const allowedTypes = ['image/', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
-
-*/
-
- const multerFilter = (req, file, cb) => {
-    
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
-  }
+    if (allowedTypes.some(type => file.mimetype.startsWith(type))) {
+        cb(null, true);
+    } else {
+        cb(new AppError('Not a valid file type! Please upload only images, PDFs, or Word documents.', 400), false);
+    }
 };
 
 const multerStorage = multer.memoryStorage();
-
-
-
 const upload = multer({
-  storage: multerStorage,
- // limits: { fileSize: 2000000 /* bytes */ },
-  fileFilter: multerFilter
+    storage: multerStorage,
+    // limits: { fileSize: 2000000 /* bytes */ },
+    fileFilter: multerFilter
 });
 
-exports.uploadUserPhoto = upload.single('profileImage');
+exports.uploadFile = upload.single('file');
+
+
 
 //resize midlleWare
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+exports.resizeUserFile = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  // Define the filename based on the file type
+  const timestamp = Date.now();
+  let filename;
+  if (req.file.mimetype.startsWith('image')) {
+    filename = `user-Testtttttttttttt-${timestamp}.jpeg`;
+    await sharp(req.file.buffer)
+      .resize(500, 500)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/users/${filename}`);
+  } else if (req.file.mimetype === 'application/pdf') {
+    filename = `user-Test-${timestamp}.pdf`;
+    fs.writeFileSync(path.join(__dirname, `public/files/${filename}`), req.file.buffer);
+  } else if (req.file.mimetype === 'application/msword' || req.file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    filename = `user-Test-${timestamp}.docx`;
+    fs.writeFileSync(path.join(__dirname, `public/files/${filename}`), req.file.buffer);
+  } else {
+    return next(new AppError('Unsupported file type!', 400));
+  }
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
-
+  req.file.filename = filename;
   next();
 });
 
-exports.updateUser=catchAsync(async(req,res,next)=>{
-   
-    //Filtered out unwanted fields names that are not allowed to be updated
-    const filteredBody = filterObj(req.body, 'name');
-    if (req.file) filteredBody.profileImage = `https://dalilalhafr.com/api/public/img/users/${req.file.filename}`;
 
-      
-   
-      
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true,
-    runValidators: true
-  });
-          if(!updatedUser){
-            return next(new AppError(`Accont n't found`,404))
-          }
-   res.status(200).json({
-    status:true,
-    message:"Account Updated Successfully",
-  //  data:updatedUser
-   })
 
+exports.testPdfFiles=catchAsync(async(req,res,next)=>{
+  console.log(req.file.filename)
+  res.status(200).json({
+    filePath:req.file.filename
+  })
 })
+
+
 
 exports.updateUserByAdmin=catchAsync(async(req,res,next)=>{
   const id =req.params.id;
@@ -159,7 +146,7 @@ exports.deleteUser=catchAsync(async(req,res,next)=>{
   if(!user){
     return next(new AppError(`Account n't found`,404))
   }
-  await Review.deleteMany({user:req.params.id})
+ 
   await user.delete();
 
   res.status(200).json({
@@ -170,7 +157,7 @@ exports.deleteUser=catchAsync(async(req,res,next)=>{
 
 
 exports.deleteAccount=catchAsync(async(req,res,next)=>{
-  await Review.deleteMany({user:req.user.id})
+
  await User.findByIdAndDelete(req.user.id)
  res.cookie('jwt','loggedout',{
   expires:new Date(Date.now()+10*1000),
@@ -217,6 +204,7 @@ exports.creataAccount=catchAsync(async(req,res,next)=>{
     message:"Account Create Successfully"
   })
 })
+/*
 exports.profilePage=catchAsync(async(req,res,next)=>{
   ///protect
   const data =req.user;
@@ -228,3 +216,4 @@ exports.profilePage=catchAsync(async(req,res,next)=>{
     data
   })
 })
+  */

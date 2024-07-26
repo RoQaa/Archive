@@ -1,12 +1,12 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+
 const crypto = require('crypto');
-const validator = require('validator');
-const User = require(`${__dirname}/../models/userModel`)
-const sendEmail=require(`${__dirname}/../utils/email`)
-const { catchAsync } = require(`${__dirname}/../utils/catchAsync`);
-const AppError = require(`${__dirname}/../utils/appError`);
+
+const User = require(`./../models/userModel`)
+
+const { catchAsync } = require(`./../utils/catchAsync`);
+const AppError = require(`./../utils/appError`);
 
 const signToken = (id) => {
   const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -39,9 +39,7 @@ const createSendToken = (user, statusCode, message, res) => {
 
     data: {
       name: user.name,
-      // email:user.email,
-      // photo: user.photo,
-      //isPaid: user.isPaid,
+    
       role: user.role,
     },
     token,
@@ -83,19 +81,10 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password) {
     return next(new AppError('please provide email & password', 400));
   }
-  /*
-  const validEmail = validator.isEmail(email);
-  if (!validEmail) {
-
-    return next(new AppError(`Please provide a correct email`, 400));
-  }
-  */
-
-  //2)check user exists && password is correct
+ 
 
   const user = await User.findOne({ email: email }).select('+password'); // hyzaod el password el m5fee aslan
 
-  //const correct=await user.correctPassword(password,user.password);
 
   if (
     !user ||
@@ -113,66 +102,6 @@ exports.login = catchAsync(async (req, res, next) => {
   //3) if everything ok send token back to the client
 
   createSendToken(user, 200, 'log in successfully', res);
-
-});
-
-exports.forgotPassword = catchAsync(async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email }).select(
-    'email'
-  );
-  if (!user) {
-
-    return next(new AppError('Email not Found.', 404));
-  }
-
-
-  const OTP = await user.generateOtp();
-  await user.save({ validateBeforeSave: false });
-  try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your Password (valid for 10 min)',
-      name: user.name,
-      otp: OTP,
-    });
-
-    res.status(200).json({
-      status: true,
-      message: 'Code sent to email!',
-    });
-
-  } catch (err) {
-    user.passwordOtp = undefined;
-    user.passwordOtpExpires = undefined;
-    await user.save({ validateBeforeSave: false });
-
-    return next(new AppError(err), 500);
-  }
-});
-exports.verifyEmailOtp = catchAsync(async (req, res, next) => {
-  //just email otp
-  const cryptoOtp = crypto
-    .createHash('sha256')
-    .update(req.body.otp)
-    .digest('hex');
-
-  const user = await User.findOne({
-    passwordOtp: cryptoOtp,
-    passwordOtpExpires: { $gt: Date.now() },
-  });
-
-  if (!user) {
-
-
-    return next(new AppError('OTP is invalid or has expired', 400));
-  }
-  const token = signToken(user.id);
-
-  res.status(200).json({
-    status: true,
-    message: 'OTP is valid You can now reset password',
-    token,
-  });
 
 });
 

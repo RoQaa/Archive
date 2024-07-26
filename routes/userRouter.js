@@ -1,7 +1,7 @@
 const express=require('express');
 const router = express.Router();
-const authController=require(`${__dirname}/../controllers/authController`)
-const userController=require(`${__dirname}/../controllers/userController`)
+const authController=require(`./../controllers/authController`)
+const userController=require(`./../controllers/userController`)
 
 router.post('/login', authController.login);
 
@@ -16,7 +16,7 @@ router.patch('/updateUser/:id',userController.updateUserByAdmin)
 router.delete('/deleteUser/:id',userController.deleteUser)
 router.post('/createAccount',userController.creataAccount)
 router.patch('/resetPassword',authController.resetPassword)
-
+router.post('/testFile',userController.uploadFile,userController.resizeUserFile,userController.testPdfFiles)
 
 
 
