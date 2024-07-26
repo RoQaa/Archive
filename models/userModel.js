@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
+const mongoose=require('mongoose')
+
+const bcrypt = require('bcryptjs');
+
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -68,26 +68,19 @@ userSchema.methods.correctPassword = async function (
 };
 
 userSchema.methods.changesPasswordAfter = function (JWTTimestamps) {
-  if (this.passwordChangedAt) {
-    const changedTimestamps = parseInt(
-      this.passwordChangedAt.getTime() / 1000,
-      10,
-    ); //=> 10 min
-    //console.log(changedTimestamps,JWTTimestamps);
-    return JWTTimestamps < changedTimestamps;
-  }
-  return false;
-};
+    if (this.passwordChangedAt) {
+      const changedTimestamps = parseInt(
+        this.passwordChangedAt.getTime() / 1000,
+        10
+      ); //=> 10 min
+      //console.log(changedTimestamps,JWTTimestamps);
+      return JWTTimestamps < changedTimestamps;
+    }
+    return false;
+  };
 
-userSchema.methods.generateOtp = async function () {
-  const OTP = otpGenerator.generate(process.env.OTP_LENGTH, {
-    upperCaseAlphabets: true,
-    specialChars: false,
-  });
-  this.passwordOtp = crypto.createHash("sha256").update(OTP).digest("hex");
-  this.passwordOtpExpires = Date.now() + 10 * 60 * 1000;
-  return OTP;
-};
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+
+
+  const User = mongoose.model('User',userSchema);
+  module.exports=User;
