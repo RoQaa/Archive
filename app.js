@@ -16,26 +16,25 @@ const app = express();
 
 // Global MiddleWares
 
-//set security http headers
-app.use(helmet()); // set el htttp headers property
-
 app.use(cors());
-app.options("*", cors());
-// Poclicy for blocking images
+app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 });
+const corsOptions = {
+  origin: "http://localhost:5001",
+  optionsSuccessStatus: 200, // For legacy browser support
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
-//development logging
 if (process.env.NODE_ENV === "development") {
-  // app.use(morgan('dev'));
+  app.use(morgan("dev"));
   morganBody(app, {
     logAllReqHeader: true,
   });
 }
-
-//Limit requests from same API
 
 const limiter = rateLimit({
   max: 1000,
@@ -43,15 +42,9 @@ const limiter = rateLimit({
   message: "too many requests please try again later",
 });
 
-app.use("/api", limiter); // (/api)=> all routes start with /api
-
-//Body parser,reading data from body into req.body
-app.use(express.json()); //middle ware for req,res json files 3and req.body
-
-//Data sanitization against no SQL injection
+app.use("/api", limiter);
+app.use(express.json());
 app.use(mongoSanitize());
-
-//Data sanitization against cross site scripting attacks (XSS)
 app.use(xss());
 
 //app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
