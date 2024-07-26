@@ -31,11 +31,12 @@ const faxSchema = new mongoose.Schema({
     files:[{
         type:String,
         required:true
-    }]
+    }],
+    code:Number
 })
 
 faxSchema.pre(/^find/,function(next){
-    this.populate({path:'about'})
+    this.populate([{path:'about'},{path:'user'}])
     next();
 })
 const Fax= mongoose.model('Fax',faxSchema)
