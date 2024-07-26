@@ -1,4 +1,4 @@
-const generateRandomCode = require("../utils/generateRandomCode");
+
 const About = require("../models/aboutModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
