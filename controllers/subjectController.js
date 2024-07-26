@@ -1,4 +1,5 @@
-const generateRandomCode = require("../utils/generateRandomCode");
+const About=require("../models/aboutModel");
+const Fax =require('../models/faxModel')
 const Subject = require("../models/subjectModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -65,14 +66,24 @@ exports.updateSubject = catchAsync(async (req, res, next) => {
 
 exports.deleteSubject = catchAsync(async (req, res, next) => {
   
-    // Delete all related About documents
-    await About.deleteMany({ subject: req.params.id });
+  // Find all About documents related to the Subject
+  const abouts = await About.find({ subject: req.params.id });
 
-    // Delete the Subject document
-    await Subject.findByIdAndDelete(req.params.id);
+  // Delete all related Faxes documents
+  await Promise.all(
+    abouts.map(async (about) => {
+      await Fax.deleteMany({ about: about._id });
+    })
+  );
 
-    res.status(200).json({
-      status: true,
-      message: "Deleted successfully",
-    });
+  // Delete all related About documents
+  await About.deleteMany({ subject: req.params.id });
+
+  // Delete the Subject document
+  await Subject.findByIdAndDelete(req.params.id);
+
+  res.status(200).json({
+    status: true,
+    message: "Deleted successfully",
+  });
 });

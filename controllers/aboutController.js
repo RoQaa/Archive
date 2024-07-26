@@ -1,4 +1,4 @@
-
+const Fax =require('../models/faxModel')
 const About = require("../models/aboutModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -64,10 +64,14 @@ exports.updateAbout = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteAbout = catchAsync(async (req, res, next) => {
-  await About.findByIdAndDelete(req.params.id);
+   // Delete all related Faxes documents
+   await Fax.deleteMany({ about: req.params.id });
 
-  res.status(200).json({
-    status: true,
-    message: "deleted Successfully",
-  });
+   // Delete the About document
+   await About.findByIdAndDelete(req.params.id);
+
+   res.status(200).json({
+     status: true,
+     message: "Deleted successfully",
+   });
 });
