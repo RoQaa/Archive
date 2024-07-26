@@ -4,11 +4,11 @@ const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.createDestination = catchAsync(async (req, res, next) => {
-  const destinationSerialNumber = generateRandomCode(8);
+
 
   const newInventory = {
     ...req.body,
-    destinationSerialNumber,
+    
   };
   const doc = await Destination.create(newInventory);
 
@@ -20,16 +20,13 @@ exports.createDestination = catchAsync(async (req, res, next) => {
 });
 
 exports.getDestinations = catchAsync(async (req, res, next) => {
-  const { name, destinationSerialNumber } = req.query;
+  const { name } = req.query;
 
   let filter = {};
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
 
-  if (destinationSerialNumber) {
-    filter.destinationSerialNumber = destinationSerialNumber;
-  }
 
   const data = await Destination.find(filter).select("-__v");
   if (!data || data.length === 0) return next(new AppError(`no data`, 404));
@@ -52,9 +49,7 @@ exports.getOneDestination = catchAsync(async (req, res, next) => {
 });
 
 exports.updateDestination = catchAsync(async (req, res, next) => {
-  if (req.body.destinationSerialNumber) {
-    return next(new AppError("Cant Update serial number", 400));
-  }
+
 
   const doc = await Destination.findByIdAndUpdate(req.params.id, req.body, {
     new: true,

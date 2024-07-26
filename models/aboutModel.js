@@ -8,11 +8,7 @@ const aboutSchema = new mongoose.Schema({
     trim: true,
   },
 
-  aboutSerialNumber: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+
 
   subject: {
     type: mongoose.Schema.Types.ObjectId,
