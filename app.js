@@ -1,16 +1,16 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser')
-const morganBody = require('morgan-body');
-const path=require('path')
-const rateLimit = require('express-rate-limit'); // security
-const helmet = require('helmet'); // security
-const mongoSanitize = require('express-mongo-sanitize'); // security
-const xss = require('xss-clean'); // security
-const cors =require('cors')
-const AppError = require(`${__dirname}/utils/appError`);
+const express = require("express");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const morganBody = require("morgan-body");
+const path = require("path");
+const rateLimit = require("express-rate-limit"); // security
+const helmet = require("helmet"); // security
+const mongoSanitize = require("express-mongo-sanitize"); // security
+const xss = require("xss-clean"); // security
+const cors = require("cors");
+const AppError = require("../Arshief/utils/appError");
 
-const userRouter=require(`${__dirname}/routes/userRouter`)
+const userRouter = require(`${__dirname}/routes/userRouter`);
 
 const app = express();
 
@@ -19,19 +19,16 @@ const app = express();
 //set security http headers
 app.use(helmet()); // set el htttp headers property
 
-
-
-
 app.use(cors());
-app.options('*',cors())
+app.options("*", cors());
 // Poclicy for blocking images
 app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 });
 
 //development logging
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
   // app.use(morgan('dev'));
   morganBody(app, {
     logAllReqHeader: true,
@@ -43,11 +40,10 @@ if (process.env.NODE_ENV === 'development') {
 const limiter = rateLimit({
   max: 1000,
   windowMs: 60 * 60 * 1000,
-  message: 'too many requests please try again later',
+  message: "too many requests please try again later",
 });
 
-
-app.use('/api', limiter); // (/api)=> all routes start with /api
+app.use("/api", limiter); // (/api)=> all routes start with /api
 
 //Body parser,reading data from body into req.body
 app.use(express.json()); //middle ware for req,res json files 3and req.body
@@ -58,11 +54,8 @@ app.use(mongoSanitize());
 //Data sanitization against cross site scripting attacks (XSS)
 app.use(xss());
 
-
-
-
 //app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
-app.use('/api/public',express.static(path.join(__dirname, 'public')));
+app.use("/api/public", express.static(path.join(__dirname, "public")));
 
 //app.use(express.json({limit:'10kb'})); => limit of data in body not more than 10 KB
 
@@ -72,15 +65,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/api/auth", userRouter);
 
-
-
-app.use('/api/auth',userRouter)
-
-app.all('*', (req, res, next) => {
-
+app.all("*", (req, res, next) => {
   next(
-    new AppError(`Can't find the url ${req.originalUrl} on this server`, 404)
+    new AppError(`Can't find the url ${req.originalUrl} on this server`, 404),
   );
 });
 app.use(globalErrorHandler);
