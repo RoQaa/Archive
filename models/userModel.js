@@ -1,13 +1,12 @@
 const mongoose = require("mongoose");
-
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
-    required: [true, "Please Enter your User Name"],
+    required: [true, "Please Enter your UserName"],
     unique: [true, "there's a user with that name "],
-    trim: true,
+    minlength: [2, " Password At least has 8 characters"],
   },
 
   role: {
@@ -23,17 +22,27 @@ const userSchema = new mongoose.Schema({
     minlength: [8, " Password At least has 8 characters"],
     select: false,
   },
+  passwordConfirm: {
+    type: String,
+    required: [true, 'Please Enter your Confirm Password'],
+    validate: {
+      // This only works on CREATE and SAVE!!!
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: 'Passwords are not the same',
+    },
+  },
 
   isActive: {
     type: Boolean,
     default: true,
   },
   passwordChangedAt: Date,
-  passwordOtp: String,
-  passwordOtpExpires: Date,
+ 
 });
 
-userSchema.index({ name: "text", email: "text" });
+userSchema.index({ username: "text"});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
@@ -54,7 +63,7 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.pre(/^find/, function (next) {
-  this.find({ isActive: { $ne: false } }).select("-createdAt -rating");
+  this.find({ isActive: { $ne: false } }).select("-__v");
   next();
 });
 

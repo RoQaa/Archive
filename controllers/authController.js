@@ -32,7 +32,7 @@ const createSendToken = (user, statusCode, message, res) => {
     message,
 
     data: {
-      name: user.name,
+      username: user.username,
 
       role: user.role,
     },
@@ -40,95 +40,44 @@ const createSendToken = (user, statusCode, message, res) => {
   });
 };
 
-exports.SignUp = catchAsync(async (req, res, next) => {
-  req.body.role = undefined;
-  const newUser = await User.create(req.body);
-  if (req.headers.lang === "AR") {
-    if (!newUser) {
-      return next(new AppError(`حدث خطأ ما حاول لاحقا`, 404));
-    }
-
-    createSendToken(newUser, 201, "تم التسجيل بنجاح", res);
-  } else {
-    if (!newUser) {
-      return next(new AppError(`SomeThing Error cannot sign up`, 404));
-    }
-
-    createSendToken(newUser, 201, "sign up successfully", res);
-  }
-});
-
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  //1) check email && password exist,
-  if (!email || !password) {
-    return next(new AppError("please provide email & password", 400));
+  //1) check username && password exist,
+  if (!username || !password) {
+    return next(new AppError("من فضلكقم بادخال الاسم والباسورد", 400));
   }
 
-  const user = await User.findOne({ email: email }).select("+password"); // hyzaod el password el m5fee aslan
+  const user = await User.findOne({ username: username }).select("+password"); // hyzaod el password el m5fee aslan
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Incorrect email or password", 400));
+    return next(new AppError("Incorrect username or password", 400));
   }
 
   createSendToken(user, 200, "log in successfully", res);
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  // protect handler
-  const user = req.user;
+  // protect handler -admin restreict
+  const id = req.params.id;
+  const user = await User.findById(id);
   if (!user) {
     return next(new AppError("Token is invalid or has expired", 400));
   }
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
-  user.passwordOtp = undefined;
-  user.passwordOtpExpires = undefined;
+
 
   await user.save({ validateBeforeSave: false });
 
-  res.clearCookie("jwt");
+
   res.status(200).json({
     status: true,
     message: "password reset success you can now  try agin to log in",
   });
 });
 
-exports.updatePassword = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user.id).select("+password");
 
-  if (!user) {
-    return next(new AppError("Account not found", 404));
-  }
-  // 2) Check if posted current password is correct
-  if (!(await user.correctPassword(req.body.currentPassword, user.password))) {
-    return next(new AppError("Current password isn't correct", 400));
-  }
-  if (!req.body.newPassword || !req.body.newPasswordConfirm) {
-    return next(
-      new AppError("Please Enter new Password and password Confirm", 400),
-    );
-  }
-  if (req.body.newPassword !== req.body.newPasswordConfirm) {
-    return next(
-      new AppError("Password and Password confirm aren't the same", 400),
-    );
-  }
-  if (await user.correctPassword(req.body.newPassword, user.password)) {
-    return next(new AppError("it's the same Password", 400));
-  }
-  // 3) If so, update password
-  user.password = req.body.newPassword;
-  user.passwordConfirm = req.body.newPasswordConfirm;
-
-  await user.save({ validateBeforeSave: false });
-
-  res.status(200).json({
-    status: true,
-    message: "Password Updated ",
-  });
-});
 
 exports.logOut = catchAsync(async (req, res, next) => {
   res.cookie("jwt", "logged out", {

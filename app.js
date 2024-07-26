@@ -10,7 +10,7 @@ const xss = require("xss-clean"); // security
 const cors = require("cors");
 const AppError = require("../Arshief/utils/appError");
 const globalErrorHandler = require("../Arshief/controllers/errorController");
-const userRouter = require(`${__dirname}/routes/userRouter`);
+const userRouter = require(`./routes/userRouter`);
 
 const app = express();
 
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/user", userRouter);
 
 app.all("*", (req, res, next) => {
   next(
