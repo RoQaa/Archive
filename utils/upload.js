@@ -54,7 +54,7 @@ const handleFileUpload = catchAsync(async (req, res, next) => {
   if (req.file.mimetype.startsWith("image")) {
     filename = `user-${userId}-${timestamp}.jpeg`;
     await sharp(req.file.buffer)
-      .resize(150, 150)
+      .resize(400, 400)
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(path.join(userDir, filename));
@@ -81,12 +81,10 @@ const handleFileUpload = catchAsync(async (req, res, next) => {
   }
 
   req.file.filename = filename;
-  req.file.path = path.join("public", "uploads", userId, filename);
+  req.file.path = `127.0.0.1:5000/api/public/uploads/${userId}/${filename}`;
 
   next();
 });
-
-//
 
 const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
   if (!req.files || req.files.length === 0) return next();
@@ -102,7 +100,7 @@ const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
       if (file.mimetype.startsWith("image")) {
         filename = `user-${userId}-${timestamp}-${index}.jpeg`;
         await sharp(file.buffer)
-          .resize(150, 150)
+          .resize(400, 400)
           .toFormat("jpeg")
           .jpeg({ quality: 90 })
           .toFile(path.join(userDir, filename));
@@ -130,7 +128,7 @@ const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
 
       return {
         filename,
-        path: path.join("public", "uploads", userId, filename),
+        path: `127.0.0.1:5000/api/public/uploads/${userId}/${filename}`,
         mimetype: file.mimetype,
         size: file.size,
       };
