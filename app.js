@@ -58,6 +58,7 @@ app.use(xss());
 //app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
 app.use("/api/public", express.static(path.join(__dirname, "public")));
 
+
 app.use(express.json({ limit: "50mb" }));
 
 app.use((req, res, next) => {
