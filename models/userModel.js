@@ -1,14 +1,13 @@
-const mongoose=require('mongoose')
+const mongoose = require("mongoose");
 
-const bcrypt = require('bcryptjs');
-
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please Enter your User Name"],
-    // unique:[true,"there's a user with that name "],
-    //trim:true
+    unique: [true, "there's a user with that name "],
+    trim: true,
   },
 
   role: {
@@ -35,18 +34,18 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.index({ name: "text", email: "text" });
-// DOCUMENT MIDDLEWARE
+
 userSchema.pre("save", async function (next) {
-  //only run if password modified
   if (!this.isModified("password")) {
     return next();
   }
-  //hash password
+
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
 
   next();
 });
+
 userSchema.pre("save", function (next) {
   if (!this.isModified("password") || this.isNew) return next();
 
@@ -68,19 +67,15 @@ userSchema.methods.correctPassword = async function (
 };
 
 userSchema.methods.changesPasswordAfter = function (JWTTimestamps) {
-    if (this.passwordChangedAt) {
-      const changedTimestamps = parseInt(
-        this.passwordChangedAt.getTime() / 1000,
-        10
-      ); //=> 10 min
-      //console.log(changedTimestamps,JWTTimestamps);
-      return JWTTimestamps < changedTimestamps;
-    }
-    return false;
-  };
+  if (this.passwordChangedAt) {
+    const changedTimestamps = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10,
+    );
+    return JWTTimestamps < changedTimestamps;
+  }
+  return false;
+};
 
-
-
-
-  const User = mongoose.model('User',userSchema);
-  module.exports=User;
+const User = mongoose.model("User", userSchema);
+module.exports = User;
