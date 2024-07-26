@@ -67,13 +67,6 @@ exports.resizeUserFile = catchAsync(async (req, res, next) => {
 
 
 
-exports.testPdfFiles=catchAsync(async(req,res,next)=>{
-  console.log(req.body)
-  console.log(req.file.filename)
-  res.status(200).json({
-    filePath:req.file.filename
-  })
-})
 
 
 

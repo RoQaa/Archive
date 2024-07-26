@@ -5,7 +5,7 @@ const userController=require(`./../controllers/userController`)
 
 router.post('/login', authController.login);
 
-router.post('/testFile',userController.uploadFile,userController.resizeUserFile,userController.testPdfFiles)
+
 
 // Protect all routes after this middleware
 router.use(authController.protect)
