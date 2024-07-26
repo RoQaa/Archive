@@ -4,11 +4,11 @@ const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.createAbout = catchAsync(async (req, res, next) => {
-  const aboutSerialNumber = generateRandomCode(8);
+
 
   const newInventory = {
     ...req.body,
-    aboutSerialNumber,
+    
   };
   const doc = await About.create(newInventory);
 
@@ -20,16 +20,14 @@ exports.createAbout = catchAsync(async (req, res, next) => {
 });
 
 exports.getAbouts = catchAsync(async (req, res, next) => {
-  const { name, aboutSerialNumber } = req.query;
+  const { name } = req.query;
 
   let filter = {};
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
 
-  if (aboutSerialNumber) {
-    filter.aboutSerialNumber = aboutSerialNumber;
-  }
+
 
   const data = await About.find(filter).select("-__v");
   if (!data || data.length === 0) return next(new AppError(`no data`, 404));
@@ -52,9 +50,7 @@ exports.getOneAbout = catchAsync(async (req, res, next) => {
 });
 
 exports.updateAbout = catchAsync(async (req, res, next) => {
-  if (req.body.aboutSerialNumber) {
-    return next(new AppError("Cant Update serial number", 400));
-  }
+
   const doc = await About.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,

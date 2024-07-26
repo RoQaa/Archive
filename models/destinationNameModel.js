@@ -8,11 +8,7 @@ const destinationSchema = new mongoose.Schema({
     trim: true,
   },
 
-  destinationSerialNumber: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+
 });
 
 const Destination = mongoose.model("Destination", destinationSchema);

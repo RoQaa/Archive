@@ -4,11 +4,11 @@ const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.createSubject = catchAsync(async (req, res, next) => {
-  const subjectSerialNumber = generateRandomCode(8);
+
 
   const newInventory = {
     ...req.body,
-    subjectSerialNumber,
+   
   };
   const doc = await Subject.create(newInventory);
 
@@ -20,16 +20,14 @@ exports.createSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.getSubjects = catchAsync(async (req, res, next) => {
-  const { name, subjectSerialNumber } = req.query;
+  const { name} = req.query;
 
   let filter = {};
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
 
-  if (subjectSerialNumber) {
-    filter.subjectSerialNumber = subjectSerialNumber;
-  }
+
 
   const data = await Subject.find(filter).select("-__v");
   if (!data || data.length === 0) return next(new AppError(`no data`, 404));
@@ -52,9 +50,7 @@ exports.getOneSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.updateSubject = catchAsync(async (req, res, next) => {
-  if (req.body.subjectSerialNumber) {
-    return next(new AppError("Cant Update serial number", 400));
-  }
+
   const doc = await Subject.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,

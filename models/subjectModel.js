@@ -8,11 +8,7 @@ const subjectSchema = new mongoose.Schema({
     trim: true,
   },
 
-  subjectSerialNumber: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+ 
 
   destination: {
     type: mongoose.Schema.Types.ObjectId,
