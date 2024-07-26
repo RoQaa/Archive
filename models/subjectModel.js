@@ -17,6 +17,11 @@ const subjectSchema = new mongoose.Schema({
   },
 });
 
+subjectSchema.pre(/^find/,function(next){
+  this.populate({path:"destination"})
+  next()
+})
+
 const Subject = mongoose.model("Subject", subjectSchema);
 
 module.exports = Subject;

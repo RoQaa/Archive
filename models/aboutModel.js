@@ -17,6 +17,11 @@ const aboutSchema = new mongoose.Schema({
   },
 });
 
+aboutSchema.pre(/^find/,function(next){
+  this.populate({path:"subject"})
+  next()
+})
+
 const About = mongoose.model("About", aboutSchema);
 
 module.exports = About;

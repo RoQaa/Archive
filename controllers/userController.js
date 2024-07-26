@@ -30,7 +30,16 @@ exports.updateUserByAdmin = catchAsync(async (req, res, next) => {
 
 
 exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
-  const data = await User.find({role:"user"});
+  const { username } = req.query;
+
+  let filter = {};
+  filter.role='user'
+  if (username) {
+    filter.username = { $regex: username, $options: "i" };
+    
+  }
+
+  const data = await User.find(filter);
   if (!data || data.length === 0) return next(new AppError(`No users Found`, 404))
   res.status(200).json({
     status: true,
@@ -58,10 +67,10 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
 
 
-
+/*
 exports.search = catchAsync(async (req, res, next) => {
   const searchTerm = req.query.user;
-  //const results = await User.find({ $text: { $search: searchTerm } }).limit(10);
+
   const results = await User.find({
     username: { $regex: searchTerm, $options: "i" }
   }).limit(10);
@@ -74,7 +83,7 @@ exports.search = catchAsync(async (req, res, next) => {
     results,
   });
 });
-
+*/
 exports.creataAccount = catchAsync(async (req, res, next) => {
   //restirct to admin
   console.log(req.body)
