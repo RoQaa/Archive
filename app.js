@@ -21,15 +21,20 @@ const app = express();
 // Global MiddleWares
 
 app.use(helmet());
-app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 });
+
+// CORS configuration
 const corsOptions = {
   origin: "http://localhost:5173",
   optionsSuccessStatus: 200, // For legacy browser support
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type,Authorization",
+  preflightContinue: false,
 };
+
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
