@@ -16,8 +16,8 @@ const app = express();
 
 // Global MiddleWares
 
-app.use(cors());
 app.use(helmet());
+app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/auth", userRouter);
+app.use("/api/v1/auth", userRouter);
 
 app.all("*", (req, res, next) => {
   next(
