@@ -28,10 +28,17 @@ app.use((req, res, next) => {
 });
 const corsOptions = {
   origin: "http://localhost:5173",
+  credentials: true, // Allow credentials
   optionsSuccessStatus: 200, // For legacy browser support
 };
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
