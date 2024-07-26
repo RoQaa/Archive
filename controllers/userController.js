@@ -85,22 +85,20 @@ exports.updateUserByAdmin=catchAsync(async(req,res,next)=>{
       $set: {
         name: filteredBody.name,
         role: filteredBody.role,
-        isActive: filteredBody.isActive
-      }
-      
+        isActive: filteredBody.isActive,
+      },
     },
- 
+
     {
       $merge: {
         into: "users", // The target collection to merge the documents into
-        whenMatched: "replace" // Specifies how to handle matching documents
-      }
-    }
+        whenMatched: "replace", // Specifies how to handle matching documents
+      },
+    },
   ]);
 
-
-  if(!user){
-    return next(new AppError(`Accont n't found`,404))
+  if (!user) {
+    return next(new AppError(`Accont n't found`, 404));
   }
 res.status(200).json({
 status:true,
@@ -174,26 +172,26 @@ exports.deleteAccount=catchAsync(async(req,res,next)=>{
 
 
 
-exports.search=catchAsync(async(req,res,next)=>{
+exports.search = catchAsync(async (req, res, next) => {
   const searchTerm = req.query.term;
   //const results = await User.find({ $text: { $search: searchTerm } }).limit(10);
   const results = await User.find({
     $or: [
       { name: { $regex: searchTerm, $options: "i" } },
-      { email: { $regex: searchTerm, $options: "i" } }
-    ]
+      { email: { $regex: searchTerm, $options: "i" } },
+    ],
   }).limit(10);
 
-  if(!results){
-    return next(new AppError(`Data n't found`,404))
+  if (!results) {
+    return next(new AppError(`Data n't found`, 404));
   }
   res.status(200).json({
-    status:true,
-    results
-  })
-})
+    status: true,
+    results,
+  });
+});
 
-exports.creataAccount=catchAsync(async(req,res,next)=>{
+exports.creataAccount = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
   if (!newUser) {
@@ -207,9 +205,9 @@ exports.creataAccount=catchAsync(async(req,res,next)=>{
 /*
 exports.profilePage=catchAsync(async(req,res,next)=>{
   ///protect
-  const data =req.user;
-  if(!data){
-    return next(new AppError(`Something is wrong please Try again`,404))
+  const data = req.user;
+  if (!data) {
+    return next(new AppError(`Something is wrong please Try again`, 404));
   }
   res.status(200).json({
     status:true,
