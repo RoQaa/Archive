@@ -11,7 +11,10 @@ const destinationSchema = new mongoose.Schema({
 
 });
 
-
+destinationSchema.pre(/^find/,function(next){
+  this.select('-__v')
+  next();
+})
 const Destination = mongoose.model("Destination", destinationSchema);
 
 module.exports = Destination;

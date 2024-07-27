@@ -41,7 +41,7 @@ exports.getDestinations = catchAsync(async (req, res, next) => {
 });
 
 exports.getOneDestination = catchAsync(async (req, res, next) => {
-  const doc = await Destination.findById(req.params.id);
+  const doc = await Destination.findById(req.params.id).select('-__v');
 
   if (!doc) return next(new AppError("cannot found that Destination", 404));
   res.status(200).json({

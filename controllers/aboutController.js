@@ -26,10 +26,10 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
+  filter.subject=req.params.id;
 
 
-
-  const data = await About.find(filter).select("-__v");
+  const data = await About.find(filter)
   if (!data || data.length === 0) return next(new AppError(`no data`, 404));
 
   res.status(200).json({

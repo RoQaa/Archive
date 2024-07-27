@@ -36,7 +36,7 @@ const faxSchema = new mongoose.Schema({
 })
 
 faxSchema.pre(/^find/,function(next){
-    this.populate([{path:'about'},{path:'user'}])
+    this.populate([{path:'about'},{path:'user'}]).select('-__v')
     next();
 })
 const Fax= mongoose.model('Fax',faxSchema)

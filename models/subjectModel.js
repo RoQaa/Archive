@@ -18,7 +18,7 @@ const subjectSchema = new mongoose.Schema({
 });
 
 subjectSchema.pre(/^find/,function(next){
-  this.populate({path:"destination"})
+  this.populate({path:"destination"}).select('-__v')
   next()
 })
 

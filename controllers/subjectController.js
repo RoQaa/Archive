@@ -27,6 +27,7 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
+  filter.destination=req.params.id;
 
 
 
