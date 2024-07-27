@@ -26,20 +26,7 @@ exports.getAllFaxes = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.searchByDatesAdmin = catchAsync(async (req, res, next) => {
-  const { startDate, endDate } = req.body;
-exports.getAllFaxes=catchAsync(async(req,res,next)=>{
-    let filter={};
-    const {faxType} =req.query;
-    if(faxType) filter.faxType=faxType
-    const data = await Fax.find(filter);
-    if(!data) return next(new AppError(`No data found`,404))
-        res.status(200).json({
-            status:true,
-            data
-    })
 
-})
 exports.getOneFax=catchAsync(async(req,res,next)=>{
     const fax = await Fax.findById(req.params.id);
     if(!fax) return next(new AppError(`fax not found `,404))
@@ -115,18 +102,6 @@ exports.searchByDatesUser = catchAsync(async (req, res, next) => {
     data,
   });
 });
-    const data = await Fax.find({
-        user:req.user.id,
-        date: {
-            $gte: startDate,
-            $lte: endDate
-        }
-    });
-    if (!data||data.length===0) return next(new AppError(`No data found`, 404))
-    res.status(200).json({
-        status: true,
-        data
+   
 
-    })
-})
 
