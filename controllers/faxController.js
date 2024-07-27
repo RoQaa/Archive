@@ -28,7 +28,14 @@ exports.getAllFaxes=catchAsync(async(req,res,next)=>{
     })
 
 })
-
+exports.getOneFax=catchAsync(async(req,res,next)=>{
+    const fax = await Fax.findById(req.params.id);
+    if(!fax) return next(new AppError(`fax not found `,404))
+        res.status(200).json({
+            status:true,
+            fax
+    })
+})
 exports.searchByDatesAdmin=catchAsync(async(req,res,next)=>{
     const {startDate, endDate} = req.body;
 
@@ -101,3 +108,4 @@ exports.searchByDatesUser=catchAsync(async(req,res,next)=>{
 
     })
 })
+
