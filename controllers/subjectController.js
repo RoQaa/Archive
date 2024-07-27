@@ -1,15 +1,12 @@
-const About=require("../models/aboutModel");
-const Fax =require('../models/faxModel')
+const About = require("../models/aboutModel");
+const Fax = require("../models/faxModel");
 const Subject = require("../models/subjectModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.createSubject = catchAsync(async (req, res, next) => {
-
-
   const newInventory = {
     ...req.body,
-   
   };
   const doc = await Subject.create(newInventory);
 
@@ -21,15 +18,13 @@ exports.createSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.getSubjects = catchAsync(async (req, res, next) => {
-  const { name} = req.query;
+  const { name } = req.query;
 
   let filter = {};
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
-  filter.destination=req.params.id;
-
-
+  filter.destination = req.params.id;
 
   const data = await Subject.find(filter).select("-__v");
   if (!data || data.length === 0) return next(new AppError(`no data`, 404));
@@ -52,7 +47,6 @@ exports.getOneSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.updateSubject = catchAsync(async (req, res, next) => {
-
   const doc = await Subject.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -66,7 +60,6 @@ exports.updateSubject = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteSubject = catchAsync(async (req, res, next) => {
-  
   // Find all About documents related to the Subject
   const abouts = await About.find({ subject: req.params.id });
 
@@ -74,7 +67,7 @@ exports.deleteSubject = catchAsync(async (req, res, next) => {
   await Promise.all(
     abouts.map(async (about) => {
       await Fax.deleteMany({ about: about._id });
-    })
+    }),
   );
 
   // Delete all related About documents
