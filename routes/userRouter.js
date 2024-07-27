@@ -13,6 +13,7 @@ router.use(authController.protect)
 //Just Admin routes
 router.use(authController.restrictTo('admin'));
     router.get('/getAllUsers',userController.getUsersByAdmin)
+    router.get('/getOneUser/:id',userController.getOneUser)
    // router.get('/search',userController.search)
     router.post('/createUser',userController.creataAccount)
     router.patch('/updateUser/:id',userController.updateUserByAdmin)

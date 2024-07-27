@@ -82,6 +82,7 @@ exports.creataAccount = catchAsync(async (req, res, next) => {
   })
 })
 
+
 exports.getMyProfile=catchAsync(async (req,res,next)=>{
   
   res.status(200).json({
@@ -89,3 +90,12 @@ exports.getMyProfile=catchAsync(async (req,res,next)=>{
     data:req.user
   })
 })
+
+exports.getOneUser=catchAsync(async(req,res,next)=>{
+  const doc = await User.findById(req.params.id);
+  if(!doc)  return next(new AppError(`هذا المستخدم غير موجود`,404))
+    res.status(200).json({
+      status:true,
+      doc
+  })
+ })
