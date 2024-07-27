@@ -18,6 +18,7 @@ router.get("/searchDateByAdmin",faxController.searchByDatesAdmin)
 router
   .route("/:id")
   .patch(faxController.updateFax)
+  .get(faxController.getOneFax)
   .delete(faxController.deleteFax);
 
 module.exports = router;
