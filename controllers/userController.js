@@ -1,4 +1,5 @@
 const User = require(`./../models/userModel`);
+const Fax =require('../models/faxModel')
 const { catchAsync } = require(`./../utils/catchAsync`);
 const AppError = require(`./../utils/appError`);
 
@@ -56,7 +57,8 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError(`User n't found`, 404))
   }
-
+  await Fax.deleteMany({user:user.id})
+    
   await user.delete();
 
   res.status(200).json({
