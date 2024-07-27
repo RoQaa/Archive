@@ -16,12 +16,18 @@ exports.createFax = catchAsync(async (req, res, next) => {
 //Admin
 exports.getAllFaxes = catchAsync(async (req, res, next) => {
   let filter = {};
-  const { faxType } = req.query;
+  const { faxType,page,limit } = req.query;
   if (faxType) filter.faxType = faxType;
-  const data = await Fax.find(filter);
+  
+      const pageUpdate = page * 1 || 1;
+      const limitUpdate = limit * 1 || 100;
+      const skip = (pageUpdate - 1) * limitUpdate;
+
+  const data = await Fax.find(filter).skip(skip).limit(limitUpdate);
   if (!data) return next(new AppError(`No data found`, 404));
   res.status(200).json({
     status: true,
+    length:data.length,
     data,
   });
 });
