@@ -24,7 +24,7 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
-  filter.destination = req.params.id;
+ // filter.destination = req.params.id;
 
   const data = await Subject.find(filter).select("-__v");
   if (!data || data.length === 0) return next(new AppError(`no data`, 404));

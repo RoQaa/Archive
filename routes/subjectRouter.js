@@ -6,7 +6,7 @@ const subjectController = require("../controllers/subjectController");
 
 router.use(authController.protect)
 router.post("/add", subjectController.createSubject);
-router.get("/:id", subjectController.getSubjects);
+router.get("/", subjectController.getSubjects);
 
 
 //Admin Restricts
