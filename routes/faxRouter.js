@@ -7,7 +7,7 @@ router.use(authController.protect);
 
 // user
 router.get("/my-faxes", faxController.getMyFaxes);
-
+router.get('/getOneUserFax/:id',faxController.getOneUserFax)
 // user - admin
 router.post("/add", faxController.createFax);
 router.get("/searchDateByUser",faxController.searchByDatesUser)

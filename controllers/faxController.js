@@ -110,4 +110,11 @@ exports.searchByDatesUser = catchAsync(async (req, res, next) => {
 });
    
 
-
+exports.getOneUserFax=catchAsync(async(req,res,next)=>{
+  const fax = await Fax.find({_id:req.params.id,user:req.user.id});
+  if(!fax) return next(new AppError(`هذا الفاكس غير موجود `,404))
+      res.status(200).json({
+          status:true,
+          fax
+  })
+})
