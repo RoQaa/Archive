@@ -13,7 +13,7 @@ const subjectSchema = new mongoose.Schema({
   destination: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Destination",
-    required: true,
+  //  required: true,
   },
 });
 
