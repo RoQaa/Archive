@@ -12,7 +12,7 @@ exports.createSubject = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: true,
-    message: "Subject created successfully",
+    message: "تم انشاء الموضوع",
     doc,
   });
 });
@@ -27,7 +27,7 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
  // filter.destination = req.params.id;
 
   const data = await Subject.find(filter).select("-__v");
-  if (!data || data.length === 0) return next(new AppError(`no data`, 404));
+  if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات`, 404));
 
   res.status(200).json({
     status: true,
@@ -39,7 +39,7 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
 exports.getOneSubject = catchAsync(async (req, res, next) => {
   const doc = await Subject.findById(req.params.id);
 
-  if (!doc) return next(new AppError("cannot found that Subject", 404));
+  if (!doc) return next(new AppError("هذا الموضوع غير موجود", 404));
   res.status(200).json({
     status: true,
     doc,
@@ -51,11 +51,11 @@ exports.updateSubject = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (!doc) return next(new AppError("cannot found that Subject", 404));
+  if (!doc) return next(new AppError("هذا الموضوع غير موجود", 404));
   res.status(200).json({
     status: true,
-    message: "updated Successfully",
-    doc,
+    message: "تم التعديل بنجاح",
+  //  doc,
   });
 });
 
@@ -78,6 +78,6 @@ exports.deleteSubject = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: true,
-    message: "Deleted successfully",
+    message: "تم حذف الموضوع مع الشؤون والفاكسات المتعلقة به",
   });
 });

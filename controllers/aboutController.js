@@ -14,8 +14,8 @@ exports.createAbout = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: true,
-    message: "About created successfully",
-    doc,
+    message: "تم الانشاء",
+  //  doc,
   });
 });
 
@@ -30,7 +30,7 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
 
 
   const data = await About.find(filter)
-  if (!data || data.length === 0) return next(new AppError(`no data`, 404));
+  if (!data || data.length === 0) return next(new AppError(`لا نوجد بيانات لعرضها`, 404));
 
   res.status(200).json({
     status: true,
@@ -42,7 +42,7 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
 exports.getOneAbout = catchAsync(async (req, res, next) => {
   const doc = await About.findById(req.params.id);
 
-  if (!doc) return next(new AppError("cannot found that About", 404));
+  if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
   res.status(200).json({
     status: true,
     doc,
@@ -55,11 +55,11 @@ exports.updateAbout = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (!doc) return next(new AppError("cannot found that About", 404));
+  if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
   res.status(200).json({
     status: true,
-    message: "updated Successfully",
-    doc,
+    message: "تم التعديل بنجاح",
+ //   doc,
   });
 });
 
@@ -72,6 +72,6 @@ exports.deleteAbout = catchAsync(async (req, res, next) => {
 
    res.status(200).json({
      status: true,
-     message: "Deleted successfully",
+     message: "تم الحذف الشأن وجميع الفاكسات المتعلقة بهذا الشأن",
    });
 });

@@ -9,7 +9,7 @@ exports.createFax = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: true,
     message: "تم انشاء الفاكس بنجاح",
-    doc,
+   // doc,
   });
 });
 
@@ -18,13 +18,13 @@ exports.getAllFaxes = catchAsync(async (req, res, next) => {
   let filter = {};
   const { faxType,page,limit } = req.query;
   if (faxType) filter.faxType = faxType;
-  
+
       const pageUpdate = page * 1 || 1;
       const limitUpdate = limit * 1 || 100;
       const skip = (pageUpdate - 1) * limitUpdate;
 
   const data = await Fax.find(filter).skip(skip).limit(limitUpdate);
-  if (!data) return next(new AppError(`No data found`, 404));
+  if (!data) return next(new AppError(`لا توجد بيانات`, 404));
   res.status(200).json({
     status: true,
     length:data.length,
@@ -35,7 +35,7 @@ exports.getAllFaxes = catchAsync(async (req, res, next) => {
 
 exports.getOneFax=catchAsync(async(req,res,next)=>{
     const fax = await Fax.findById(req.params.id);
-    if(!fax) return next(new AppError(`fax not found `,404))
+    if(!fax) return next(new AppError(`هذا الفاكس غير موجود `,404))
         res.status(200).json({
             status:true,
             fax
@@ -51,7 +51,7 @@ exports.searchByDatesAdmin=catchAsync(async(req,res,next)=>{
     },
   });
   if (!data || data.length === 0)
-    return next(new AppError(`No data found`, 404));
+    return next(new AppError(`لا توجد بيانات`, 404));
   res.status(200).json({
     status: true,
     length: data.length,
@@ -64,11 +64,11 @@ exports.updateFax = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (!doc) return next(new AppError("cannot found that fax", 404));
+  if (!doc) return next(new AppError("هذا الفاكس غير موجود", 404));
   res.status(200).json({
     status: true,
-    message: "updated Successfully",
-    doc,
+    message: "تم التعديل",
+ //   doc,
   });
 });
 
@@ -77,14 +77,14 @@ exports.deleteFax = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: true,
-    message: "deleted Successfully",
+    message: "تم الحذف",
   });
 });
 
 //user
 exports.getMyFaxes = catchAsync(async (req, res, next) => {
   const data = await Fax.find({ user: req.user.id });
-  if (!data) return next(new AppError("No Data Found", 404));
+  if (!data) return next(new AppError("لا توجد فاكسات", 404));
   res.status(200).json({
     status: true,
     data,
@@ -102,7 +102,7 @@ exports.searchByDatesUser = catchAsync(async (req, res, next) => {
     },
   });
   if (!data || data.length === 0)
-    return next(new AppError(`No data found`, 404));
+    return next(new AppError(`لا توجد بيانات`, 404));
   res.status(200).json({
     status: true,
     data,

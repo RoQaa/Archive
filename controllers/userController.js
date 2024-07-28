@@ -18,12 +18,12 @@ exports.updateUserByAdmin = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, 'username', 'role', 'isActive');
   const user = await User.findByIdAndUpdate(id, filteredBody, { new: true, runValidators: true })
 
-  if (!user) return next(new AppError(`Accont n't found`, 404));
+  if (!user) return next(new AppError(`هذا الحساب غير موجود`, 404));
 
   res.status(200).json({
     status: true,
-    message: "Account Updated Successfully",
-    user
+    message: "تم تعديل الحساب",
+   // user
 
   })
 
@@ -41,7 +41,7 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
   }
 
   const data = await User.find(filter);
-  if (!data || data.length === 0) return next(new AppError(`No users Found`, 404))
+  if (!data || data.length === 0) return next(new AppError(`لا يوجد مستخدمين لعرضهم`, 404))
   res.status(200).json({
     status: true,
     length:data.length,
@@ -55,7 +55,7 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(req.params.id)
   if (!user) {
-    return next(new AppError(`User n't found`, 404))
+    return next(new AppError(`هذا المستخدم غير موجود`, 404))
   }
   await Fax.deleteMany({user:user.id})
     
@@ -63,7 +63,7 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: true,
-    message: "you Delete this User"
+    message: "تم حذف هذا المستخد مع كل الفاكسات المتعلقة بة"
   })
 })
 
@@ -76,11 +76,11 @@ exports.creataAccount = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
   if (!newUser) {
-    return next(new AppError(`SomeThing Error cannot sign up`, 404));
+    return next(new AppError(`حدث خطأ ما`, 404));
   }
   res.status(201).json({
     status: true,
-    message: "Account Create Successfully"
+    message: "تم انشاء حساب"
   })
 })
 

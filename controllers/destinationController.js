@@ -16,8 +16,8 @@ exports.createDestination = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: true,
-    message: "Destination created successfully",
-    doc,
+    message: "تم انشاء اسم جهة جديد",
+    //doc,
   });
 });
 
@@ -31,7 +31,7 @@ exports.getDestinations = catchAsync(async (req, res, next) => {
 
 
   const data = await Destination.find(filter).select("-__v");
-  if (!data || data.length === 0) return next(new AppError(`no data`, 404));
+  if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات`, 404));
 
   res.status(200).json({
     status: true,
@@ -43,7 +43,7 @@ exports.getDestinations = catchAsync(async (req, res, next) => {
 exports.getOneDestination = catchAsync(async (req, res, next) => {
   const doc = await Destination.findById(req.params.id).select('-__v');
 
-  if (!doc) return next(new AppError("cannot found that Destination", 404));
+  if (!doc) return next(new AppError("اسم الجهة غير موجود", 404));
   res.status(200).json({
     status: true,
     doc,
@@ -57,11 +57,11 @@ exports.updateDestination = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  if (!doc) return next(new AppError("cannot found that Destination", 404));
+  if (!doc) return next(new AppError("اسم الجهة غير موجود", 404));
   res.status(200).json({
     status: true,
-    message: "updated Successfully",
-    doc,
+    message: "تم التعديل بنجاح",
+  //  doc,
   });
 });
 
@@ -101,7 +101,7 @@ exports.deleteDestination = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: true,
-      message: "Deleted successfully",
+      message: "تم حذف الجهة ومواضيعها وشئونها والفاكسات الخاصة بها",
     });
 
   

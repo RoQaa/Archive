@@ -45,16 +45,16 @@ exports.login = catchAsync(async (req, res, next) => {
 
   //1) check username && password exist,
   if (!username || !password) {
-    return next(new AppError("من فضلكقم بادخال الاسم والباسورد", 400));
+    return next(new AppError("من فضلك قم بادخال الاسم و كلمة المرور", 400));
   }
 
   const user = await User.findOne({ username: username }).select("+password"); // hyzaod el password el m5fee aslan
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Incorrect username or password", 400));
+    return next(new AppError("اسم المستخدم او كلمةالمرور غير صحيحة", 400));
   }
 
-  createSendToken(user, 200, "log in successfully", res);
+  createSendToken(user, 200, "تم تسجيل الدخول بنجاح", res);
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
@@ -62,7 +62,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const user = await User.findById(id);
   if (!user) {
-    return next(new AppError("Token is invalid or has expired", 400));
+    return next(new AppError("هذا المستخدم غير موجود او قم بتسجيل الدخول مرة اخرى", 400));
   }
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
@@ -73,7 +73,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: true,
-    message: "password reset success you can now  try agin to log in",
+    message: "تم تغيير كلمة المرور",
   });
 });
 
@@ -104,7 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new AppError("Your 're not logged in please log in", 401));
+    return next(new AppError("عليك تسجيل الدخول اولا", 401));
   }
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -117,7 +117,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (currentUser.changesPasswordAfter(decoded.iat)) {
     return next(
       new AppError(
-        "user has changed password recently please log in again",
+        "قم بتسجيل الدخول مع كلمة المرورالجديدة",
         401,
       ),
     );
@@ -131,7 +131,7 @@ exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new AppError("You do not have permission to preform this action", 401),
+        new AppError("ليس لديك الصلاحية للقيام بهذة العملية", 401),
       );
     }
     next();
