@@ -2,8 +2,8 @@ const multer = require("multer");
 const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
-const AppError = require("../../Arshief/utils/appError");
-const { catchAsync } = require("../../Arshief/utils/catchAsync");
+const AppError = require("../utils/appError");
+const { catchAsync } = require("../utils/catchAsync");
 
 const multerFilter = (req, file, cb) => {
   const allowedTypes = [

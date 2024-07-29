@@ -8,14 +8,14 @@ const helmet = require("helmet"); // security
 const mongoSanitize = require("express-mongo-sanitize"); // security
 const xss = require("xss-clean"); // security
 const cors = require("cors");
-const AppError = require("../Arshief/utils/appError");
-const globalErrorHandler = require("../Arshief/controllers/errorController");
-const userRouter = require("../Arshief/routes/userRouter");
-const destinationRoutes = require("../Arshief/routes/destinationRouter");
-const subjectRoutes = require("../Arshief/routes/subjectRouter");
-const aboutRoutes = require("../Arshief/routes/aboutRouter");
-const uploadRoutes = require("../Arshief/routes/uploadsRouter");
-const faxRoutes = require("../Arshief/routes/faxRouter");
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
+const userRouter = require("./routes/userRouter");
+const destinationRoutes = require("./routes/destinationRouter");
+const subjectRoutes = require("./routes/subjectRouter");
+const aboutRoutes = require("./routes/aboutRouter");
+const uploadRoutes = require("./routes/uploadsRouter");
+const faxRoutes = require("./routes/faxRouter");
 const app = express();
 
 // Global MiddleWares
