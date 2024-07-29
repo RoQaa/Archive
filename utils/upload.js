@@ -100,9 +100,9 @@ const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
       if (file.mimetype.startsWith("image")) {
         filename = `user-${userId}-${timestamp}-${index}.jpeg`;
         await sharp(file.buffer)
-          .resize(700, 1200)
+          .resize(900, 1200)
           .toFormat("jpeg")
-          .jpeg({ quality: 90 })
+          .jpeg({ quality: 100 })
           .toFile(path.join(userDir, filename));
 
         //
