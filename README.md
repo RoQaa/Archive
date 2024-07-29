@@ -56,18 +56,17 @@ Before you begin, ensure you have the following installed on your machine:
 
 3. **Set up environment variables:**
 
-Create a .env file in the root directory and add the following 
+    Create a .env file in the root directory and add the following 
     environment variables:
-
-        ```bash
-        NODE_ENV=development
-        PORT=5000
-        DATABASE=mongodb://localhost:27017/manzomaArchive
-        UPLOADS_DIR=./public/uploads
-        JWT_SECRET=secret_key
-        JWT_EXPIRES_IN=time
-        JWT_COOKIE_EXPIRES_IN=time
-        URL_SERVER=127.0.0.1:5000/api/v1
+    ```bash
+    NODE_ENV=development
+    PORT=5000
+    DATABASE=mongodb://localhost:27017/manzomaArchive
+    UPLOADS_DIR=./public/uploads
+    JWT_SECRET=secret_key
+    JWT_EXPIRES_IN=time
+    JWT_COOKIE_EXPIRES_IN=time
+    URL_SERVER=127.0.0.1:5000/api/v1
 
 4. **Run the server:**
     ```bash
