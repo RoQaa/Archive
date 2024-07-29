@@ -51,22 +51,25 @@ Before you begin, ensure you have the following installed on your machine:
    git clone https://github.com/RoQaa/Dar_ll_mosha.git
    cd Dar_ll_mosha
 2. **Install dependencies:**
+    ```bash
     npm install
 
 3. **Set up environment variables:**
+    ```bash
     Create a .env file in the root directory and add the following environment variables:
     NODE_ENV=development
     PORT=5000
     DATABASE=mongodb://localhost:27017/manzomaArchive
     UPLOADS_DIR=./public/uploads
-    JWT_SECRET = String secret key
-    JWT_EXPIRES_IN = time
-    JWT_COOKIE_EXPIRES_IN=10
+    JWT_SECRET=secret_key
+    JWT_EXPIRES_IN=time
+    JWT_COOKIE_EXPIRES_IN=time
     URL_SERVER=127.0.0.1:5000/api/v1
 
 4. **Run the server:**
+    ```bash
     npm start
-    The server will start on http://localhost:5000.
+The server will start on http://localhost:5000.
     
 ## License
 
