@@ -17,7 +17,7 @@ exports.createDestination = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: true,
     message: "تم انشاء اسم جهة جديد",
-    //doc,
+    doc,
   });
 });
 

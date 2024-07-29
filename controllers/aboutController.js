@@ -15,7 +15,7 @@ exports.createAbout = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: true,
     message: "تم الانشاء",
-  //  doc,
+    doc,
   });
 });
 
