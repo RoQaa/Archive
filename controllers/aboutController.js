@@ -26,7 +26,7 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
- // filter.subject=req.params.id;
+  filter.subject=req.params.id;
 
 
   const data = await About.find(filter)
