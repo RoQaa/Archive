@@ -55,9 +55,11 @@ Before you begin, ensure you have the following installed on your machine:
     npm install
 
 3. **Set up environment variables:**
-    Create a .env file in the root directory and add the following 
+
+Create a .env file in the root directory and add the following 
+environment variables:
     ```bash
-    environment variables:
+    
     NODE_ENV=development
     PORT=5000
     DATABASE=mongodb://localhost:27017/manzomaArchive
