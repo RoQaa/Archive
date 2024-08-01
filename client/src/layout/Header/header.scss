@@ -1,0 +1,67 @@
+/* header.scss */
+
+.header {
+  .navbar {
+    background-color: #f8f9fa; // Lighter background color
+  }
+
+  .nav-link {
+    color: #000000 !important; // Dark text color for better contrast
+    font-weight: bold !important;
+
+    &.active-page {
+      color: #8d4d11 !important; // Highlight color for the active page
+      position: relative;
+
+      &:after {
+        content: 'أنت هنا';
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #8d4d11;
+        color: #f8f9fa;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      &:hover:after {
+        opacity: 1;
+      }
+    }
+  }
+
+  .btn-logout {
+    background-color: #d12f1a !important; // Lighter button background color
+    border: none !important;
+    color: white !important;
+    cursor: pointer !important;
+    padding: 10px 20px !important;
+  }
+
+  .btn-logout:hover {
+    background-color: rgba(
+      255,
+      0,
+      0,
+      0.781
+    ) !important; // Slightly darker shade on hover
+  }
+
+  .ms-auto {
+    margin-left: auto !important;
+  }
+
+  .navbar-nav {
+    .nav-item {
+      margin-left: 10px !important;
+    }
+  }
+
+  .user-name {
+    color: #8d4d11 !important; // Dark color for the username
+  }
+}

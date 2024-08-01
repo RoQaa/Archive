@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+:root {
+  --main-color: #8d4d11;
+  --word-dash: #8d4d11;
+  --gold-color: #8d4d11;
+  --gold-color2: #8d4d11;
+  --darkblue-color: #8d4d11;
+  --shd: 0px 2px 50px 10px rgba(44, 43, 105, 0.29);
+  --background-color: #ffffff;
+  --text-color: #000000;
+}
+
+* {
+  font-family: 'Cairo', sans-serif !important;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* font-family: 'Poppins', sans-serif; */
+  font-family: 'Sora', sans-serif;
+  color: inherit;
+  text-decoration: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* font-family: 'Cairo', sans-serif !important; */
+}
+
+body {
+  /* font-family: 'Cairo', sans-serif !important; */
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--background-color);
+  color: var(--text-color);
+  text-align: end !important;
+}
+
+input,
+textarea {
+  border-radius: 5px !important;
+  padding: 5px 10px !important;
+  font-size: 18px !important;
+  border: 1px solid var(--gold-color) !important;
+}
+
+h2 {
+  color: var(--main-color);
+}
+
+button {
+  cursor: pointer;
+  border-radius: 10px !important;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--gold-color);
+  padding: 6px;
+}
+
+button:hover {
+  background-color: #703b0d !important;
+  color: white;
+  border-color: #fff;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  background-color: rgb(255, 255, 255);
+  display: grid;
+  color: black;
+  text-align: center;
+  z-index: 1000000;
+  place-content: center;
+  display: none;
+}
+
+.loading::before {
+  content: '';
+  width: 50px;
+  height: 50px;
+  border: 6px solid rgb(0, 0, 0);
+  border-top: 6px solid #8d4d11;
+  border-radius: 50%;
+  animation: spinner 1.2s linear infinite;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 8px !important;
+}
+
+.Container {
+  padding: 30px 55px;
+  margin-inline: auto;
+  max-width: 1300px;
+}
+
+.back-details-button {
+  border-radius: 22px !important;
+  border: 3px solid #8d4d11;
+  background: none;
+  color: #8d4d11;
+  width: 7rem;
+}
+
+.editIcon {
+  background-color: #000;
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  font-size: 50px;
+  justify-content: center;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 2000;
+  align-items: center;
+  cursor: pointer !important;
+}
+
+.bacground-color-darkblue {
+  background-color: var(--darkblue-color);
+}
+
+.bacground-color-golden {
+  background-color: var(--gold-color);
+}
+
+@media (max-width: 700px) {
+  .responsive-home-grid {
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .Container {
+    padding: 10px 35px;
+
+    padding-bottom: 30px;
+
+    h2 {
+      margin-top: 30px;
+    }
+  }
+}

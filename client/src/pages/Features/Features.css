@@ -1,0 +1,5 @@
+.confirm-btn {
+  align-self: flex-start;
+  width: fit-content;
+  margin-bottom: 1rem; /* Adds some space below each confirm button */
+}
