@@ -70,9 +70,9 @@ const Header = () => {
               )}
               <li className="nav-item">
                 <Link
-                  to={'/home'}
+                  to="/home"
                   className={`nav-link ${
-                    location.pathname === '/' ? 'active-page' : ''
+                    location.pathname === '/home' ? 'active-page' : ''
                   } text-light fw-bolder`}
                   aria-current="page"
                 >
