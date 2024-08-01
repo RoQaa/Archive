@@ -81,8 +81,8 @@ const handleFileUpload = catchAsync(async (req, res, next) => {
   }
 
   req.file.filename = filename;
-  req.file.path = `${process.env.URL_SERVER}/api/public/uploads/${userId}/${filename}`;
-
+//  req.file.path = `${process.env.URL_SERVER}/public/uploads/${userId}/${filename}`;
+req.file.path = `public/uploads/${userId}/${filename}`;
   next();
 });
 
@@ -128,7 +128,8 @@ const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
 
       return {
         filename,
-        path: `${process.env.URL_SERVER}/api/public/uploads/${userId}/${filename}`,
+       // path: `${process.env.URL_SERVER}/public/uploads/${userId}/${filename}`,
+        path: `public/uploads/${userId}/${filename}`,
         mimetype: file.mimetype,
         size: file.size,
       };

@@ -54,7 +54,8 @@ app.use(express.json());
 app.use(mongoSanitize());
 app.use(xss());
 
-app.use("/api/public", express.static(path.join(__dirname, "public")));
+
+app.use("/api/v1/public", express.static(path.join(__dirname, "public")));
 
 
 app.use(express.json({ limit: "50mb" }));
