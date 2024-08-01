@@ -5,7 +5,8 @@ const AppError = require("../utils/appError");
 // user and admin
 exports.createFax = catchAsync(async (req, res, next) => {
   req.body.user = req.user.id;
-  const doc = await Fax.create(req.body);
+  await Fax.create(req.body);
+ // const doc = await Fax.create(req.body);
   res.status(201).json({
     status: true,
     message: "تم انشاء الفاكس بنجاح",
@@ -86,6 +87,7 @@ exports.getMyFaxes = catchAsync(async (req, res, next) => {
   if (!data) return next(new AppError("لا توجد فاكسات", 404));
   res.status(200).json({
     status: true,
+    length:data.length,
     data,
   });
 });
@@ -125,22 +127,51 @@ exports.searches = catchAsync(async (req, res, next) => {
   if (fax_Number) data = await Fax.find({ faxNumber: fax_Number })
 
   if (username) {
-    data = await Fax.aggregate([{
-      $lookup: {
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'user'
-      }
-    },
-    { $unwind: '$user' },
-    {
-      $match: {
-        'user.username': { $regex: username, $options: "i" }// new RegExp(username, 'i')
-      }
-    }
-
-    ])
+     data = await Fax.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
+      {
+        $match: {
+          'user.username': { $regex: username, $options: 'i' }
+        }
+      },
+      {
+        $lookup: {
+          from: 'abouts',
+          localField: 'about',
+          foreignField: '_id',
+          as: 'about'
+        }
+      },
+      { $unwind: '$about' },
+      {
+        $lookup: {
+          from: 'subjects',
+          localField: 'about.subject',
+          foreignField: '_id',
+          as: 'about.subject'
+        }
+      },
+      { $unwind: '$about.subject' },
+      {
+        $lookup: {
+          from: 'destinations',
+          localField: 'about.subject.destination',
+          foreignField: '_id',
+          as: 'about.subject.destination'
+        }
+      },
+      { $unwind: '$about.subject.destination' },
+      // Optionally, add additional stages here if needed (e.g., projection, sorting)
+    ]);
+   
   }
 
   if (destinationName) {
@@ -176,13 +207,23 @@ exports.searches = catchAsync(async (req, res, next) => {
         $match: {
           'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
         }
-      }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
 
     ])
   }
   if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
   res.status(200).json({
     status: true,
+    length:data.length,
     data
   })
 
