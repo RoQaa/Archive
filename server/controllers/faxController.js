@@ -122,109 +122,88 @@ exports.getOneUserFax = catchAsync(async (req, res, next) => {
 
 exports.searches = catchAsync(async (req, res, next) => {
   const { username, fax_Number, destinationName, faxType } = req.query;
-  let data;
-  if (faxType) data = await Fax.find({ faxType: faxType })
-  if (fax_Number) data = await Fax.find({ faxNumber: fax_Number })
 
+  let matchConditions = {};
+
+  // Collect search criteria
   if (username) {
-     data = await Fax.aggregate([
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user',
-          foreignField: '_id',
-          as: 'user'
-        }
-      },
-      { $unwind: '$user' },
-      {
-        $match: {
-          'user.username': { $regex: username, $options: 'i' }
-        }
-      },
-      {
-        $lookup: {
-          from: 'abouts',
-          localField: 'about',
-          foreignField: '_id',
-          as: 'about'
-        }
-      },
-      { $unwind: '$about' },
-      {
-        $lookup: {
-          from: 'subjects',
-          localField: 'about.subject',
-          foreignField: '_id',
-          as: 'about.subject'
-        }
-      },
-      { $unwind: '$about.subject' },
-      {
-        $lookup: {
-          from: 'destinations',
-          localField: 'about.subject.destination',
-          foreignField: '_id',
-          as: 'about.subject.destination'
-        }
-      },
-      { $unwind: '$about.subject.destination' },
-      // Optionally, add additional stages here if needed (e.g., projection, sorting)
-    ]);
-   
+    matchConditions['user.username'] = { $regex: username, $options: 'i' };
+  }
+  if (fax_Number) {
+
+   // Convert fax_Number to number if it's numeric
+   const faxNumber = isNaN(fax_Number) ? fax_Number : Number(fax_Number);
+   matchConditions['faxNumber'] = faxNumber;
+  }
+  if (faxType) {
+    matchConditions['faxType'] = faxType;
   }
 
+  let pipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    { $unwind: '$user' },
+    {
+      $lookup: {
+        from: 'abouts',
+        localField: 'about',
+        foreignField: '_id',
+        as: 'about'
+      }
+    },
+    { $unwind: '$about' },
+    {
+      $lookup: {
+        from: 'subjects',
+        localField: 'about.subject',
+        foreignField: '_id',
+        as: 'about.subject'
+      }
+    },
+    { $unwind: '$about.subject' },
+    {
+      $lookup: {
+        from: 'destinations',
+        localField: 'about.subject.destination',
+        foreignField: '_id',
+        as: 'about.subject.destination'
+      }
+    },
+    { $unwind: '$about.subject.destination' }
+  ];
+
+  // Add match conditions based on query parameters
   if (destinationName) {
-    data = await Fax.aggregate([
-      {
-        $lookup: {
-          from: 'abouts',
-          localField: 'about',
-          foreignField: '_id',
-          as: 'about'
-        }
-      },
-      { $unwind: '$about' },
-      {
-        $lookup: {
-          from: 'subjects',
-          localField: 'about.subject',
-          foreignField: '_id',
-          as: 'about.subject'
-        }
-      },
-      { $unwind: '$about.subject' },
-      {
-        $lookup: {
-          from: 'destinations',
-          localField: 'about.subject.destination',
-          foreignField: '_id',
-          as: 'about.subject.destination'
-        }
-      },
-      { $unwind: '$about.subject.destination' },
-      {
-        $match: {
-          'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
-        }
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user',
-          foreignField: '_id',
-          as: 'user'
-        }
-      },
-      { $unwind: '$user' },
-
-    ])
+    pipeline.push({
+      $match: {
+        ...matchConditions,
+        'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
+      }
+    });
+  } else {
+    pipeline.push({ $match: matchConditions });
   }
+
+  // Execute the aggregation pipeline
+  const data = await Fax.aggregate(pipeline);
+
+  // Handle case when no data is found
   if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
+
+  // Send response
   res.status(200).json({
     status: true,
-    length:data.length,
+    length: data.length,
     data
-  })
+  });
+});
 
-})
+
+
+
