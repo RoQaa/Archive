@@ -1,6 +1,3 @@
-const Subject =require('../models/subjectModel')
-const Destination =require('../models/destinationNameModel')
-const User=require('../models/userModel')
 const Fax = require("../models/faxModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -12,40 +9,39 @@ exports.createFax = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: true,
     message: "تم انشاء الفاكس بنجاح",
-   // doc,
+    // doc,
   });
 });
 
 //Admin
 exports.getAllFaxes = catchAsync(async (req, res, next) => {
-  let filter = {};
-  const { faxType,page,limit } = req.query;
-  if (faxType) filter.faxType = faxType;
 
-      const pageUpdate = page * 1 || 1;
-      const limitUpdate = limit * 1 || 100;
-      const skip = (pageUpdate - 1) * limitUpdate;
+  const { page, limit } = req.query;
 
-  const data = await Fax.find(filter).skip(skip).limit(limitUpdate);
+  const pageUpdate = page * 1 || 1;
+  const limitUpdate = limit * 1 || 100;
+  const skip = (pageUpdate - 1) * limitUpdate;
+
+  const data = await Fax.find().skip(skip).limit(limitUpdate);
   if (!data) return next(new AppError(`لا توجد بيانات`, 404));
   res.status(200).json({
     status: true,
-    length:data.length,
+    length: data.length,
     data,
   });
 });
 
 
-exports.getOneFax=catchAsync(async(req,res,next)=>{
-    const fax = await Fax.findById(req.params.id);
-    if(!fax) return next(new AppError(`هذا الفاكس غير موجود `,404))
-        res.status(200).json({
-            status:true,
-            fax
-    })
+exports.getOneFax = catchAsync(async (req, res, next) => {
+  const fax = await Fax.findById(req.params.id);
+  if (!fax) return next(new AppError(`هذا الفاكس غير موجود `, 404))
+  res.status(200).json({
+    status: true,
+    fax
+  })
 })
-exports.searchByDatesAdmin=catchAsync(async(req,res,next)=>{
-    const {startDate, endDate} = req.query;
+exports.searchByDatesAdmin = catchAsync(async (req, res, next) => {
+  const { startDate, endDate } = req.query;
 
   const data = await Fax.find({
     date: {
@@ -71,7 +67,7 @@ exports.updateFax = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: true,
     message: "تم التعديل",
- //   doc,
+    //   doc,
   });
 });
 
@@ -111,84 +107,83 @@ exports.searchByDatesUser = catchAsync(async (req, res, next) => {
     data,
   });
 });
-   
 
-exports.getOneUserFax=catchAsync(async(req,res,next)=>{
-  const fax = await Fax.find({_id:req.params.id,user:req.user.id});
-  if(!fax) return next(new AppError(`هذا الفاكس غير موجود `,404))
-      res.status(200).json({
-          status:true,
-          fax
+
+exports.getOneUserFax = catchAsync(async (req, res, next) => {
+  const fax = await Fax.find({ _id: req.params.id, user: req.user.id });
+  if (!fax) return next(new AppError(`هذا الفاكس غير موجود `, 404))
+  res.status(200).json({
+    status: true,
+    fax
   })
 })
 
-exports.searches=catchAsync(async(req,res,next)=>{
-  const { username, fax_Number, destinationName } = req.query;
-    let data;
-  if(fax_Number) data = await Fax.find({faxNumber:fax_Number})
-  
-    if(username){
-      data =  await Fax.aggregate([  {
+exports.searches = catchAsync(async (req, res, next) => {
+  const { username, fax_Number, destinationName, faxType } = req.query;
+  let data;
+  if (faxType) data = await Fax.find({ faxType: faxType })
+  if (fax_Number) data = await Fax.find({ faxNumber: fax_Number })
+
+  if (username) {
+    data = await Fax.aggregate([{
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    { $unwind: '$user' },
+    {
+      $match: {
+        'user.username': { $regex: username, $options: "i" }// new RegExp(username, 'i')
+      }
+    }
+
+    ])
+  }
+
+  if (destinationName) {
+    data = await Fax.aggregate([
+      {
         $lookup: {
-          from: 'users',
-          localField: 'user',
+          from: 'abouts',
+          localField: 'about',
           foreignField: '_id',
-          as: 'user'
+          as: 'about'
         }
       },
-      { $unwind: '$user' },
+      { $unwind: '$about' },
+      {
+        $lookup: {
+          from: 'subjects',
+          localField: 'about.subject',
+          foreignField: '_id',
+          as: 'about.subject'
+        }
+      },
+      { $unwind: '$about.subject' },
+      {
+        $lookup: {
+          from: 'destinations',
+          localField: 'about.subject.destination',
+          foreignField: '_id',
+          as: 'about.subject.destination'
+        }
+      },
+      { $unwind: '$about.subject.destination' },
       {
         $match: {
-          'user.username':{$regex: username, $options: "i"}// new RegExp(username, 'i')
+          'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
         }
       }
-  
-  ])
-    }
 
-    if(destinationName){
-      data= await Fax.aggregate([
-        {
-          $lookup: {
-            from: 'abouts',
-            localField: 'about',
-            foreignField: '_id',
-            as: 'about'
-          }
-        },
-        { $unwind: '$about' },
-        {
-          $lookup: {
-            from: 'subjects',
-            localField: 'about.subject',
-            foreignField: '_id',
-            as: 'about.subject'
-          }
-        },
-        { $unwind: '$about.subject' },
-        {
-          $lookup: {
-            from: 'destinations',
-            localField: 'about.subject.destination',
-            foreignField: '_id',
-            as: 'about.subject.destination'
-          }
-        },
-        { $unwind: '$about.subject.destination' },
-        {
-          $match: {
-            'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
-          }
-        }
-     
-      ])
-    }
-
-    res.status(200).json({
-      status:true,
-      data
-    })
+    ])
+  }
+  if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
+  res.status(200).json({
+    status: true,
+    data
+  })
 
 })
-
-//جهة اسم مرسل كود

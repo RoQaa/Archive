@@ -1,7 +1,7 @@
 const Destination = require("../models/destinationNameModel");
 const Subject = require("../models/subjectModel");
-const About =require('../models/aboutModel')
-const Fax =require('../models/faxModel')
+const About = require('../models/aboutModel')
+const Fax = require('../models/faxModel')
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
@@ -10,7 +10,7 @@ exports.createDestination = catchAsync(async (req, res, next) => {
 
   const newInventory = {
     ...req.body,
-    
+
   };
   const doc = await Destination.create(newInventory);
 
@@ -61,48 +61,48 @@ exports.updateDestination = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: true,
     message: "تم التعديل بنجاح",
-  //  doc,
+    //  doc,
   });
 });
 
 exports.deleteDestination = catchAsync(async (req, res, next) => {
- 
+
   const subjects = await Subject.find({ destination: req.params.id });
 
-    // Find all related About documents
-    const abouts = await Promise.all(
-      subjects.map(async (sub) => {
-        return About.find({ subject: sub._id });
-      })
-    );
+  // Find all related About documents
+  const abouts = await Promise.all(
+    subjects.map(async (sub) => {
+      return About.find({ subject: sub._id });
+    })
+  );
 
-    // Flatten the abouts array
-    const allAbouts = [].concat(...abouts);
+  // Flatten the abouts array
+  const allAbouts = [].concat(...abouts);
 
-    // Delete all related Faxes documents
-    await Promise.all(
-      allAbouts.map(async (about) => {
-        await Fax.deleteMany({ about: about._id });
-      })
-    );
+  // Delete all related Faxes documents
+  await Promise.all(
+    allAbouts.map(async (about) => {
+      await Fax.deleteMany({ about: about._id });
+    })
+  );
 
-    // Delete all related About documents
-    await Promise.all(
-      subjects.map(async (sub) => {
-        await About.deleteMany({ subject: sub._id });
-      })
-    );
+  // Delete all related About documents
+  await Promise.all(
+    subjects.map(async (sub) => {
+      await About.deleteMany({ subject: sub._id });
+    })
+  );
 
-    // Delete all related Subject documents
-    await Subject.deleteMany({ destination: req.params.id });
+  // Delete all related Subject documents
+  await Subject.deleteMany({ destination: req.params.id });
 
-    // Delete the Destination document
-    await Destination.findByIdAndDelete(req.params.id);
+  // Delete the Destination document
+  await Destination.findByIdAndDelete(req.params.id);
 
-    res.status(200).json({
-      status: true,
-      message: "تم حذف الجهة ومواضيعها وشئونها والفاكسات الخاصة بها",
-    });
+  res.status(200).json({
+    status: true,
+    message: "تم حذف الجهة ومواضيعها وشئونها والفاكسات الخاصة بها",
+  });
 
-  
+
 });

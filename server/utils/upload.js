@@ -68,7 +68,7 @@ const handleFileUpload = catchAsync(async (req, res, next) => {
   } else if (
     req.file.mimetype === "application/msword" ||
     req.file.mimetype ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   ) {
     filename = `user-${userId}-${timestamp}.docx`;
     fs.writeFileSync(path.join(userDir, filename), req.file.buffer);
@@ -114,7 +114,7 @@ const handleMultipleFileUpload = catchAsync(async (req, res, next) => {
       } else if (
         file.mimetype === "application/msword" ||
         file.mimetype ===
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       ) {
         filename = `user-${userId}-${timestamp}-${index}.docx`;
         fs.writeFileSync(path.join(userDir, filename), file.buffer);

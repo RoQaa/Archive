@@ -1,6 +1,5 @@
 const express = require("express");
 const morgan = require("morgan");
-const bodyParser = require("body-parser");
 const morganBody = require("morgan-body");
 const path = require("path");
 const rateLimit = require("express-rate-limit"); // security
@@ -55,7 +54,6 @@ app.use(express.json());
 app.use(mongoSanitize());
 app.use(xss());
 
-//app.set('view engine', 'ejs'); // Change 'ejs' to your desired template engine
 app.use("/api/public", express.static(path.join(__dirname, "public")));
 
 
@@ -74,7 +72,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/uploads", uploadRoutes);
 app.use("/api/v1/faxes", faxRoutes);
 
-//
+
 app.all("*", (req, res, next) => {
   next(
     new AppError(`Can't find the url ${req.originalUrl} on this server`, 404),

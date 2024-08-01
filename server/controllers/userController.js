@@ -1,5 +1,5 @@
 const User = require(`./../models/userModel`);
-const Fax =require('../models/faxModel')
+const Fax = require('../models/faxModel')
 const { catchAsync } = require(`./../utils/catchAsync`);
 const AppError = require(`./../utils/appError`);
 
@@ -23,7 +23,7 @@ exports.updateUserByAdmin = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: true,
     message: "تم تعديل الحساب",
-   // user
+    // user
 
   })
 
@@ -34,17 +34,17 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
   const { username } = req.query;
 
   let filter = {};
-  filter.role='user'
+  filter.role = 'user'
   if (username) {
     filter.username = { $regex: username, $options: "i" };
-    
+
   }
 
   const data = await User.find(filter);
   if (!data || data.length === 0) return next(new AppError(`لا يوجد مستخدمين لعرضهم`, 404))
   res.status(200).json({
     status: true,
-    length:data.length,
+    length: data.length,
     data
   })
 })
@@ -57,8 +57,8 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError(`هذا المستخدم غير موجود`, 404))
   }
-  await Fax.deleteMany({user:user.id})
-    
+  await Fax.deleteMany({ user: user.id })
+
   await user.delete();
 
   res.status(200).json({
@@ -85,19 +85,19 @@ exports.creataAccount = catchAsync(async (req, res, next) => {
 })
 
 
-exports.getMyProfile=catchAsync(async (req,res,next)=>{
-  
+exports.getMyProfile = catchAsync(async (req, res, next) => {
+
   res.status(200).json({
-    status:true,
-    data:req.user
+    status: true,
+    data: req.user
   })
 })
 
-exports.getOneUser=catchAsync(async(req,res,next)=>{
+exports.getOneUser = catchAsync(async (req, res, next) => {
   const doc = await User.findById(req.params.id);
-  if(!doc)  return next(new AppError(`هذا المستخدم غير موجود`,404))
-    res.status(200).json({
-      status:true,
-      doc
+  if (!doc) return next(new AppError(`هذا المستخدم غير موجود`, 404))
+  res.status(200).json({
+    status: true,
+    doc
   })
- })
+})

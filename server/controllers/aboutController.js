@@ -1,4 +1,4 @@
-const Fax =require('../models/faxModel')
+const Fax = require('../models/faxModel')
 const About = require("../models/aboutModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -8,7 +8,7 @@ exports.createAbout = catchAsync(async (req, res, next) => {
 
   const newInventory = {
     ...req.body,
-    
+
   };
   const doc = await About.create(newInventory);
 
@@ -26,7 +26,7 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
   if (name) {
     filter.name = { $regex: name, $options: "i" };
   }
-  filter.subject=req.params.id;
+  filter.subject = req.params.id;
 
 
   const data = await About.find(filter)
@@ -59,19 +59,19 @@ exports.updateAbout = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: true,
     message: "تم التعديل بنجاح",
- //   doc,
+    //   doc,
   });
 });
 
 exports.deleteAbout = catchAsync(async (req, res, next) => {
-   // Delete all related Faxes documents
-   await Fax.deleteMany({ about: req.params.id });
+  // Delete all related Faxes documents
+  await Fax.deleteMany({ about: req.params.id });
 
-   // Delete the About document
-   await About.findByIdAndDelete(req.params.id);
+  // Delete the About document
+  await About.findByIdAndDelete(req.params.id);
 
-   res.status(200).json({
-     status: true,
-     message: "تم الحذف الشأن وجميع الفاكسات المتعلقة بهذا الشأن",
-   });
+  res.status(200).json({
+    status: true,
+    message: "تم الحذف الشأن وجميع الفاكسات المتعلقة بهذا الشأن",
+  });
 });

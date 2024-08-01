@@ -8,7 +8,7 @@ const subjectSchema = new mongoose.Schema({
     trim: true,
   },
 
- 
+
 
   destination: {
     type: mongoose.Schema.Types.ObjectId,
@@ -17,8 +17,8 @@ const subjectSchema = new mongoose.Schema({
   },
 });
 
-subjectSchema.pre(/^find/,function(next){
-  this.populate({path:"destination"}).select('-__v')
+subjectSchema.pre(/^find/, function (next) {
+  this.populate({ path: "destination" }).select('-__v')
   next()
 })
 
