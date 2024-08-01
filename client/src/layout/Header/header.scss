@@ -10,7 +10,7 @@
     font-weight: bold !important;
 
     &.active-page {
-      color: #8d4d11 !important; // Highlight color for the active page
+      color: #3777b8 !important; // Highlight color for the active page
       position: relative;
 
       &:after {
@@ -19,7 +19,7 @@
         bottom: -20px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #8d4d11;
+        background-color: #3777b8;
         color: #f8f9fa;
         padding: 2px 5px;
         border-radius: 3px;
@@ -62,6 +62,6 @@
   }
 
   .user-name {
-    color: #8d4d11 !important; // Dark color for the username
+    color: #3777b8 !important; // Dark color for the username
   }
 }

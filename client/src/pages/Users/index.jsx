@@ -252,19 +252,19 @@ const Users = () => {
               <td className="p-3">
                 <button
                   onClick={() => openPasswordModal(item)}
-                  className="btn btn-outline-success bt-c mx-2 px-4"
+                  className="btn btn-success bt-c mx-2 px-4"
                 >
                   تعديل كلمة السر
                 </button>
                 <button
                   onClick={() => openEditUserModal(item)}
-                  className="btn btn-outline-info bt-c mx-2 px-4"
+                  className="btn btn-info bt-c mx-2 px-4"
                 >
                   تعديل المستخدم
                 </button>
                 <button
                   onClick={() => handleDelete(item._id)}
-                  className="btn bt-d btn-outline-danger mx-2 px-4"
+                  className="btn bt-d btn-danger mx-2 px-4"
                 >
                   حذف المستخدم
                 </button>
@@ -311,10 +311,7 @@ const Users = () => {
               حفظ التعديلات
             </button>
           </form>
-          <button
-            onClick={closePasswordModal}
-            className="btn btn-secondary mt-3"
-          >
+          <button onClick={closePasswordModal} className="btn btn-danger mt-3">
             إلغاء
           </button>
         </Modal>
@@ -367,10 +364,7 @@ const Users = () => {
               إنشاء مستخدم
             </button>
           </form>
-          <button
-            onClick={closeNewUserModal}
-            className="btn btn-secondary mt-3"
-          >
+          <button onClick={closeNewUserModal} className="btn btn-danger mt-3">
             إلغاء
           </button>
         </Modal>
@@ -415,10 +409,7 @@ const Users = () => {
               حفظ التعديلات
             </button>
           </form>
-          <button
-            onClick={closeEditUserModal}
-            className="btn btn-secondary mt-3"
-          >
+          <button onClick={closeEditUserModal} className="btn btn-danger mt-3">
             إلغاء
           </button>
         </Modal>

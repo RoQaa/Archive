@@ -51,7 +51,8 @@ const Routers = () => {
       <Suspense fallback="جاري تحميل البايانات">
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/update/:id" element={<UpdatedFax />} />
             <Route path="/details/:id" element={<DetailsFax />} />
             <Route path="/addNewFax" element={<AddNewFax />} />
@@ -70,14 +71,14 @@ const Routers = () => {
                 // </Protect>
               }
             />
-            <Route
+            {/* <Route
               path="/auth/login"
               element={
                 <Protect path="login">
                   <Login />
                 </Protect>
               }
-            />
+            /> */}
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Router>

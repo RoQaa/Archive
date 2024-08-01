@@ -22,15 +22,15 @@ body {
 }
 
 h2 {
-  color: #8d4d11 !important; /* New button color */
+  color: #343a40 !important; /* New button color */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   padding: 15px !important;
   border-radius: 8px !important;
   background-color: #f0f0f0 !important;
 }
 
-.btn {
-  background-color: #8d4d11 !important; /* New button color */
+/* .btn {
+  background-color: #343a40 !important; 
   color: #ffffff !important;
   border: none !important;
   padding: 10px 20px !important;
@@ -38,11 +38,11 @@ h2 {
   border-radius: 8px !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   transition: background-color 0.3s ease !important;
-}
+}  */
 
-.btn:hover {
-  background-color: #6e3d0d !important; /* Slightly darker shade on hover */
-}
+/* .btn:hover {
+  background-color: #343a40ea !important; 
+} */
 
 .form-control {
   background-color: #ffffff !important; /* Light background color */
@@ -79,7 +79,7 @@ input[type='file'] {
 }
 
 input[type='file']::file-selector-button {
-  background-color: #8d4d11 !important; /* New button color */
+  background-color: #343a40 !important; /* New button color */
   color: #ffffff !important;
   border: none !important;
   padding: 10px !important;
@@ -127,10 +127,10 @@ form {
   color: #ff3333 !important;
 }
 
-button.btn-primary,
+/* button.btn-primary,
 button.btn-outline-primary,
 button.btn-danger {
-  background-color: #8d4d11 !important; /* New button color */
+  background-color: #343a40 !important; 
   color: #ffffff !important;
   border: none !important;
   padding: 10px 20px !important;
@@ -143,8 +143,8 @@ button.btn-danger {
 button.btn-primary:hover,
 button.btn-outline-primary:hover,
 button.btn-danger:hover {
-  background-color: #6e3d0d !important; /* Slightly darker shade on hover */
-}
+  background-color: #6e3d0d !important; 
+} */
 
 button:disabled {
   background-color: #e0e0e0 !important; /* Lighter background color for disabled state */

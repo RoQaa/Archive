@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from '@/api/axios';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
+import { Header } from '@/layout';
 
 Modal.setAppElement('#root');
 
@@ -31,7 +32,7 @@ const DetailsFax = () => {
         } catch (error) {
           if (error.response && error.response.status === 401) {
             setError('Unauthorized. Please log in again.');
-            navigate('/auth/login');
+            navigate('/');
           } else if (error.response && error.response.status === 500) {
             setError('Internal server error. Please try again later.');
           } else {
@@ -68,7 +69,8 @@ const DetailsFax = () => {
   }
 
   return (
-    <div className="details-fax-container">
+    <div className="details-fax-container container">
+      <Header />
       <h2 className="text-light text-center fw-bolder">ملحقات الفاكس</h2>
       <div className="fax-files">
         {fax?.files?.length > 0 ? (

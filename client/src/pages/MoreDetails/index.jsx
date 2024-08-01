@@ -1,8 +1,12 @@
 import { Header, SidebarDashboard } from '@/layout';
+import axios from '@/api/axios';
 import { MdOutlineArrowBack } from 'react-icons/md';
-import { Link, useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const MoreDetails = () => {
+  const navigate = useNavigate();
   const item = useLocation()?.state?.item;
   const handleViewDetails = (id) => {
     const token = localStorage.getItem('userToken');
@@ -41,7 +45,7 @@ const MoreDetails = () => {
                         <p className="mb-0 fw-bolder"> الجهة </p>
                       </div>
                       <div className="col-sm-9">
-                        <p className="text-muted mb-0 ">
+                        <p className="text-muted mb-0 fw-bolder">
                           {item?.about.subject.destination.name}
                         </p>
                       </div>
@@ -131,7 +135,7 @@ const MoreDetails = () => {
                       <div className="col-sm-9">
                         <button
                           onClick={() => handleViewDetails(item._id)}
-                          className="btn btn-outline-info mx-2 px-4"
+                          className="btn btn-info mx-2 px-4"
                         >
                           عرض الملف
                         </button>

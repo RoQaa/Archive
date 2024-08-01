@@ -30,15 +30,12 @@ const Login = () => {
         }
       );
       toast.success('تم تسجيل الدخول بنجاح');
+      navigate('/home');
       setuser(data.data);
       localStorage.setItem('userToken', data.token);
       setIsPending(false);
-      if (
-        data.data.role === 'admin' ||
-        data.data.role === 'godAdmin' ||
-        data.data.role === 'manager'
-      ) {
-        navigate('/');
+      if (data.data.role === 'admin') {
+        navigate('/home');
       }
     } catch (err) {
       console.log(err);
@@ -55,7 +52,7 @@ const Login = () => {
           <div className="card-container">
             <div className="p-3 mb-5 bg-body-dark p-5 rounded login-card">
               <h3 className="text-center text-light pt-3 fs-2 fw-bold">
-                أرشيف دار المشاه
+                أرشيف ادارة المشاه
               </h3>
               <h3 className="text-center text-light pt-3 fs-2 fw-bold">
                 تسجيل الدخول

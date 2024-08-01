@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 :root {
-  --main-color: #8d4d11;
-  --word-dash: #8d4d11;
-  --gold-color: #8d4d11;
-  --gold-color2: #8d4d11;
-  --darkblue-color: #8d4d11;
+  --main-color: #343a40;
+  --word-dash: #343a40;
+  --gold-color: #343a40;
+  --gold-color2: #343a40;
+  --darkblue-color: #343a40;
   --shd: 0px 2px 50px 10px rgba(44, 43, 105, 0.29);
   --background-color: #ffffff;
   --text-color: #000000;
@@ -60,7 +60,7 @@ button {
 }
 
 button:hover {
-  background-color: #703b0d !important;
+  background-color: #343a40ea !important;
   color: white;
   border-color: #fff;
 }
@@ -92,7 +92,7 @@ button:hover {
   width: 50px;
   height: 50px;
   border: 6px solid rgb(0, 0, 0);
-  border-top: 6px solid #8d4d11;
+  border-top: 6px solid #343a40;
   border-radius: 50%;
   animation: spinner 1.2s linear infinite;
 }
@@ -110,9 +110,9 @@ button {
 
 .back-details-button {
   border-radius: 22px !important;
-  border: 3px solid #8d4d11;
+  border: 3px solid #343a40;
   background: none;
-  color: #8d4d11;
+  color: #343a40;
   width: 7rem;
 }
 

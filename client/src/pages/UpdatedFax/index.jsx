@@ -78,7 +78,7 @@ const UpdatedFax = () => {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         setLoading(false);
-        navigate('/'); // Redirect to faxes page on success
+        navigate('/home'); // Redirect to faxes page on success
       })
       .catch((error) => {
         setLoading(false);
@@ -144,7 +144,7 @@ const UpdatedFax = () => {
             </button>
           )}
           <button
-            onClick={() => navigate(`/`)}
+            onClick={() => navigate(`/home`)}
             className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-danger mb-4"
           >
             الغاء

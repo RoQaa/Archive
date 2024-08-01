@@ -14,6 +14,26 @@
   position: absolute;
   animation: fadeIn 0.5s ease;
 }
+.btn {
+  /* background-color: #343a40 !important;  */
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: background-color 0.3s ease !important;
+}
+h2 {
+  background-color: #343a40 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  margin: 5px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: background-color 0.3s ease !important;
+}
 
 .light-mode-overlay {
   background-color: rgba(255, 255, 255, 0.75); /* Light overlay color */
@@ -32,22 +52,22 @@
 
 .light-mode-modal .btn-primary {
   background-color: #ff0000 !important; /* Specified button color */
-  border-color: #8d4d11 !important;
+  border-color: #343a40 !important;
 }
 
 .light-mode-modal .btn-primary:hover {
-  background-color: #703b0d !important; /* Slightly darker shade on hover */
-  border-color: #703b0d !important;
+  background-color: #343a40f6 !important; /* Slightly darker shade on hover */
+  border-color: #343a40e7 !important;
 }
 
 .light-mode-modal .btn-secondary {
-  background-color: #8d4d11 !important; /* Specified button color */
-  border-color: #8d4d11 !important;
+  background-color: #343a40 !important; /* Specified button color */
+  border-color: #343a40 !important;
 }
 
 .light-mode-modal .btn-secondary:hover {
-  background-color: #703b0d !important; /* Slightly darker shade on hover */
-  border-color: #703b0d !important;
+  background-color: #343a40e8 !important; /* Slightly darker shade on hover */
+  border-color: #343a40e8 !important;
 }
 
 /* Fade-in animation for the modal */

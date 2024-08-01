@@ -3,3 +3,7 @@
   width: fit-content;
   margin-bottom: 1rem; /* Adds some space below each confirm button */
 }
+.features-container input:disabled {
+  background-color: #d3d3d3 !important; /* Light grey to indicate disabled state */
+  color: #6c757d !important; /* Text color to contrast the background */
+}

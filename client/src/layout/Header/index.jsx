@@ -48,7 +48,7 @@ const Header = () => {
       localStorage.removeItem('userToken');
       setIsLoggedIn(false);
       toast.success('تم تسجيل الخروج بنجاح');
-      navigate('/auth/login');
+      navigate('/');
       window.location.reload();
     } catch (error) {
       console.error('Failed to logout:', error);
@@ -70,7 +70,7 @@ const Header = () => {
               )}
               <li className="nav-item">
                 <Link
-                  to={'/'}
+                  to={'/home'}
                   className={`nav-link ${
                     location.pathname === '/' ? 'active-page' : ''
                   } text-light fw-bolder`}
@@ -100,7 +100,7 @@ const Header = () => {
                   } text-light fw-bolder`}
                   aria-current="page"
                 >
-                  اضافة خصائص
+                  اضافة مواضيع و جهات
                 </Link>
               </li>
             </ul>

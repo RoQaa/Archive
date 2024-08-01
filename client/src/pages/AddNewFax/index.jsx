@@ -9,7 +9,7 @@ const AddNewFax = () => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [destinations, setDestinations] = useState([]);
-  const [destinationId, setDestinationId] = useState([]);
+  // const [destinationId, setDestinationId] = useState([]);
   const [selectedDestination, setSelectedDestination] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [allSubjects, setAllSubjects] = useState([]);
@@ -269,7 +269,7 @@ const AddNewFax = () => {
         >
           <div className="col-12 text-end fw-bold fs-5 mb-4">
             <label htmlFor="input1" className="form-label">
-              رقم الفاكس
+              كود الفاكس
             </label>
             <input
               name="input1"
@@ -279,7 +279,7 @@ const AddNewFax = () => {
               required
               value={faxNumber}
               onChange={(e) => setFaxNumber(e.target.value)}
-              placeholder="اضف رقم الفاكس*"
+              placeholder="اضف كود الفاكس*"
             />
           </div>
           <div className="col-12 text-end fw-bold fs-5 mb-4">
@@ -335,6 +335,7 @@ const AddNewFax = () => {
 
           {!loading && (
             <button
+              onClick={() => navigate(`/home`)}
               type="submit"
               className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-primary  mb-4"
             >
@@ -347,7 +348,7 @@ const AddNewFax = () => {
             </button>
           )}
           <button
-            onClick={() => navigate(`/`)}
+            onClick={() => navigate(`/home`)}
             className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-danger mb-4"
           >
             الغاء

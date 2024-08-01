@@ -3,9 +3,11 @@ import { Navigate } from 'react-router';
 import { AuthProvider } from '@/context/Auth';
 
 const PrivateRoute = ({ children }) => {
-  const Loggedin = useContext(AuthProvider);
-  console.log('login here', Loggedin);
-  return Loggedin ? children : <Navigate to="/login" />;
+  if (localStorage.getItem('userToken') == null) {
+    return <Navigate to={'/auth/Login'} />;
+  } else {
+    return <Navigate to={'/home'} />;
+  }
 };
 
 export default PrivateRoute;
