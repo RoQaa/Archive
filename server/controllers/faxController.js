@@ -43,13 +43,29 @@ exports.getOneFax = catchAsync(async (req, res, next) => {
 })
 exports.searchByDatesAdmin = catchAsync(async (req, res, next) => {
   const { startDate, endDate } = req.query;
-
+ /*
   const data = await Fax.find({
     date: {
       $gte: startDate,
       $lte: endDate,
     },
   });
+  */
+   // Parse dates from query
+   const start = new Date(startDate);
+   const end = new Date(endDate);
+ 
+   // Subtract one day from endDate
+   const endMinusOneDay = new Date(end);
+   endMinusOneDay.setDate(endMinusOneDay.getDate() + 1);
+ 
+   // Query the Fax collection
+   const data = await Fax.find({
+     date: {
+       $gte: start,
+       $lte: endMinusOneDay,
+     },
+   });
   if (!data || data.length === 0)
     return next(new AppError(`لا توجد بيانات`, 404));
   res.status(200).json({
