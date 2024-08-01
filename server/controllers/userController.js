@@ -53,17 +53,19 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
 
 exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
-  const user = await User.findById(req.params.id)
+ // const user = await User.findById(req.params.id)
+ const user = await User.findByIdAndUpdate(req.params.id,{isActive:false},{new:true,runValidators:true})
   if (!user) {
     return next(new AppError(`هذا المستخدم غير موجود`, 404))
   }
+  /*
   await Fax.deleteMany({ user: user.id })
 
   await user.delete();
-
+*/
   res.status(200).json({
     status: true,
-    message: "تم حذف هذا المستخد مع كل الفاكسات المتعلقة بة"
+    message: "تم حذف هذا المستخدم"
   })
 })
 
