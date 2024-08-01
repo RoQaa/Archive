@@ -15,6 +15,7 @@ router.get("/searchDateByUser",faxController.searchByDatesUser)
 router.use(authController.restrictTo("admin"));
 router.get("", faxController.getAllFaxes);
 router.get("/searchDateByAdmin",faxController.searchByDatesAdmin)
+router.get("/searches",faxController.searches)
 router
   .route("/:id")
   .patch(faxController.updateFax)

@@ -1,3 +1,6 @@
+const Subject =require('../models/subjectModel')
+const Destination =require('../models/destinationNameModel')
+const User=require('../models/userModel')
 const Fax = require("../models/faxModel");
 const { catchAsync } = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
@@ -42,7 +45,7 @@ exports.getOneFax=catchAsync(async(req,res,next)=>{
     })
 })
 exports.searchByDatesAdmin=catchAsync(async(req,res,next)=>{
-    const {startDate, endDate} = req.body;
+    const {startDate, endDate} = req.query;
 
   const data = await Fax.find({
     date: {
@@ -92,7 +95,7 @@ exports.getMyFaxes = catchAsync(async (req, res, next) => {
 });
 
 exports.searchByDatesUser = catchAsync(async (req, res, next) => {
-  const { startDate, endDate } = req.body;
+  const { startDate, endDate } = req.query;
 
   const data = await Fax.find({
     user: req.user.id,
@@ -118,3 +121,74 @@ exports.getOneUserFax=catchAsync(async(req,res,next)=>{
           fax
   })
 })
+
+exports.searches=catchAsync(async(req,res,next)=>{
+  const { username, fax_Number, destinationName } = req.query;
+    let data;
+  if(fax_Number) data = await Fax.find({faxNumber:fax_Number})
+  
+    if(username){
+      data =  await Fax.aggregate([  {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
+      {
+        $match: {
+          'user.username':{$regex: username, $options: "i"}// new RegExp(username, 'i')
+        }
+      }
+  
+  ])
+    }
+
+    if(destinationName){
+      data= await Fax.aggregate([
+        {
+          $lookup: {
+            from: 'abouts',
+            localField: 'about',
+            foreignField: '_id',
+            as: 'about'
+          }
+        },
+        { $unwind: '$about' },
+        {
+          $lookup: {
+            from: 'subjects',
+            localField: 'about.subject',
+            foreignField: '_id',
+            as: 'about.subject'
+          }
+        },
+        { $unwind: '$about.subject' },
+        {
+          $lookup: {
+            from: 'destinations',
+            localField: 'about.subject.destination',
+            foreignField: '_id',
+            as: 'about.subject.destination'
+          }
+        },
+        { $unwind: '$about.subject.destination' },
+        {
+          $match: {
+            'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
+          }
+        }
+     
+      ])
+    }
+
+    res.status(200).json({
+      status:true,
+      data
+    })
+
+})
+
+//جهة اسم مرسل كود

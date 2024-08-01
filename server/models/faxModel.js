@@ -18,6 +18,7 @@ const faxSchema = new mongoose.Schema({
     faxNumber:{
         type:Number,
         required:true,
+        unique:true
     },
     faxType:{
         type:String,
