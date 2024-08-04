@@ -5,7 +5,7 @@ const subjectSchema = new mongoose.Schema({
     type: String,
     required: true,
     //unique: true,
-  
+    trim:true
   },
 
 
