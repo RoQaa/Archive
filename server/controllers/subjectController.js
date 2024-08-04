@@ -9,7 +9,7 @@ exports.createSubject = catchAsync(async (req, res, next) => {
     ...req.body,
   };
   const doc = await Subject.create(newInventory);
-
+    await About.create({name:"لا يوجد",subject:doc._id})
   res.status(201).json({
     status: true,
     message: "تم انشاء الموضوع",
