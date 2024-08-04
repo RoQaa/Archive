@@ -109,10 +109,11 @@ const Features = () => {
   }, [token]);
 
   const handleConfirmDestination = () => {
+    console.log('here', newDestination.trim());
     axios
       .post(
         'destinations/add',
-        { name: newDestination },
+        { name: newDestination.trim() },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ const Features = () => {
     axios
       .post(
         'subjects/add',
-        { name: newSubject, destination: selectedId },
+        { name: newSubject.trim(), destination: selectedId },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -203,7 +204,7 @@ const Features = () => {
     axios
       .post(
         'about/add',
-        { name: newAbout, subject: selectedId },
+        { name: newAbout.trim, subject: selectedId },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -304,7 +305,7 @@ const Features = () => {
     axios
       .patch(
         `destinations/${selectedDestination}`,
-        { name: newDestination },
+        { name: newDestination.trim() },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -337,7 +338,7 @@ const Features = () => {
     axios
       .patch(
         `subjects/${selectedSubject}`,
-        { name: newSubject },
+        { name: newSubject.trim() },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -370,7 +371,7 @@ const Features = () => {
     axios
       .patch(
         `about/${selectedAbout}`,
-        { name: newAbout },
+        { name: newAbout.trim() },
         {
           headers: {
             'Content-Type': 'application/json',
