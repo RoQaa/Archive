@@ -9,7 +9,7 @@ const faxSchema = new mongoose.Schema({
     about: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'About',
-        required: true
+      //  required: true
     },
     comment: {
         type: String,
