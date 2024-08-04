@@ -23,7 +23,7 @@ app.use(helmet());
 
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONT_URL,
   credentials: true, // Allow credentials
   optionsSuccessStatus: 200, // For legacy browser support
 };
@@ -37,11 +37,11 @@ app.use((req, res, next) => {
 
 
 if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
- /* morganBody(app, {
+  //app.use(morgan("dev"));
+  morganBody(app, {
     logAllReqHeader: true,
   });
-  */
+  
 }
 
 const limiter = rateLimit({
