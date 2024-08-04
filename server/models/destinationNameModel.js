@@ -10,6 +10,8 @@ const destinationSchema = new mongoose.Schema({
 
 
 });
+destinationSchema.index({ name: "text" });
+
 
 destinationSchema.pre(/^find/, function (next) {
   this.select('-__v')
