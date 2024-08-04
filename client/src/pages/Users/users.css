@@ -81,3 +81,32 @@ h2 {
     transform: translate(-50%, -50%);
   }
 }
+/* users.css */
+
+.dark-mode-overlay {
+  transition: opacity 0.3s ease;
+}
+
+.dark-mode-modal {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1 !important;
+}
+
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0 !important;
+}
+
+.ReactModal__Content--before-close {
+  opacity: 0;
+  transform: translateY(-50px);
+}

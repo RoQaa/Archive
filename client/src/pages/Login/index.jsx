@@ -49,8 +49,8 @@ const Login = () => {
       {isPending && <div className="loading"></div>}
       <div className="login-page">
         <div className="container pt-5 login">
-          <div className="card-container">
-            <div className="p-3 mb-5 bg-body-dark p-5 rounded login-card">
+          <div className="card-container shadow-lg">
+            <div className="p-3 mb-5 bg-body-dark p-3 rounded login-card">
               <h3 className="text-center text-light pt-3 fs-2 fw-bold">
                 أرشيف ادارة المشاه
               </h3>

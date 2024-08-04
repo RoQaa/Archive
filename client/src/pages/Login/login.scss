@@ -3,17 +3,18 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: url('../../assets/imgs/back-ground2.jpg');
-
+  // background-image: url('../../assets/imgs/back-ground2.jpg');
+  background: linear-gradient(45deg, black, #0000008c);
   .login {
-    max-width: 400px;
+    max-width: 50% !important;
     margin: 0 auto;
 
     .login-card {
-      background-color: #343a40;
+      background: url('/src/assets/imgs/back-ground.jpg') center;
+      background-size: cover;
       padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      border-radius: 2rem;
+      box-shadow: 0 0.5rem 1rem rgba(248, 246, 246, 0.575);
 
       h3 {
         margin-bottom: 2rem;

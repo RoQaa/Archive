@@ -41,7 +41,7 @@ function Protect({ children, protect = false, path = '/', role = 'user' }) {
   )
     return <Navigate to={'/login'} />;
   if (authed === protect && path !== '/login') return children;
-  return <Navigate to={protect ? '/auth/login' : '/'} />;
+  return <Navigate to={protect ? '/login' : '/'} />;
 }
 const Routers = () => {
   const allowed = useAuth().user;
@@ -52,6 +52,7 @@ const Routers = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
+
             <Route path="/home" element={<Home />} />
             <Route path="/update/:id" element={<UpdatedFax />} />
             <Route path="/details/:id" element={<DetailsFax />} />

@@ -118,7 +118,7 @@ const Header = () => {
             ) : (
               <ul className="navbar-nav p-3 mb-2 mb-lg-0">
                 <li className="nav-item ms-auto">
-                  <Link to={'/auth/login'}>
+                  <Link to={'login'}>
                     <button className="nav-link active text-light fw-bolder btn btn-logout">
                       تسجيل الدخول
                     </button>

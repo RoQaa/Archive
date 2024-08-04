@@ -9,6 +9,7 @@ const AddNewFax = () => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [destinations, setDestinations] = useState([]);
+  // const [destinationId, setDestinationId] = useState([]);
   const [selectedDestination, setSelectedDestination] = useState('');
   const [subjects, setSubjects] = useState([]);
   const [allSubjects, setAllSubjects] = useState([]);
@@ -34,42 +35,44 @@ const AddNewFax = () => {
         },
       })
       .then((res) => {
-        setDestinations(res.data.data);
+        setDestinations(res?.data.data);
+        setDestinationId = res.data._id;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    /*
+    // Load all subjects and abouts initially
+    axios
+      .get('subjects', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setAllSubjects(res?.data.data);
+        setSubjects(res?.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
 
-    // Uncomment if you need to load subjects and abouts initially
-    // axios
-    //   .get('subjects', {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     setAllSubjects(res.data.data);
-    //     setSubjects(res.data.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    // axios
-    //   .get('about', {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     setAllAbouts(res.data.data);
-    //     setAbouts(res.data.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .get('about', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setAllAbouts(res?.data.data);
+        setAbouts(res?.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      */
   }, [token]);
 
   const handleDestinationChange = (e) => {
@@ -86,7 +89,7 @@ const AddNewFax = () => {
           },
         })
         .then((res) => {
-          const relatedSubjects = res.data.data;
+          const relatedSubjects = res?.data.data;
           setSubjects(
             relatedSubjects.length > 0 ? relatedSubjects : allSubjects
           );
@@ -116,7 +119,7 @@ const AddNewFax = () => {
           },
         })
         .then((res) => {
-          const relatedAbouts = res.data.data;
+          const relatedAbouts = res?.data.data;
           setAbouts(relatedAbouts.length > 0 ? relatedAbouts : allAbouts);
         })
         .catch((err) => {
@@ -133,20 +136,30 @@ const AddNewFax = () => {
 
   const uploadFiles = async () => {
     const formData = new FormData();
-    Array.from(files).forEach((file) => {
-      formData.append('files', file);
-    });
+    if (files.length === 1) {
+      formData.append('file', files[0]);
+    } else {
+      Array.from(files).forEach((file) => {
+        formData.append('files', file);
+      });
+    }
+
+    const url =
+      files.length === 1 ? '/uploads/uploadSingle' : '/uploads/uploadMultiple';
 
     try {
-      const response = await axios.post('/uploads/uploadMultiple', formData, {
+      const response = await axios.post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.data.status === 'success') {
-        return response.data.data.files.map((file) => file.path);
+        if (files.length === 1) {
+          return [response.data.data.file.path];
+        } else {
+          return response.data.data.files.map((file) => file.path);
+        }
       } else {
         throw new Error('File upload failed');
       }
@@ -323,17 +336,13 @@ const AddNewFax = () => {
           {!loading && (
             <button
               type="submit"
-              className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-primary mb-4"
+              className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-primary  mb-4"
             >
               اضافة
             </button>
           )}
           {loading && (
-            <button
-              type="button"
-              className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-outline-primary mb-4"
-              disabled
-            >
+            <button className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-outline-primary mb-4">
               جاري الاضافة ...
             </button>
           )}

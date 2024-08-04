@@ -1,8 +1,8 @@
 import { useAuth } from '@/context/Auth';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from '@/api/axios';
 import { toast, ToastContainer } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/layout/Header';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,7 +10,6 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
-  const [faxType, setFaxType] = useState('');
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
   const [usernameSearch, setUsernameSearch] = useState('');
@@ -18,10 +17,14 @@ const Home = () => {
   const [faxTypeSearch, setFaxTypeSearch] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // Add error message state
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to get location object
+
   const itemsPerPage = 10;
 
-  useEffect(() => {
+  // Function to fetch data
+  const fetchData = useCallback(() => {
     const token = localStorage.getItem('userToken');
     const url = user.role === 'user' ? 'faxes/my-faxes' : 'faxes';
     axios
@@ -33,6 +36,7 @@ const Home = () => {
       })
       .then((res) => {
         setData(res?.data);
+        setErrorMessage(''); // Clear any previous error message
       })
       .catch((err) => {
         console.log(err);
@@ -40,36 +44,52 @@ const Home = () => {
       });
   }, [user.role]);
 
+  // Function to fetch search results
+  const fetchSearchResults = useCallback(async () => {
+    const token = localStorage.getItem('userToken');
+    const searchParams = new URLSearchParams();
+    if (search) searchParams.append('destinationName', search);
+    if (usernameSearch) searchParams.append('username', usernameSearch);
+    if (faxNumberSearch) searchParams.append('fax_Number', faxNumberSearch);
+    if (faxTypeSearch) searchParams.append('faxType', faxTypeSearch);
+
+    let url = 'faxes/searches';
+    if (user.role === 'admin' && (startDate || endDate)) {
+      url = 'faxes/searchDateByAdmin';
+      if (startDate) searchParams.append('startDate', formatDate(startDate));
+      if (endDate) searchParams.append('endDate', formatDate(endDate));
+    }
+
+    try {
+      const res = await axios.get(`${url}?${searchParams.toString()}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setData(res.data);
+      setErrorMessage(''); // Clear any previous error message
+    } catch (err) {
+      console.log(err);
+      setErrorMessage('لا توجد بيانات لعرضها'); // Set error message
+    }
+  }, [
+    search,
+    usernameSearch,
+    faxNumberSearch,
+    faxTypeSearch,
+    startDate,
+    endDate,
+    user.role,
+  ]);
+
+  // Refresh data on location change
   useEffect(() => {
-    const fetchSearchResults = async () => {
-      const token = localStorage.getItem('userToken');
-      const searchParams = new URLSearchParams();
-      if (search) searchParams.append('destinationName', search);
-      if (usernameSearch) searchParams.append('username', usernameSearch);
-      if (faxNumberSearch) searchParams.append('fax_Number', faxNumberSearch);
-      if (faxTypeSearch) searchParams.append('faxType', faxTypeSearch);
+    fetchData();
+  }, [location, fetchData]);
 
-      let url = 'faxes/searches';
-      if (user.role === 'admin' && (startDate || endDate)) {
-        url = 'faxes/searchDateByAdmin';
-        if (startDate) searchParams.append('startDate', formatDate(startDate));
-        if (endDate) searchParams.append('endDate', formatDate(endDate));
-      }
-
-      try {
-        const res = await axios.get(`${url}?${searchParams.toString()}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setData(res.data);
-      } catch (err) {
-        console.log(err);
-        // toast.error('حدث خطأ أثناء البحث');
-      }
-    };
-
+  // Refresh search results on search/filter change
+  useEffect(() => {
     if (
       search ||
       usernameSearch ||
@@ -80,22 +100,6 @@ const Home = () => {
     ) {
       fetchSearchResults();
     } else {
-      const fetchData = async () => {
-        const token = localStorage.getItem('userToken');
-        const url = user.role === 'user' ? 'faxes/my-faxes' : 'faxes';
-        try {
-          const res = await axios.get(url, {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setData(res?.data);
-        } catch (err) {
-          console.log(err);
-          toast.error('حدث خطأ ');
-        }
-      };
       fetchData();
     }
   }, [
@@ -105,7 +109,8 @@ const Home = () => {
     faxTypeSearch,
     startDate,
     endDate,
-    user.role,
+    fetchSearchResults,
+    fetchData,
   ]);
 
   const handleDelete = (id) => {
@@ -190,9 +195,11 @@ const Home = () => {
   const handleFaxNumberSearchChange = (e) => {
     setFaxNumberSearch(e.target.value);
   };
+
   const handleFaxTypeSearchChange = (e) => {
     setFaxTypeSearch(e.target.value);
   };
+
   const handleStartDateChange = (e) => {
     setStartDate(e.target.value);
   };
@@ -202,9 +209,7 @@ const Home = () => {
   };
 
   const formatDate = (dateString) => {
-    console.log(dateString.split('-'));
     const dat = dateString.split('-');
-
     return `${dat[0]}-${dat[1]}-${dat[2]}`;
   };
 
@@ -260,6 +265,7 @@ const Home = () => {
             </button>
           </Link>
         )}
+
         <form className="d-flex shadow-lg" role="search">
           <input
             className="form-control me-2"
@@ -274,7 +280,7 @@ const Home = () => {
             className="form-control me-2"
             type="search"
             id="user"
-            placeholder="أكتب للبحث بأسم المرسل"
+            placeholder="أكتب للبحث بأسم المستخدم "
             aria-label="Search"
             value={usernameSearch}
             onChange={handleUsernameSearchChange}
@@ -299,6 +305,7 @@ const Home = () => {
             <option value="وارد">وارد</option>
           </select>
         </form>
+
         <div className="dateInput d-flex ">
           <label
             htmlFor=""
@@ -331,7 +338,10 @@ const Home = () => {
             aria-label="Search"
           />
         </div>
-        {paginatedData?.length > 0 ? (
+
+        {errorMessage ? (
+          <h2 className="text-center text-light my-5">{errorMessage}</h2>
+        ) : paginatedData?.length > 0 ? (
           <>
             <div className="table-responsive">
               <table className="table text-center table-hover p-5 my-5">
@@ -339,7 +349,7 @@ const Home = () => {
                   <tr>
                     <th className="p-4 ">#</th>
                     <th className="p-4 table-headers">الجهة</th>
-                    <th className="p-4 table-headers">اسم المرسل</th>
+                    <th className="p-4 table-headers">اسم المستخدم</th>
                     <th className="p-4 table-headers">كود الفاكس</th>
                     <th className="p-4 table-headers">نوع الفاكس</th>
                     <th className="p-4 table-headers">التاريخ</th>
@@ -347,12 +357,11 @@ const Home = () => {
                   </tr>
                 </thead>
                 <tbody className="text-center p-5">
-                  {paginatedData?.map((item, index) => (
+                  {paginatedData.map((item, index) => (
                     <tr key={item._id}>
                       <td className="p-3">
                         {(currentPage - 1) * itemsPerPage + index + 1}
                       </td>
-
                       <td className="p-3">
                         {item?.about?.subject?.destination?.name || 'غير محدد'}
                       </td>
@@ -410,7 +419,9 @@ const Home = () => {
             </div>
           </>
         ) : (
-          <h2 className="text-center text-light my-5">لا توجد فكسات متاحة</h2>
+          <h2 className="text-center not-found text-light my-5">
+            لا توجد فكسات متاحة
+          </h2>
         )}
       </div>
     </>

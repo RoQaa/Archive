@@ -61,7 +61,7 @@ const Features = () => {
         setDestinations(res.data.data);
       })
       .catch((err) => console.log(err));
-  }, [destinations, token]);
+  }, [token]);
 
   useEffect(() => {
     if (selectedDestination) {
@@ -129,6 +129,9 @@ const Features = () => {
           setIsDestinationSelected(true);
           toast.success('تم انشاء الجهة');
           setNewDestination(''); // Reset input field
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           toast.error('اسم الجهه موجود من قبل');
         }
@@ -166,6 +169,9 @@ const Features = () => {
           setIsSubjectSelected(true);
           toast.success('تم انشاء الموضوع');
           setNewSubject(''); // Reset input field
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           toast.error('حدث خطأ أثناء الإنشاء');
         }
@@ -201,6 +207,9 @@ const Features = () => {
           toast.success('تم انشاء البشان');
           setIsAboutSelected(true);
           setNewAbout(''); // Reset input field
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           toast.error('حدث خطأ أثناء الإنشاء');
         }
@@ -296,6 +305,9 @@ const Features = () => {
         if (res.data.status) {
           toast.success('تم تعديل الجهة بنجاح');
           // Optionally, update state to reflect changes
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           toast.error(' اكتب اسم التعديل ');
         }
@@ -325,6 +337,9 @@ const Features = () => {
       .then((res) => {
         if (res.data.status) {
           toast.success('تم تعديل الموضوع بنجاح');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
           // Optionally, update state to reflect changes
         } else {
           toast.error('حدث خطأ أثناء التعديل');
@@ -355,6 +370,9 @@ const Features = () => {
       .then((res) => {
         if (res.data.status) {
           toast.success('تم تعديل البشان بنجاح');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
           // Optionally, update state to reflect changes
         } else {
           toast.error('حدث خطأ أثناء التعديل');
