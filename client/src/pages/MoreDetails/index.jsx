@@ -46,7 +46,7 @@ const MoreDetails = () => {
                       </div>
                       <div className="col-sm-9">
                         <p className="text-muted mb-0 fw-bolder">
-                          {item?.about.subject.destination.name}
+                          {item?.about?.subject?.destination?.name}
                         </p>
                       </div>
                     </div>
