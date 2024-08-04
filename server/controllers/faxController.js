@@ -319,13 +319,13 @@ exports.searchesByAdmin = catchAsync(async (req, res, next) => {
 
 exports.searchesByUser = catchAsync(async (req, res, next) => {
 
-    const { startDate, endDate, username, fax_Number, destinationName, faxType } = req.query;
+    const { startDate, endDate, fax_Number, destinationName, faxType } = req.query;
     
     let matchConditions = {};
   
     // Collect search criteria
-    if (username) {
-      matchConditions['user.username'] = { $regex: req.user.username, $options: 'i' };
+    if (req.user.username) {
+      matchConditions['user.username'] = req.user.username
     }
     if (fax_Number) {
       // Convert fax_Number to number if it's numeric
