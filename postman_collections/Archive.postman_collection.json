@@ -397,56 +397,6 @@
 					"response": []
 				},
 				{
-					"name": "search By Dates",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwt}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/faxes/searchDateByUser?startDate&endDate",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"faxes",
-								"searchDateByUser"
-							],
-							"query": [
-								{
-									"key": "startDate",
-									"value": null
-								},
-								{
-									"key": "endDate",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "getOneFax",
 					"request": {
 						"auth": {
@@ -502,32 +452,27 @@
 							"query": [
 								{
 									"key": "startDate",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "endDate",
-									"value": null,
-									"disabled": true
-								},
-								{
-									"key": "username",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "fax_Number",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "destinationName",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "faxType",
-									"value": null,
+									"value": "صادر",
 									"disabled": true
 								}
 							]
@@ -1232,117 +1177,6 @@
 							"path": [
 								"faxes",
 								"66a3b6d5cc963570dc37b5f0"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - search By Dates",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwt}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/faxes/searchDateByAdmin?startDate=2024-07-30&endDate=2024-07-31",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"faxes",
-								"searchDateByAdmin"
-							],
-							"query": [
-								{
-									"key": "startDate",
-									"value": "2024-07-30"
-								},
-								{
-									"key": "endDate",
-									"value": "2024-07-31"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Admin - searches",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwt}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/faxes/searches?fax_Number=287",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"faxes",
-								"searches"
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "محمد سيد حسن",
-									"disabled": true
-								},
-								{
-									"key": "fax_Number",
-									"value": "287"
-								},
-								{
-									"key": "destinationName",
-									"value": "aaasdvv",
-									"disabled": true
-								},
-								{
-									"key": "faxType",
-									"value": "وارد",
-									"disabled": true
-								}
 							]
 						}
 					},
