@@ -38,9 +38,10 @@ app.use((req, res, next) => {
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
-  morganBody(app, {
+ /* morganBody(app, {
     logAllReqHeader: true,
   });
+  */
 }
 
 const limiter = rateLimit({

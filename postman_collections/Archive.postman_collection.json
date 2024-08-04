@@ -37,9 +37,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{SURL}}/user/login",
+							"raw": "{{URL}}/user/login",
 							"host": [
-								"{{SURL}}"
+								"{{URL}}"
 							],
 							"path": [
 								"user",
@@ -491,13 +491,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/faxes/searches/searchesByUser",
+							"raw": "{{URL}}/faxes/searchesByUser",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"faxes",
-								"searches",
 								"searchesByUser"
 							],
 							"query": [
@@ -1365,45 +1364,41 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/faxes/searches/searchesByAdmin",
+							"raw": "{{URL}}/faxes/searchesByAdmin?startDate=2024-08-03&endDate=2024-08-04&faxType=صادر",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"faxes",
-								"searches",
 								"searchesByAdmin"
 							],
 							"query": [
 								{
 									"key": "startDate",
-									"value": null,
-									"disabled": true
+									"value": "2024-08-03"
 								},
 								{
 									"key": "endDate",
-									"value": null,
-									"disabled": true
+									"value": "2024-08-04"
 								},
 								{
 									"key": "username",
-									"value": null,
+									"value": "محمد سيد",
 									"disabled": true
 								},
 								{
 									"key": "fax_Number",
-									"value": null,
+									"value": "32",
 									"disabled": true
 								},
 								{
 									"key": "destinationName",
-									"value": null,
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "faxType",
-									"value": null,
-									"disabled": true
+									"value": "صادر"
 								}
 							]
 						}

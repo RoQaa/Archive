@@ -47,14 +47,14 @@ exports.searchByDatesAdmin = catchAsync(async (req, res, next) => {
    const end = new Date(endDate);
  
    // Subtract one day from endDate
-   const endMinusOneDay = new Date(end);
-   endMinusOneDay.setDate(endMinusOneDay.getDate() + 1);
+   const endPlusOneDay = new Date(end);
+   endPlusOneDay.setDate(endPlusOneDay.getDate() + 1);
  
    // Query the Fax collection
    const data = await Fax.find({
      date: {
        $gte: start,
-       $lte: endMinusOneDay,
+       $lte: endPlusOneDay,
      },
    });
   if (!data || data.length === 0)
@@ -216,7 +216,7 @@ exports.searches = catchAsync(async (req, res, next) => {
 
 exports.searchesByAdmin = catchAsync(async (req, res, next) => {
   const { startDate, endDate, username, fax_Number, destinationName, faxType } = req.query;
-
+  
   let matchConditions = {};
 
   // Collect search criteria
@@ -230,21 +230,6 @@ exports.searchesByAdmin = catchAsync(async (req, res, next) => {
   }
   if (faxType) {
     matchConditions['faxType'] = faxType;
-  }
-
-  // Handle date range filtering
-  if (startDate && endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Subtract one day from endDate
-    const endMinusOneDay = new Date(end);
-    endMinusOneDay.setDate(endMinusOneDay.getDate() + 1);
-
-    matchConditions.date = {
-      $gte: start,
-      $lte: endMinusOneDay,
-    };
   }
 
   let pipeline = [
@@ -286,7 +271,23 @@ exports.searchesByAdmin = catchAsync(async (req, res, next) => {
     { $unwind: '$about.subject.destination' }
   ];
 
-  // Add match conditions based on query parameters
+  // Handle date range filtering
+  if (startDate && endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    end.setDate(end.getDate() + 1); // Add one day to endDate to include the entire end date
+
+    pipeline.push({
+      $match: {
+        date: {
+          $gte: start,
+          $lt: end
+        }
+      }
+    });
+  }
+
+  // Add other match conditions based on query parameters
   if (destinationName) {
     pipeline.push({
       $match: {
@@ -315,13 +316,17 @@ exports.searchesByAdmin = catchAsync(async (req, res, next) => {
 
 
 
+
 exports.searchesByUser = catchAsync(async (req, res, next) => {
-  const { startDate, endDate, fax_Number, destinationName, faxType } = req.query;
+  const { startDate, endDate, username, fax_Number, destinationName, faxType } = req.query;
   const userId = req.user.id;
 
   let matchConditions = { 'user._id': userId };
 
-
+  // Collect search criteria
+  if (username) {
+    matchConditions['user.username'] = { $regex: username, $options: 'i' };
+  }
   if (fax_Number) {
     // Convert fax_Number to number if it's numeric
     const faxNumber = isNaN(fax_Number) ? fax_Number : Number(fax_Number);
@@ -329,21 +334,6 @@ exports.searchesByUser = catchAsync(async (req, res, next) => {
   }
   if (faxType) {
     matchConditions['faxType'] = faxType;
-  }
-
-  // Handle date range filtering
-  if (startDate && endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    // Subtract one day from endDate
-    const endMinusOneDay = new Date(end);
-    endMinusOneDay.setDate(endMinusOneDay.getDate() + 1);
-
-    matchConditions.date = {
-      $gte: start,
-      $lte: endMinusOneDay,
-    };
   }
 
   let pipeline = [
@@ -385,7 +375,24 @@ exports.searchesByUser = catchAsync(async (req, res, next) => {
     { $unwind: '$about.subject.destination' }
   ];
 
-  // Add match conditions based on query parameters
+  // Handle date range filtering
+  if (startDate && endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const endPlusOneDay = new Date(end);
+    endPlusOneDay.setDate(endPlusOneDay.getDate() + 1);
+
+    pipeline.push({
+      $match: {
+        date: {
+          $gte: start,
+          $lte: endPlusOneDay
+        }
+      }
+    });
+  }
+
+  // Add other match conditions based on query parameters
   if (destinationName) {
     pipeline.push({
       $match: {
