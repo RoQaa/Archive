@@ -1,25 +1,25 @@
-/* header.scss */
-
 .header {
   .navbar {
-    background-color: #f8f9fa; // Lighter background color
+    background-color: #f8f9fa; // Light background color for the navbar
   }
 
   .nav-link {
-    color: #000000 !important; // Dark text color for better contrast
-    font-weight: bold !important;
+    color: #000 !important; // Dark text color for links
+    font-weight: bold !important; // Bold text for links
 
     &.active-page {
-      color: #3777b8 !important; // Highlight color for the active page
+      background-color: #0d6efd !important; // Background color for active link
+      color: white !important; // White text color for active link
       position: relative;
+      border-radius: 6px;
 
       &:after {
-        content: 'أنت هنا';
+        content: 'أنت هنا'; // Text to show on active link
         position: absolute;
         bottom: -20px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #3777b8;
+        background-color: #0d6efd;
         color: #f8f9fa;
         padding: 2px 5px;
         border-radius: 3px;
@@ -29,35 +29,39 @@
       }
 
       &:hover:after {
-        opacity: 1;
+        opacity: 1; // Show the 'أنت هنا' text on hover
       }
+    }
+
+    &:hover {
+      color: #0d6efd; // Optional: Change link color on hover
     }
   }
 
   .btn-logout {
-    background-color: #d12f1a !important; // Lighter button background color
+    background-color: #d12f1a !important; // Background color for the logout button
     border: none !important;
-    color: white !important;
-    cursor: pointer !important;
-    padding: 10px 20px !important;
-  }
+    color: white !important; // White text for the logout button
+    cursor: pointer !important; // Pointer cursor
+    padding: 10px 20px !important; // Padding for the button
 
-  .btn-logout:hover {
-    background-color: rgba(
-      255,
-      0,
-      0,
-      0.781
-    ) !important; // Slightly darker shade on hover
+    &:hover {
+      background-color: rgba(
+        255,
+        0,
+        0,
+        0.781
+      ) !important; // Slightly darker shade on hover
+    }
   }
 
   .ms-auto {
-    margin-left: auto !important;
+    margin-left: auto !important; // Align elements to the right
   }
 
   .navbar-nav {
     .nav-item {
-      margin-left: 10px !important;
+      margin-left: 10px !important; // Spacing between nav items
     }
   }
 
