@@ -48,7 +48,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("من فضلك قم بادخال الاسم و كلمة المرور", 400));
   }
 
-  const user = await User.findOne({ username: username }).select("+password"); // hyzaod el password el m5fee aslan
+  const user = await User.findOne({ username: username, isActive: { $ne: false } }).select("+password"); // hyzaod el password el m5fee aslan
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("اسم المستخدم او كلمةالمرور غير صحيحة", 400));
@@ -109,7 +109,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id)
   if (!currentUser) {
     return next(new AppError(`Your Session expires please Login again`, 401));
   }

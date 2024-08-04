@@ -40,7 +40,7 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
 
   }
 
-  const data = await User.find();
+  const data = await User.find({ isActive: { $ne: false }});
   if (!data || data.length === 0) return next(new AppError(`لا يوجد مستخدمين لعرضهم`, 404))
   res.status(200).json({
     status: true,

@@ -63,7 +63,8 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.pre(/^find/, function (next) {
-  this.find({ isActive: { $ne: false } }).select("-__v");
+ // this.find({ isActive: { $ne: false } }).select("-__v");
+ this.select("-__v");
   next();
 });
 
