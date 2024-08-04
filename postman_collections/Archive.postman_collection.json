@@ -1,0 +1,1363 @@
+{
+	"info": {
+		"_postman_id": "9e2fd761-4270-4bba-90d9-dfbe61342079",
+		"name": "Archive",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28031665",
+		"_collection_link": "https://red-crater-408896.postman.co/workspace/Team-App~114af008-5b54-40f7-bf63-3f8a672c88d8/collection/28031665-9e2fd761-4270-4bba-90d9-dfbe61342079?action=share&source=collection_link&creator=28031665"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"hossam\",\r\n    \"password\":\"123456789\",\r\n    \"passwordConfirm\":\"123456789\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/createUser",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"createUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"password\":\"987654321\",\r\n    \"passwordConfirm\":\"987654321\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/resetPassword/66a391cf200ed376eceb3d1d",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"resetPassword",
+								"66a391cf200ed376eceb3d1d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/deleteUser/66a391cf200ed376eceb3d1d",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"deleteUser",
+								"66a391cf200ed376eceb3d1d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"username\":\"farouk1\",\r\n    \"role\":\"user\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/updateUser/66a5f5d1400ed64521ac6022",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"updateUser",
+								"66a5f5d1400ed64521ac6022"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/logout",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "myProfile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/myProfile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"myProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/getAllUsers",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"getAllUsers"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "farouk",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOneUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/user/getOneUser/66a391bf200ed376eceb3d11",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"getOneUser",
+								"66a391bf200ed376eceb3d11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Faxes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/faxes/my-faxes",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"my-faxes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOneFax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/faxes/getOneUserFax/66a60b5814783e3f30855998",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"getOneUserFax",
+								"66a60b5814783e3f30855998"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User-All Searches",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/faxes/searchesByUser",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"searchesByUser"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "fax_Number",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "destinationName",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "faxType",
+									"value": "صادر",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Destinations",
+			"item": [
+				{
+					"name": "Add new Desination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"جهة2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/destinations/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"destinations",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Destinations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/destinations",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"destinations"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "جهة",
+									"description": "optional for search",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Destination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/destinations/66a5e62b28ece6f59a47c5ff",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"destinations",
+								"66a5e62b28ece6f59a47c5ff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Destination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"جهة بعد التعديل\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/destinations/66a3985c7b3df4f9add49273",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"destinations",
+								"66a3985c7b3df4f9add49273"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Destination",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/destinations/66a38759544ccd60d53096ad",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"destinations",
+								"66a38759544ccd60d53096ad"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subjects",
+			"item": [
+				{
+					"name": "Add new subject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"موضوع 1\",\r\n    \"destination\":\"66a3873b544ccd60d53096aa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/subjects/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subjects",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all subjects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/subjects",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subjects"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "subject1",
+									"disabled": true
+								},
+								{
+									"key": "subjectSerialNumber",
+									"value": "y3kLGctL",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One subject",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/subjects/66a388781d201bd8a5f61489",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subjects",
+								"66a388781d201bd8a5f61489"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update subject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"موضوع بعد التعديل\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/subjects/66a39a10baa82bd518b0f6aa",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subjects",
+								"66a39a10baa82bd518b0f6aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete subject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/subjects/66a39a10baa82bd518b0f6aa",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subjects",
+								"66a39a10baa82bd518b0f6aa"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "About",
+			"item": [
+				{
+					"name": "Add new about",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"بشأن1\",\r\n    \"subject\":\"66a388781d201bd8a5f61489\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/about/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"about",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all about",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/about/66a388781d201bd8a5f61489",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"about",
+								"66a388781d201bd8a5f61489"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "about1",
+									"disabled": true
+								},
+								{
+									"key": "aboutSerialNumber",
+									"value": "fEKpHrJ5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One about",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/about/66a391dd1d201bd8a5f614a5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"about",
+								"66a391dd1d201bd8a5f614a5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update about",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"بشأن بعد التعديل\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/about/66a39acdbd82076136c05fda",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"about",
+								"66a39acdbd82076136c05fda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete about",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/about/66a39acdbd82076136c05fda",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"about",
+								"66a39acdbd82076136c05fda"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "fax",
+			"item": [
+				{
+					"name": "Add Fax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"to delete\",\r\n    \"faxNumber\": 2,\r\n    \"faxType\": \"صادر\",\r\n    \"files\": [\"public\\\\uploads\\\\66a391bf200ed376eceb3d11\\\\user-66a391bf200ed376eceb3d11-1722004966074-0.jpeg\",\"public\\\\uploads\\\\66a391bf200ed376eceb3d11\\\\user-66a391bf200ed376eceb3d11-1722004966074-1.pdf\"],\r\n    \"about\":\"66a391c41d201bd8a5f6149f\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/faxes/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get all Faxes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/faxes",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "faxType",
+									"value": "وارد",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Get one Fax",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/faxes/66a3b632cc963570dc37b5db",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"66a3b632cc963570dc37b5db"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Update Fax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"fax comment2\",\r\n    \"faxNumber\": 2,\r\n    \"faxType\": \"صادر\",\r\n    \"files\": [\"public\\\\uploads\\\\66a391bf200ed376eceb3d11\\\\user-66a391bf200ed376eceb3d11-1722004966074-0.jpeg\"],\r\n    \"about\":\"66a391c41d201bd8a5f6149f\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/faxes/66a3b646cc963570dc37b5de",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"66a3b646cc963570dc37b5de"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin - Delete Fax",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/faxes/66a3b6d5cc963570dc37b5f0",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"66a3b6d5cc963570dc37b5f0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin-All Searches",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/faxes/searchesByAdmin?startDate=2024-08-03&endDate=2024-08-04&faxType=صادر",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"faxes",
+								"searchesByAdmin"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-08-03"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-08-04"
+								},
+								{
+									"key": "username",
+									"value": "محمد سيد",
+									"disabled": true
+								},
+								{
+									"key": "fax_Number",
+									"value": "32",
+									"disabled": true
+								},
+								{
+									"key": "destinationName",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "faxType",
+									"value": "صادر"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Uploads",
+			"item": [
+				{
+					"name": "Upload Single File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/pc/Desktop/Rank06.png",
+									"disabled": true
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/pc/Desktop/صور_حلويات.jpg"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/pc/Desktop/user-Test-1721986590400.docx",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/uploads/uploadSingle",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"uploads",
+								"uploadSingle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Multiple File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/pc/Desktop/Rank11.png",
+										"/C:/Users/pc/Desktop/Screenshot 2024-07-16 180129.jpg"
+									],
+									"disabled": true
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/pc/Desktop/Rank02.png",
+										"/C:/Users/pc/Desktop/user-Test-1721986554551.pdf"
+									],
+									"disabled": true
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/pc/Desktop/team.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/uploads/uploadMultiple",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"uploads",
+								"uploadMultiple"
+							],
+							"query": [
+								{
+									"key": "file",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
