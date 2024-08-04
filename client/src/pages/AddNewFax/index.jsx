@@ -273,7 +273,7 @@ const AddNewFax = () => {
             </label>
             <input
               name="input1"
-              type="text"
+              type="number"
               className="form-control"
               id="input1"
               required
