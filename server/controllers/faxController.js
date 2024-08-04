@@ -318,102 +318,101 @@ exports.searchesByAdmin = catchAsync(async (req, res, next) => {
 
 
 exports.searchesByUser = catchAsync(async (req, res, next) => {
-  const { startDate, endDate, username, fax_Number, destinationName, faxType } = req.query;
-  const userId = req.user.id;
 
-  let matchConditions = { 'user._id': userId };
-
-  // Collect search criteria
-  if (username) {
-    matchConditions['user.username'] = { $regex: username, $options: 'i' };
-  }
-  if (fax_Number) {
-    // Convert fax_Number to number if it's numeric
-    const faxNumber = isNaN(fax_Number) ? fax_Number : Number(fax_Number);
-    matchConditions['faxNumber'] = faxNumber;
-  }
-  if (faxType) {
-    matchConditions['faxType'] = faxType;
-  }
-
-  let pipeline = [
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'user'
-      }
-    },
-    { $unwind: '$user' },
-    {
-      $lookup: {
-        from: 'abouts',
-        localField: 'about',
-        foreignField: '_id',
-        as: 'about'
-      }
-    },
-    { $unwind: '$about' },
-    {
-      $lookup: {
-        from: 'subjects',
-        localField: 'about.subject',
-        foreignField: '_id',
-        as: 'about.subject'
-      }
-    },
-    { $unwind: '$about.subject' },
-    {
-      $lookup: {
-        from: 'destinations',
-        localField: 'about.subject.destination',
-        foreignField: '_id',
-        as: 'about.subject.destination'
-      }
-    },
-    { $unwind: '$about.subject.destination' }
-  ];
-
-  // Handle date range filtering
-  if (startDate && endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const endPlusOneDay = new Date(end);
-    endPlusOneDay.setDate(endPlusOneDay.getDate() + 1);
-
-    pipeline.push({
-      $match: {
-        date: {
-          $gte: start,
-          $lte: endPlusOneDay
+    const { startDate, endDate, username, fax_Number, destinationName, faxType } = req.query;
+    
+    let matchConditions = {};
+  
+    // Collect search criteria
+    if (username) {
+      matchConditions['user.username'] = { $regex: req.user.username, $options: 'i' };
+    }
+    if (fax_Number) {
+      // Convert fax_Number to number if it's numeric
+      const faxNumber = isNaN(fax_Number) ? fax_Number : Number(fax_Number);
+      matchConditions['faxNumber'] = faxNumber;
+    }
+    if (faxType) {
+      matchConditions['faxType'] = faxType;
+    }
+  
+    let pipeline = [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user'
         }
-      }
+      },
+      { $unwind: '$user' },
+      {
+        $lookup: {
+          from: 'abouts',
+          localField: 'about',
+          foreignField: '_id',
+          as: 'about'
+        }
+      },
+      { $unwind: '$about' },
+      {
+        $lookup: {
+          from: 'subjects',
+          localField: 'about.subject',
+          foreignField: '_id',
+          as: 'about.subject'
+        }
+      },
+      { $unwind: '$about.subject' },
+      {
+        $lookup: {
+          from: 'destinations',
+          localField: 'about.subject.destination',
+          foreignField: '_id',
+          as: 'about.subject.destination'
+        }
+      },
+      { $unwind: '$about.subject.destination' }
+    ];
+  
+    // Handle date range filtering
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      end.setDate(end.getDate() + 1); // Add one day to endDate to include the entire end date
+  
+      pipeline.push({
+        $match: {
+          date: {
+            $gte: start,
+            $lt: end
+          }
+        }
+      });
+    }
+  
+    // Add other match conditions based on query parameters
+    if (destinationName) {
+      pipeline.push({
+        $match: {
+          ...matchConditions,
+          'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
+        }
+      });
+    } else {
+      pipeline.push({ $match: matchConditions });
+    }
+  
+    // Execute the aggregation pipeline
+    const data = await Fax.aggregate(pipeline);
+  
+    // Handle case when no data is found
+    if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
+  
+    // Send response
+    res.status(200).json({
+      status: true,
+      length: data.length,
+      data
     });
-  }
-
-  // Add other match conditions based on query parameters
-  if (destinationName) {
-    pipeline.push({
-      $match: {
-        ...matchConditions,
-        'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
-      }
-    });
-  } else {
-    pipeline.push({ $match: matchConditions });
-  }
-
-  // Execute the aggregation pipeline
-  const data = await Fax.aggregate(pipeline);
-
-  // Handle case when no data is found
-  if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
-
-  // Send response
-  res.status(200).json({
-    status: true,
-    length: data.length,
-    data
-  });
-});
+  })
