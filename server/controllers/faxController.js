@@ -43,16 +43,7 @@ exports.getOneFax = catchAsync(async (req, res, next) => {
 })
 exports.searchByDatesAdmin = catchAsync(async (req, res, next) => {
   const { startDate, endDate } = req.query;
- /*
-  const data = await Fax.find({
-    date: {
-      $gte: startDate,
-      $lte: endDate,
-    },
-  });
-  */
-   // Parse dates from query
-   const start = new Date(startDate);
+  const start = new Date(startDate);
    const end = new Date(endDate);
  
    // Subtract one day from endDate
@@ -223,3 +214,199 @@ exports.searches = catchAsync(async (req, res, next) => {
 
 
 
+exports.searchesByAdmin = catchAsync(async (req, res, next) => {
+  const { startDate, endDate, username, fax_Number, destinationName, faxType } = req.query;
+
+  let matchConditions = {};
+
+  // Collect search criteria
+  if (username) {
+    matchConditions['user.username'] = { $regex: username, $options: 'i' };
+  }
+  if (fax_Number) {
+    // Convert fax_Number to number if it's numeric
+    const faxNumber = isNaN(fax_Number) ? fax_Number : Number(fax_Number);
+    matchConditions['faxNumber'] = faxNumber;
+  }
+  if (faxType) {
+    matchConditions['faxType'] = faxType;
+  }
+
+  // Handle date range filtering
+  if (startDate && endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Subtract one day from endDate
+    const endMinusOneDay = new Date(end);
+    endMinusOneDay.setDate(endMinusOneDay.getDate() + 1);
+
+    matchConditions.date = {
+      $gte: start,
+      $lte: endMinusOneDay,
+    };
+  }
+
+  let pipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    { $unwind: '$user' },
+    {
+      $lookup: {
+        from: 'abouts',
+        localField: 'about',
+        foreignField: '_id',
+        as: 'about'
+      }
+    },
+    { $unwind: '$about' },
+    {
+      $lookup: {
+        from: 'subjects',
+        localField: 'about.subject',
+        foreignField: '_id',
+        as: 'about.subject'
+      }
+    },
+    { $unwind: '$about.subject' },
+    {
+      $lookup: {
+        from: 'destinations',
+        localField: 'about.subject.destination',
+        foreignField: '_id',
+        as: 'about.subject.destination'
+      }
+    },
+    { $unwind: '$about.subject.destination' }
+  ];
+
+  // Add match conditions based on query parameters
+  if (destinationName) {
+    pipeline.push({
+      $match: {
+        ...matchConditions,
+        'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
+      }
+    });
+  } else {
+    pipeline.push({ $match: matchConditions });
+  }
+
+  // Execute the aggregation pipeline
+  const data = await Fax.aggregate(pipeline);
+
+  // Handle case when no data is found
+  if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
+
+  // Send response
+  res.status(200).json({
+    status: true,
+    length: data.length,
+    data
+  });
+});
+
+
+
+
+exports.searchesByUser = catchAsync(async (req, res, next) => {
+  const { startDate, endDate, fax_Number, destinationName, faxType } = req.query;
+  const userId = req.user.id;
+
+  let matchConditions = { 'user._id': userId };
+
+
+  if (fax_Number) {
+    // Convert fax_Number to number if it's numeric
+    const faxNumber = isNaN(fax_Number) ? fax_Number : Number(fax_Number);
+    matchConditions['faxNumber'] = faxNumber;
+  }
+  if (faxType) {
+    matchConditions['faxType'] = faxType;
+  }
+
+  // Handle date range filtering
+  if (startDate && endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Subtract one day from endDate
+    const endMinusOneDay = new Date(end);
+    endMinusOneDay.setDate(endMinusOneDay.getDate() + 1);
+
+    matchConditions.date = {
+      $gte: start,
+      $lte: endMinusOneDay,
+    };
+  }
+
+  let pipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    },
+    { $unwind: '$user' },
+    {
+      $lookup: {
+        from: 'abouts',
+        localField: 'about',
+        foreignField: '_id',
+        as: 'about'
+      }
+    },
+    { $unwind: '$about' },
+    {
+      $lookup: {
+        from: 'subjects',
+        localField: 'about.subject',
+        foreignField: '_id',
+        as: 'about.subject'
+      }
+    },
+    { $unwind: '$about.subject' },
+    {
+      $lookup: {
+        from: 'destinations',
+        localField: 'about.subject.destination',
+        foreignField: '_id',
+        as: 'about.subject.destination'
+      }
+    },
+    { $unwind: '$about.subject.destination' }
+  ];
+
+  // Add match conditions based on query parameters
+  if (destinationName) {
+    pipeline.push({
+      $match: {
+        ...matchConditions,
+        'about.subject.destination.name': { $regex: destinationName, $options: 'i' }
+      }
+    });
+  } else {
+    pipeline.push({ $match: matchConditions });
+  }
+
+  // Execute the aggregation pipeline
+  const data = await Fax.aggregate(pipeline);
+
+  // Handle case when no data is found
+  if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات لعرضها`, 404));
+
+  // Send response
+  res.status(200).json({
+    status: true,
+    length: data.length,
+    data
+  });
+});
