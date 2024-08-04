@@ -1,5 +1,5 @@
 const User = require(`./../models/userModel`);
-const Fax = require('../models/faxModel')
+
 const { catchAsync } = require(`./../utils/catchAsync`);
 const AppError = require(`./../utils/appError`);
 
@@ -40,7 +40,7 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
 
   }
 
-  const data = await User.find(filter);
+  const data = await User.find();
   if (!data || data.length === 0) return next(new AppError(`لا يوجد مستخدمين لعرضهم`, 404))
   res.status(200).json({
     status: true,
