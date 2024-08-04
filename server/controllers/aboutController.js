@@ -50,26 +50,40 @@ exports.getOneAbout = catchAsync(async (req, res, next) => {
 });
 
 exports.updateAbout = catchAsync(async (req, res, next) => {
+  // Find the About document by ID
+  let doc = await About.findById(req.params.id);
+  if(doc.name ==='لايوجد') return next(new AppError(`لا يمكن التعديل`,400))
+  // If the document doesn't exist, return a 404 error
+  if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
 
-  const doc = await About.findByIdAndUpdate(req.params.id, req.body, {
+  // Update the document with the request body data
+  doc = await About.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
+
+  // Send the updated document in the response
   res.status(200).json({
     status: true,
     message: "تم التعديل بنجاح",
-    //   doc,
+    doc,
   });
 });
 
 exports.deleteAbout = catchAsync(async (req, res, next) => {
+  // Find the About document by ID
+  const doc = await About.findById(req.params.id);
+  if(doc.name ==='لايوجد') return next(new AppError(`لا يمكن الحذف`,400))
+  // If the document doesn't exist, return a 404 error
+  if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
+
   // Delete all related Faxes documents
   await Fax.deleteMany({ about: req.params.id });
 
   // Delete the About document
   await About.findByIdAndDelete(req.params.id);
 
+  // Send a success response
   res.status(200).json({
     status: true,
     message: "تم الحذف الشأن وجميع الفاكسات المتعلقة بهذا الشأن",
