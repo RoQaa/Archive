@@ -149,6 +149,9 @@ const Features = () => {
       return;
     }
 
+    // Show loading state
+    const toastId = toast.loading('جارٍ إضافة الموضوع...');
+
     axios
       .post(
         'subjects/add',
@@ -161,24 +164,29 @@ const Features = () => {
         }
       )
       .then((res) => {
+        toast.dismiss(toastId);
         if (res.data.status) {
+          // Update state immediately
           const newSubj = { _id: res.data.doc._id, name: newSubject };
-          setSubjects([...subjects, newSubj]); // Update subjects list
+          setSubjects((prevSubjects) => [...prevSubjects, newSubj]); // Update subjects list
           setSubjectId(res.data.doc._id);
           setIsAboutEnabled(true);
           setIsSubjectSelected(true);
           toast.success('تم انشاء الموضوع');
-          setNewSubject(''); // Reset input field
           setTimeout(() => {
             window.location.reload();
           }, 1000);
+          setNewSubject(''); // Reset input field
         } else {
           toast.error('حدث خطأ أثناء الإنشاء');
         }
       })
       .catch((error) => {
+        toast.dismiss(toastId);
         console.log(error);
-        toast.error('حدث خطأ أثناء الإنشاء');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       });
   };
 
@@ -188,6 +196,9 @@ const Features = () => {
       toast.error('الموضوع غير محدد');
       return;
     }
+
+    // Show loading state
+    const toastId = toast.loading('جارٍ إضافة البشان...');
 
     axios
       .post(
@@ -201,20 +212,20 @@ const Features = () => {
         }
       )
       .then((res) => {
+        toast.dismiss(toastId);
         if (res.data.status) {
+          // Update state immediately
           const newAbt = { _id: res.data._id, name: newAbout };
-          setAbouts([...abouts, newAbt]); // Update abouts list
-          toast.success('تم انشاء البشان');
+          setAbouts((prevAbouts) => [...prevAbouts, newAbt]); // Update abouts list
           setIsAboutSelected(true);
           setNewAbout(''); // Reset input field
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          toast.success('تم انشاء البشان');
         } else {
           toast.error('حدث خطأ أثناء الإنشاء');
         }
       })
       .catch((error) => {
+        toast.dismiss(toastId);
         console.log(error);
         toast.error('حدث خطأ أثناء الإنشاء');
       });

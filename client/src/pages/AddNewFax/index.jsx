@@ -308,7 +308,6 @@ const AddNewFax = () => {
               type="text"
               className="form-control"
               id="input1"
-              required
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="اضف تعليق*"

@@ -22,13 +22,13 @@ const DetailsFax = () => {
     if (!fax) {
       const fetchFaxDetails = async () => {
         try {
-          const response = await axios.get(`faxes/getOneUserFax/${id}`, {
+          const response = await axios.get(`faxes/${id}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setFax(response.data.fax[0]);
-          console.log('Fetched Fax Details:', response.data.fax[0]);
+          setFax(response.data.fax);
+          console.log('Fetched Fax Details:', response.data.fax);
         } catch (error) {
           if (error.response && error.response.status === 401) {
             setError('Unauthorized. Please log in again.');
@@ -85,7 +85,7 @@ const DetailsFax = () => {
                   file?.endsWith('.jpeg') ||
                   file?.endsWith('.png') ? (
                     <img
-                      src={`http://${file}`}
+                      src={`${import.meta.env.VITE_MAIN_IMAGE}${file}`}
                       alt={`fax-file-${index + 1}`}
                       className="fax-file-image"
                     />
@@ -99,7 +99,7 @@ const DetailsFax = () => {
                   )}
                 </div>
                 <a
-                  href={`http://${file}`}
+                  href={`${import.meta.env.VITE_MAIN_IMAGE}${file}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="download-button"
@@ -110,7 +110,9 @@ const DetailsFax = () => {
             ))}
           </div>
         ) : (
-          <p>لا توجد ملفات</p>
+          <p className="text-dark fw-bolder text-center fs-3 mt-5">
+            لا توجد ملفات
+          </p>
         )}
       </div>
       <Modal
@@ -129,13 +131,13 @@ const DetailsFax = () => {
             currentFile?.endsWith('.jpeg') ||
             currentFile?.endsWith('.png') ? (
               <img
-                src={`http://${currentFile}`}
+                src={`${import.meta.env.VITE_MAIN_IMAGE}${currentFile}`}
                 alt="File preview"
                 className="file-preview-image"
               />
             ) : currentFile?.endsWith('.pdf') ? (
               <embed
-                src={`http://${currentFile}`}
+                src={`${import.meta.env.VITE_MAIN_IMAGE}${currentFile}`}
                 type="application/pdf"
                 width="100%"
                 height="600px"

@@ -441,7 +441,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/faxes/searchesByUser?startDate=2024-08-02&endDate=2024-08-03&fax_Number=4446&faxType=وارد",
+							"raw": "{{URL}}/faxes/searchesByUser",
 							"host": [
 								"{{URL}}"
 							],
@@ -452,15 +452,18 @@
 							"query": [
 								{
 									"key": "startDate",
-									"value": "2024-08-02"
+									"value": "",
+									"disabled": true
 								},
 								{
 									"key": "endDate",
-									"value": "2024-08-03"
+									"value": "",
+									"disabled": true
 								},
 								{
 									"key": "fax_Number",
-									"value": "4446"
+									"value": "",
+									"disabled": true
 								},
 								{
 									"key": "destinationName",
@@ -469,7 +472,8 @@
 								},
 								{
 									"key": "faxType",
-									"value": "وارد"
+									"value": "صادر",
+									"disabled": true
 								}
 							]
 						}
@@ -868,13 +872,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/about/66af8c33d10c63cbab0308e7",
+							"raw": "{{URL}}/about/66a388781d201bd8a5f61489",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"about",
-								"66af8c33d10c63cbab0308e7"
+								"66a388781d201bd8a5f61489"
 							],
 							"query": [
 								{
@@ -1194,7 +1198,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/faxes/searchesByAdmin?startDate=2024-08-02&endDate=2024-08-04",
+							"raw": "{{URL}}/faxes/searchesByAdmin?startDate=2024-08-03&endDate=2024-08-04&faxType=صادر",
 							"host": [
 								"{{URL}}"
 							],
@@ -1205,7 +1209,7 @@
 							"query": [
 								{
 									"key": "startDate",
-									"value": "2024-08-02"
+									"value": "2024-08-03"
 								},
 								{
 									"key": "endDate",
@@ -1228,8 +1232,7 @@
 								},
 								{
 									"key": "faxType",
-									"value": "صادر",
-									"disabled": true
+									"value": "صادر"
 								}
 							]
 						}
