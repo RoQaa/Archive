@@ -200,7 +200,7 @@ const AddNewFax = () => {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         setLoading(false);
-        navigate('/'); // Redirect to faxes page on success
+        navigate('/home'); // Redirect to faxes page on success
       })
       .catch((error) => {
         setLoading(false);
@@ -220,7 +220,7 @@ const AddNewFax = () => {
 
         <div className="drop-down mb-5 d-flex justify-content-between align-items-center">
           <select
-            className="form-select ms-3"
+            className="form-control ms-3"
             aria-label="Default select example"
             onChange={handleDestinationChange}
             onBlur={() => setIsDestinationSelected(!!selectedDestination)}
@@ -234,7 +234,7 @@ const AddNewFax = () => {
             ))}
           </select>
           <select
-            className="form-select ms-3"
+            className="form-control ms-3"
             aria-label="Default select example"
             onChange={handleSubjectChange}
             value={selectedSubject}
@@ -248,7 +248,7 @@ const AddNewFax = () => {
             ))}
           </select>
           <select
-            className="form-select"
+            className="form-control"
             aria-label="Default select example"
             onChange={(e) => setAbout(e.target.value)}
             value={about}
@@ -335,7 +335,6 @@ const AddNewFax = () => {
 
           {!loading && (
             <button
-              onClick={() => navigate(`/home`)}
               type="submit"
               className="d-grid col-3 py-3 fs-4 fw-bold align-content-center mx-auto btn btn-primary  mb-4"
             >

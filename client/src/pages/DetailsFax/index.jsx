@@ -92,7 +92,9 @@ const DetailsFax = () => {
                   ) : (
                     <div className="file-icon">
                       <i className="fa fa-file" aria-hidden="true"></i>
-                      <p>{file.split('.').pop().toUpperCase()} File</p>
+                      <p className="text-dark">
+                        {file.split('.').pop().toUpperCase()} File
+                      </p>
                     </div>
                   )}
                 </div>

@@ -10,13 +10,6 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([]);
-  const [search, setSearch] = useState('');
-  const [usernameSearch, setUsernameSearch] = useState('');
-  const [faxNumberSearch, setFaxNumberSearch] = useState('');
-  const [faxTypeSearch, setFaxTypeSearch] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   const navigate = useNavigate();
   const location = useLocation(); // Hook to get location object
 
@@ -35,80 +28,13 @@ const Home = () => {
       })
       .then((res) => {
         setData(res?.data);
+        setErrorMessage(''); // Clear any previous error message
       })
       .catch((err) => {
         console.log(err);
         toast.error('حدث خطأ ');
       });
   }, [user.role]);
-
-  // Function to fetch search results
-  const fetchSearchResults = useCallback(async () => {
-    const token = localStorage.getItem('userToken');
-    const searchParams = new URLSearchParams();
-    if (search) searchParams.append('destinationName', search);
-    if (usernameSearch) searchParams.append('username', usernameSearch);
-    if (faxNumberSearch) searchParams.append('fax_Number', faxNumberSearch);
-    if (faxTypeSearch) searchParams.append('faxType', faxTypeSearch);
-
-    let url = 'faxes/searches';
-    if (user.role === 'admin' && (startDate || endDate)) {
-      url = 'faxes/searchDateByAdmin';
-      if (startDate) searchParams.append('startDate', formatDate(startDate));
-      if (endDate) searchParams.append('endDate', formatDate(endDate));
-    }
-
-    try {
-      const res = await axios.get(`${url}?${searchParams.toString()}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setData(res.data);
-    } catch (err) {
-      console.log(err);
-      toast.error('حدث خطأ أثناء البحث');
-    }
-  }, [
-    search,
-    usernameSearch,
-    faxNumberSearch,
-    faxTypeSearch,
-    startDate,
-    endDate,
-    user.role,
-  ]);
-
-  // Refresh data on location change
-  useEffect(() => {
-    fetchData();
-  }, [location, fetchData]);
-
-  // Refresh search results on search/filter change
-  useEffect(() => {
-    if (
-      search ||
-      usernameSearch ||
-      faxNumberSearch ||
-      faxTypeSearch ||
-      startDate ||
-      endDate
-    ) {
-      fetchSearchResults();
-    } else {
-      fetchData();
-    }
-  }, [
-    search,
-    usernameSearch,
-    faxNumberSearch,
-    faxTypeSearch,
-    startDate,
-    endDate,
-    fetchSearchResults,
-    fetchData,
-  ]);
 
   const handleDelete = (id) => {
     const confirmDelete = () => {
@@ -262,79 +188,12 @@ const Home = () => {
             </button>
           </Link>
         )}
-        {user.role === 'admin' && (
-          <form className="d-flex shadow-lg" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              id="dest"
-              placeholder="أكتب للبحث بأسم الجهة"
-              aria-label="Search"
-              value={search}
-              onChange={handleSearchChange}
-            />
-            <input
-              className="form-control me-2"
-              type="search"
-              id="user"
-              placeholder="أكتب للبحث بأسم المرسل"
-              aria-label="Search"
-              value={usernameSearch}
-              onChange={handleUsernameSearchChange}
-            />
-            <input
-              className="form-control me-2"
-              type="search"
-              id="code"
-              placeholder="أكتب للبحث بكود الفاكس"
-              aria-label="Search"
-              value={faxNumberSearch}
-              onChange={handleFaxNumberSearchChange}
-            />
-            <select
-              className="form-control me-2"
-              id="faxtype"
-              value={faxTypeSearch}
-              onChange={handleFaxTypeSearchChange}
-            >
-              <option value="">اختر نوع الفاكس</option>
-              <option value="صادر">صادر</option>
-              <option value="وارد">وارد</option>
-            </select>
-          </form>
-        )}
-        <div className="dateInput d-flex ">
-          <label
-            htmlFor=""
-            className="fw-bolder me-1 d-flex justify-content-center align-items-center"
-          >
-            من
-          </label>
-          <input
-            className="form-control me-3"
-            type="date"
-            id="startDate"
-            value={startDate}
-            onChange={handleStartDateChange}
-            placeholder="أكتب للبحث بنوع الفاكس"
-            aria-label="Search"
-          />
-          <label
-            htmlFor=""
-            className="fw-bolder ms-3 me-3 d-flex justify-content-center align-items-center"
-          >
-            إلي
-          </label>
-          <input
-            className="form-control ms-3"
-            type="date"
-            id="endDate"
-            value={endDate}
-            onChange={handleEndDateChange}
-            placeholder="أكتب للبحث بنوع الفاكس"
-            aria-label="Search"
-          />
-        </div>
+        <input
+          className="form-control"
+          id="search"
+          placeholder="أكتب للبحث ..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
         {paginatedData?.length > 0 ? (
           <>
             <div className="table-responsive">
@@ -343,7 +202,7 @@ const Home = () => {
                   <tr>
                     <th className="p-4 ">#</th>
                     <th className="p-4 table-headers">الجهة</th>
-                    <th className="p-4 table-headers">اسم المرسل</th>
+                    <th className="p-4 table-headers">اسم المستخدم</th>
                     <th className="p-4 table-headers">كود الفاكس</th>
                     <th className="p-4 table-headers">نوع الفاكس</th>
                     <th className="p-4 table-headers">التاريخ</th>
@@ -351,12 +210,11 @@ const Home = () => {
                   </tr>
                 </thead>
                 <tbody className="text-center p-5">
-                  {paginatedData?.map((item, index) => (
+                  {paginatedData.map((item, index) => (
                     <tr key={item._id}>
                       <td className="p-3">
                         {(currentPage - 1) * itemsPerPage + index + 1}
                       </td>
-
                       <td className="p-3">
                         {item?.about?.subject?.destination?.name || 'غير محدد'}
                       </td>
@@ -414,7 +272,9 @@ const Home = () => {
             </div>
           </>
         ) : (
-          <h2 className="text-center text-light my-5">لا توجد فكسات متاحة</h2>
+          <h2 className="text-center not-found text-light my-5">
+            لا توجد فكسات متاحة
+          </h2>
         )}
       </div>
     </>

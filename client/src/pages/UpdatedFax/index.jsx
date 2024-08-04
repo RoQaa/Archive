@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import axios from '@/api/axios';
+import { Header } from '@/layout';
 
 const UpdatedFax = () => {
   const navigate = useNavigate();
   const item = useLocation()?.state?.item;
   const [loading, setLoading] = useState(false);
-  const [comment, setComment] = useState(item?.comment);
+  const [comment, setComment] = useState(item?.comment || '');
+  const [faxNumber, setFaxNumber] = useState(item?.faxNumber || '');
+  const [faxType, setFaxType] = useState(item?.faxType || '');
   const [files, setFiles] = useState([]);
+  const [about, setAbout] = useState(item?.about || '');
   const [fileUploadError, setFileUploadError] = useState('');
 
   const token = localStorage.getItem('userToken');
@@ -60,8 +64,10 @@ const UpdatedFax = () => {
 
     const fileUploadPaths = await uploadFiles();
     const updateData = {
-      comment: comment || item?.comment,
-      about: item?.about?._id,
+      comment: comment,
+      faxNumber: faxNumber,
+      faxType: faxType,
+      about: about,
     };
 
     if (fileUploadPaths.length > 0) {
@@ -89,9 +95,10 @@ const UpdatedFax = () => {
   return (
     <div className="dashboard d-flex flex-row">
       <div className="container text-center">
+        <Header />
         <div className="shadow-none p-3 mt-3 mb-5 bg-body-dark rounded main-title">
           <h2 className="fs-1 fw-bold text-light shadow-lg p-3 mb-5 bg-body-dark rounded">
-            تعديل
+            تعديل البيانات
           </h2>
         </div>
         <form
@@ -100,7 +107,7 @@ const UpdatedFax = () => {
         >
           <div className="col-12 text-end fw-bold fs-5 mb-4">
             <label htmlFor="comment" className="form-label">
-              تعليق
+              التعليق
             </label>
             <input
               name="comment"
@@ -111,6 +118,37 @@ const UpdatedFax = () => {
               onChange={(e) => setComment(e.target.value)}
               placeholder="اضف تعليق"
             />
+          </div>
+          <div className="col-12 text-end fw-bold fs-5 mb-4">
+            <label htmlFor="faxNumber" className="form-label">
+              كود الفاكس
+            </label>
+            <input
+              name="faxNumber"
+              type="number"
+              className="form-control"
+              id="faxNumber"
+              value={faxNumber}
+              onChange={(e) => setFaxNumber(e.target.value)}
+              placeholder="ادخل رقم الفاكس"
+            />
+          </div>
+          <div className="col-12 text-end fw-bold fs-5 mb-4">
+            <label htmlFor="input1" className="form-label">
+              نوع الفاكس
+            </label>
+            <select
+              name="input1"
+              className="form-control"
+              id="input1"
+              required
+              value={faxType}
+              onChange={(e) => setFaxType(e.target.value)}
+            >
+              <option value="">اختر نوع الفاكس</option>
+              <option value="صادر">صادر</option>
+              <option value="وارد">وارد</option>
+            </select>
           </div>
           <div className="col-12 text-end fw-bold fs-5 mb-4">
             <label htmlFor="files" className="form-label">
