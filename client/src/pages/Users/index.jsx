@@ -286,7 +286,7 @@ const Users = () => {
             isOpen={true}
             onRequestClose={closeModal}
             contentLabel="تعديل كلمة المرور"
-            className="Modal"
+            className="Modal text-end px-5"
             overlayClassName="Overlay"
           >
             <h2>تعديل كلمة السر للمستخدم: {selectedUser.username}</h2>
@@ -323,7 +323,7 @@ const Users = () => {
             isOpen={true}
             onRequestClose={closeModal}
             contentLabel="إضافة مستخدم جديد"
-            className="Modal"
+            className="Modal text-end px-5"
             overlayClassName="Overlay"
           >
             <h2>إضافة مستخدم جديد</h2>
@@ -369,7 +369,7 @@ const Users = () => {
             isOpen={true}
             onRequestClose={closeModal}
             contentLabel="تعديل المستخدم"
-            className="Modal"
+            className="Modal text-end px-5"
             overlayClassName="Overlay"
           >
             <h2>تعديل المستخدم: {selectedUser.username}</h2>
