@@ -18,7 +18,7 @@ router.get('/getOneUser/:id', userController.getOneUser)
 router.post('/createUser', userController.creataAccount)
 router.patch('/updateUser/:id', userController.updateUserByAdmin)
 router.patch('/resetPassword/:id', authController.resetPassword)
-router.delete('/deleteUser/:id', userController.deleteUserByAdmin)
+router.patch('/deleteUser/:id', userController.deleteUserByAdmin)
 
 
 

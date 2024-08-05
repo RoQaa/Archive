@@ -40,7 +40,8 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
 
   }
 
-  const data = await User.find({ isActive: { $ne: false }});
+ // const data = await User.find({ isActive: { $ne: false }});
+ const data = await User.find();
   if (!data || data.length === 0) return next(new AppError(`لا يوجد مستخدمين لعرضهم`, 404))
   res.status(200).json({
     status: true,
@@ -53,8 +54,9 @@ exports.getUsersByAdmin = catchAsync(async (req, res, next) => {
 
 exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
- // const user = await User.findById(req.params.id)
- const user = await User.findByIdAndUpdate(req.params.id,{isActive:false},{new:true,runValidators:true})
+  const state = await User.findById(req.params.id)
+  if(state.role==='admin') return next(new AppError(`لا يمكن التعديل حالة المسئول`,400))
+ const user = await User.findByIdAndUpdate(req.params.id,{isActive:req.body.active},{new:true,runValidators:true})
   if (!user) {
     return next(new AppError(`هذا المستخدم غير موجود`, 404))
   }
@@ -65,7 +67,7 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 */
   res.status(200).json({
     status: true,
-    message: "تم حذف هذا المستخدم"
+    message: "تم تعديل الحالة"
   })
 })
 

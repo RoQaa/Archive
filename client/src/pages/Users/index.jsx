@@ -19,7 +19,7 @@ const Users = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [editUsername, setEditUsername] = useState('');
   const [editRole, setEditRole] = useState('');
-
+  const [state, setstate] = useState(false)
   useEffect(() => {
     fetchData();
   }, []);
@@ -56,6 +56,7 @@ const Users = () => {
       setEditRole(user.role);
     }
   };
+  console.log('data', data);
 
   const closeModal = () => {
     setModalType(null);
@@ -181,19 +182,24 @@ const Users = () => {
     const confirmDelete = () => {
       const token = localStorage.getItem('userToken');
       axios
-        .delete(`user/deleteUser/${userId}`, {
+        .patch(`user/deleteUser/${userId}`,{
+          active: state
+
+        }, { //active = true ,false
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
-          },
-        })
+          }
+
+        },
+        )
         .then((res) => {
-          toast.success('تم حذف المستخدم بنجاح');
+          toast.success(res.data?.message);
           fetchData();
         })
         .catch((err) => {
           console.log(err);
-          toast.error('Failed to delete user');
+          toast.error(err.response.data.message);
         });
     };
 
@@ -220,6 +226,8 @@ const Users = () => {
       }
     );
   };
+  console.log(state);
+
 
   return (
     <div className="container bg-light text-center">
@@ -255,7 +263,7 @@ const Users = () => {
               <td className="p-3">
                 <button
                   onClick={() => openModal('password', item)}
-                  className="btn btn-success bt-c mx-2 px-4"
+                  className="btn btn-warning bt-c mx-2 px-4"
                 >
                   تعديل كلمة السر
                 </button>
@@ -265,165 +273,188 @@ const Users = () => {
                 >
                   تعديل المستخدم
                 </button>
-                <button
-                  onClick={() => handleDelete(item._id)}
-                  className="btn bt-d btn-danger mx-2 px-4"
-                >
-                  حذف المستخدم
-                </button>
+                {item?.isActive == true ? (
+                  <button
+                    onClick={
+                      () => {
+                        setstate(false)
+                        handleDelete(item._id)
+                      }}
+                    className="btn bt-d btn-success mx-2 px-4"
+                  >
+                    مفعل
+                  </button>
+                ) : (
+                  <button
+                    onClick={
+                      () => {
+                        setstate(true)
+                        handleDelete(item._id)
+                      }}
+                    className="btn bt-d btn-danger mx-2 px-4"
+                  >
+                    غير مفعل
+                  </button>
+                )}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {modalType === 'password' && (
-        <Modal
-          isOpen={true}
-          onRequestClose={closeModal}
-          contentLabel="Edit User Password"
-          className="dark-mode-modal text-end container p-5"
-          overlayClassName="dark-mode-overlay"
-          style={{ overlay: { top: '10%' } }} // Position the modal from the top
-          closeTimeoutMS={300}
-        >
-          <h2>تعديل كلمة المرور للمستخدم {selectedUser?.username}</h2>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className="form-group">
-              <label htmlFor="password ms-auto">كلمة المرور الجديدة</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="passwordConfirm">تأكيد كلمة المرور</label>
-              <input
-                type="password"
-                id="passwordConfirm"
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handlePasswordChange}
-              className="btn btn-primary mt-3"
-            >
-              حفظ التعديلات
-            </button>
-          </form>
-          <button onClick={closeModal} className="btn btn-danger mt-3">
-            إلغاء
-          </button>
-        </Modal>
-      )}
-      {modalType === 'newUser' && (
-        <Modal
-          isOpen={true}
-          onRequestClose={closeModal}
-          contentLabel="Create New User"
-          className="dark-mode-modal text-end container p-5"
-          overlayClassName="dark-mode-overlay"
-          style={{ overlay: { top: '10%' } }} // Position the modal from the top
-          closeTimeoutMS={300}
-        >
-          <h2>إنشاء مستخدم جديد</h2>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className="form-group">
-              <label htmlFor="newUsername">اسم المستخدم</label>
-              <input
-                type="text"
-                id="newUsername"
-                value={newUsername}
-                onChange={(e) => setNewUsername(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="newPassword">كلمة المرور</label>
-              <input
-                type="password"
-                id="newPassword"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="newPasswordConfirm">تأكيد كلمة المرور</label>
-              <input
-                type="password"
-                id="newPasswordConfirm"
-                value={newPasswordConfirm}
-                onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleCreateUser}
-              className="btn btn-primary mt-3"
-            >
-              إنشاء مستخدم
-            </button>
-          </form>
-          <button onClick={closeModal} className="btn btn-danger mt-3">
-            إلغاء
-          </button>
-        </Modal>
-      )}
-      {modalType === 'editUser' && (
-        <Modal
-          isOpen={true}
-          onRequestClose={closeModal}
-          contentLabel="Edit User"
-          className="dark-mode-modal text-end container p-5"
-          overlayClassName="dark-mode-overlay"
-          style={{ overlay: { top: '10%' } }} // Position the modal from the top
-          closeTimeoutMS={300}
-        >
-          <h2>تعديل المستخدم {selectedUser?.username}</h2>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className="form-group">
-              <label htmlFor="editUsername">اسم المستخدم</label>
-              <input
-                type="text"
-                id="editUsername"
-                value={editUsername}
-                onChange={(e) => setEditUsername(e.target.value)}
-                className="form-control"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="editRole">الدور</label>
-              <select
-                id="editRole"
-                value={editRole}
-                onChange={(e) => setEditRole(e.target.value)}
-                className="form-control"
+      {
+        modalType === 'password' && (
+          <Modal
+            isOpen={true}
+            onRequestClose={closeModal}
+            contentLabel="Edit User Password"
+            className="dark-mode-modal text-end container p-5"
+            overlayClassName="dark-mode-overlay"
+            style={{ overlay: { top: '10%' } }} // Position the modal from the top
+            closeTimeoutMS={300}
+          >
+            <h2>تعديل كلمة المرور للمستخدم {selectedUser?.username}</h2>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label htmlFor="password ms-auto">كلمة المرور الجديدة</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="passwordConfirm">تأكيد كلمة المرور</label>
+                <input
+                  type="password"
+                  id="passwordConfirm"
+                  value={passwordConfirm}
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handlePasswordChange}
+                className="btn btn-primary mt-3"
               >
-                <option value="user">مستخدم</option>
-                <option value="admin">مسئول</option>
-              </select>
-            </div>
-            <button
-              type="button"
-              onClick={handleEditUser}
-              className="btn btn-primary mt-3"
-            >
-              حفظ التعديلات
+                حفظ التعديلات
+              </button>
+            </form>
+            <button onClick={closeModal} className="btn btn-danger mt-3">
+              إلغاء
             </button>
-          </form>
-          <button onClick={closeModal} className="btn btn-danger mt-3">
-            إلغاء
-          </button>
-        </Modal>
-      )}
-    </div>
+          </Modal>
+        )
+      }
+      {
+        modalType === 'newUser' && (
+          <Modal
+            isOpen={true}
+            onRequestClose={closeModal}
+            contentLabel="Create New User"
+            className="dark-mode-modal text-end container p-5"
+            overlayClassName="dark-mode-overlay"
+            style={{ overlay: { top: '10%' } }} // Position the modal from the top
+            closeTimeoutMS={300}
+          >
+            <h2>إنشاء مستخدم جديد</h2>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label htmlFor="newUsername">اسم المستخدم</label>
+                <input
+                  type="text"
+                  id="newUsername"
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="newPassword">كلمة المرور</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="newPasswordConfirm">تأكيد كلمة المرور</label>
+                <input
+                  type="password"
+                  id="newPasswordConfirm"
+                  value={newPasswordConfirm}
+                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleCreateUser}
+                className="btn btn-primary mt-3"
+              >
+                إنشاء مستخدم
+              </button>
+            </form>
+            <button onClick={closeModal} className="btn btn-danger mt-3">
+              إلغاء
+            </button>
+          </Modal>
+        )
+      }
+      {
+        modalType === 'editUser' && (
+          <Modal
+            isOpen={true}
+            onRequestClose={closeModal}
+            contentLabel="Edit User"
+            className="dark-mode-modal text-end container p-5"
+            overlayClassName="dark-mode-overlay"
+            style={{ overlay: { top: '10%' } }} // Position the modal from the top
+            closeTimeoutMS={300}
+          >
+            <h2>تعديل المستخدم {selectedUser?.username}</h2>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="form-group">
+                <label htmlFor="editUsername">اسم المستخدم</label>
+                <input
+                  type="text"
+                  id="editUsername"
+                  value={editUsername}
+                  onChange={(e) => setEditUsername(e.target.value)}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="editRole">الدور</label>
+                <select
+                  id="editRole"
+                  value={editRole}
+                  onChange={(e) => setEditRole(e.target.value)}
+                  className="form-control"
+                >
+                  <option value="user">مستخدم</option>
+                  <option value="admin">مسئول</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                onClick={handleEditUser}
+                className="btn btn-primary mt-3"
+              >
+                حفظ التعديلات
+              </button>
+            </form>
+            <button onClick={closeModal} className="btn btn-danger mt-3">
+              إلغاء
+            </button>
+          </Modal>
+        )
+      }
+    </div >
   );
 };
 
