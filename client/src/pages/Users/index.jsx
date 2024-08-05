@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './users.css';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const Users = () => {
   const { username } = useParams();
@@ -66,6 +67,19 @@ const Users = () => {
       setEditUsername(user.username);
       setEditRole(user?.role);
     }
+          toast.info('تم الفتح اذهب للأسفل');
+
+    // const openModal = (type, user = null) => {
+    //   setSelectedUser(user);
+    //   setModalType(type);
+    //   if (type === 'editUser' && user) {
+    //     setEditUsername(user.username);
+    //     setEditRole(user?.role);
+    //   }
+    //   // Show toast message when modal is opened
+    //   toast.info('تم الفتح اذهب للأسفل');
+    // };
+    
   };
 
   const closeModal = () => {
@@ -215,9 +229,20 @@ const Users = () => {
   };
 
   return (
+
+
+    
+
+        // <Header />
     <div className="container bg-light text-center">
       <Header />
       <ToastContainer />
+          
+      <div className="container bg-light text-center">
+        <ToastContainer />
+        {/* Rest of your JSX */}
+      </div>
+
       <h2 className="text-center my-5 text-light fw-bolder shadow p-3 mb-5 rounded main-color">
         جميع المستخدمين
       </h2>

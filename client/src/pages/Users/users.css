@@ -1,21 +1,19 @@
-/* users.css */
-
 /* Light mode modal styling */
 .light-mode-modal {
-  background-color: #fff; /* Light background color */
-  color: #000000; /* Dark text color */
-  border-radius: 10px;
-  padding: 2rem;
-  max-width: 600px;
-  margin: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  animation: fadeIn 0.5s ease;
+  background-color: #fff !important; /* Light background color */
+  color: #000000 !important; /* Dark text color */
+  border-radius: 10px !important;
+  padding: 2rem !important;
+  max-width: 600px !important;
+  margin: auto !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  position: absolute !important;
+  animation: fadeIn 0.5s ease !important;
 }
+
 .btn {
-  /* background-color: #343a40 !important;  */
   color: #ffffff !important;
   border: none !important;
   padding: 10px 20px !important;
@@ -24,6 +22,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   transition: background-color 0.3s ease !important;
 }
+
 h2 {
   background-color: #343a40 !important;
   color: #ffffff !important;
@@ -36,18 +35,18 @@ h2 {
 }
 
 .light-mode-overlay {
-  background-color: rgba(255, 255, 255, 0.75); /* Light overlay color */
-  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.75) !important; /* Light overlay color */
+  backdrop-filter: blur(10px) !important;
 }
 
 .light-mode-modal .form-group label {
-  color: #bdbaba; /* Darker label color for contrast */
+  color: #bdbaba !important; /* Darker label color for contrast */
 }
 
 .light-mode-modal .form-group input {
-  background-color: #f8f9fa; /* Light input background color */
-  color: #d8d5d5; /* Dark text color */
-  border: 1px solid #ccc; /* Light border color */
+  background-color: #f8f9fa !important; /* Light input background color */
+  color: #d8d5d5 !important; /* Dark text color */
+  border: 1px solid #ccc !important; /* Light border color */
 }
 
 .light-mode-modal .btn-primary {
@@ -70,36 +69,80 @@ h2 {
   border-color: #343a40e8 !important;
 }
 
-/* Fade-in animation for the modal */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -45%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-/* users.css */
-
+/* Dark mode modal styling */
 .dark-mode-overlay {
-  transition: opacity 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.75) !important; /* Dark overlay color */
+  backdrop-filter: blur(10px) !important;
+  transition: opacity 0.3s ease !important;
 }
 
 .dark-mode-modal {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  opacity: 0;
-  transform: translateY(-50px);
+  background-color: #333 !important; /* Dark background color */
+  color: #fff !important; /* Light text color */
+  border-radius: 10px !important;
+  padding: 2rem !important;
+  max-width: 600px !important;
+  margin: auto !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  position: absolute !important;
+  animation: fadeIn 0.5s ease !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+  opacity: 0 !important;
+  transform: translateY(-50px) !important;
 }
 
+.dark-mode-modal .form-group label {
+  color: #f1f1f1 !important; /* Light label color */
+}
+
+.dark-mode-modal .form-group input {
+  background-color: #444 !important; /* Dark input background color */
+  color: #ddd !important; /* Light text color */
+  border: 1px solid #555 !important; /* Dark border color */
+}
+
+.dark-mode-modal .btn-primary {
+  background-color: #ff0000 !important; /* Specified button color */
+  border-color: #ff0000 !important;
+}
+
+.dark-mode-modal .btn-primary:hover {
+  background-color: #ff3333 !important; /* Slightly lighter shade on hover */
+  border-color: #ff3333 !important;
+}
+
+.dark-mode-modal .btn-secondary {
+  background-color: #555 !important; /* Specified button color */
+  border-color: #555 !important;
+}
+
+.dark-mode-modal .btn-secondary:hover {
+  background-color: #666 !important; /* Slightly lighter shade on hover */
+  border-color: #666 !important;
+}
+
+/* Fade-in animation for the modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0 !important;
+    transform: translate(-50%, -45%) !important;
+  }
+  to {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+/* React Modal Transition Styles */
 .ReactModal__Overlay--after-open {
   opacity: 1 !important;
 }
 
 .ReactModal__Content--after-open {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 .ReactModal__Overlay--before-close {
@@ -107,6 +150,6 @@ h2 {
 }
 
 .ReactModal__Content--before-close {
-  opacity: 0;
-  transform: translateY(-50px);
+  opacity: 0 !important;
+  transform: translateY(-50px) !important;
 }
