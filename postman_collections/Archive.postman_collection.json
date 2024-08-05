@@ -137,11 +137,11 @@
 								}
 							]
 						},
-						"method": "DELETE",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"active\":false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -149,14 +149,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/user/deleteUser/66a391cf200ed376eceb3d1d",
+							"raw": "{{URL}}/user/deleteUser/66afe2a4b79d3a06e66f2dbd",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"user",
 								"deleteUser",
-								"66a391cf200ed376eceb3d1d"
+								"66afe2a4b79d3a06e66f2dbd"
 							]
 						}
 					},
@@ -704,12 +704,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/subjects",
+							"raw": "{{URL}}/subjects/66b05b53b0fed6a3d7d2ba98",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
-								"subjects"
+								"subjects",
+								"66b05b53b0fed6a3d7d2ba98"
 							],
 							"query": [
 								{
@@ -832,7 +833,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"بشأن1\",\r\n    \"subject\":\"66a388781d201bd8a5f61489\"\r\n}",
+							"raw": "{\r\n    \"name\":\"بشأن1\",\r\n    \"subject\":\"66b05c5d93becf7a674e1d46\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1101,13 +1102,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}/faxes/66a3b632cc963570dc37b5db",
+							"raw": "{{URL}}/faxes/66afc153ccecca2ec2371498",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"faxes",
-								"66a3b632cc963570dc37b5db"
+								"66afc153ccecca2ec2371498"
 							]
 						}
 					},
