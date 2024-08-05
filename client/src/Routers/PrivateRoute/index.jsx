@@ -4,7 +4,7 @@ import { AuthProvider } from '@/context/Auth';
 
 const PrivateRoute = ({ children }) => {
   if (localStorage.getItem('userToken') == null) {
-    return <Navigate to={'/'} />;
+    return <Navigate to={'/Login'} />;
   } else {
     return children;
   }

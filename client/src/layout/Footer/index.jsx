@@ -1,5 +1,6 @@
 import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import logo from '@/assets/Cambridge-logo-.svg'
 import './footer.module.scss';
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";

@@ -204,7 +204,7 @@ const Features = () => {
     axios
       .post(
         'about/add',
-        { name: newAbout.trim, subject: selectedId },
+        { name: newAbout.trim(), subject: selectedId },
         {
           headers: {
             'Content-Type': 'application/json',
