@@ -141,7 +141,7 @@ const Users = () => {
           ) {
             toast.error('الرقم السري يجب ان يكون علي الاقل 8 أحرف');
           } else {
-            toast.error('حدث خطأ أثناء إنشاء المستخدم');
+            toast.error('الرقم السري يجب ان يكون علي الاقل 8 أحرف');
           }
         } else {
           console.log(err);

@@ -73,7 +73,8 @@ exports.updateAbout = catchAsync(async (req, res, next) => {
 exports.deleteAbout = catchAsync(async (req, res, next) => {
   // Find the About document by ID
   const doc = await About.findById(req.params.id);
-  if(doc.name ==='لايوجد') return next(new AppError(`لا يمكن الحذف`,400))
+
+  if(doc.name ==='لا يوجد') return next(new AppError(`لا يمكن الحذف`,400))
   // If the document doesn't exist, return a 404 error
   if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
 

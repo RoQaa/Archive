@@ -221,6 +221,9 @@ const Features = () => {
           setIsAboutSelected(true);
           setNewAbout(''); // Reset input field
           toast.success('تم انشاء البشان');
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000);
         } else {
           toast.error('حدث خطأ أثناء الإنشاء');
         }
@@ -420,9 +423,13 @@ const Features = () => {
               prevDestinations.filter(
                 (destination) => destination._id !== selectedDestination
               )
+              
             );
             setSelectedDestination('');
             setDestinationId(null);
+            setTimeout(() => {
+              window.location.reload()
+            }, 1000);
           } else {
             toast.error('حدث خطأ أثناء الحذف');
           }
@@ -472,6 +479,9 @@ const Features = () => {
             );
             setSelectedSubject('');
             setSubjectId(null);
+            setTimeout(() => {
+              window.location.reload()
+            }, 1000);
           } else {
             toast.error('حدث خطأ أثناء الحذف');
           }
@@ -504,7 +514,6 @@ const Features = () => {
 
     const confirmDelete = () => {
       const toastId = toast.loading('جارٍ حذف البشان...');
-
       axios
         .delete(`about/${selectedAbout}`, {
           headers: {
@@ -521,6 +530,9 @@ const Features = () => {
             );
             setSelectedAbout('');
             setAboutId(null);
+            setTimeout(() => {
+              window.location.reload()
+            }, 1000);
           } else {
             toast.error('حدث خطأ أثناء الحذف');
           }
