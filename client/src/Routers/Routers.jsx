@@ -39,9 +39,9 @@ function Protect({ children, protect = false, path = '/', role = 'user' }) {
     authed !== true &&
     path !== 'login'
   )
-    return <Navigate to={'/login'} />;
-  if (authed === protect && path !== '/login') return children;
-  return <Navigate to={protect ? '/login' : '/'} />;
+    return <Navigate to={'/'} />;
+  if (authed === protect && path !== '/') return children;
+  return <Navigate to={protect ? '/' : '/'} />;
 }
 const Routers = () => {
   const allowed = useAuth().user;
