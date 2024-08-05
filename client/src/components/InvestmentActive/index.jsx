@@ -8,10 +8,10 @@ const InvestmentActive = () => {
   const [loading, setLoading] = useState(false)
   const [investment, setInvestment] = useState([])
   const { user } = useAuth();
-  // console.log(user.role);
+  // console.log(user?.role);
   useEffect(() => {
     setLoading(true)
-    if (user.role == 'manager') {
+    if (user?.role == 'manager') {
       axios.get(`/invest/active`)
         .then((response) => {
           setInvestment(response.data)
@@ -138,7 +138,7 @@ const InvestmentActive = () => {
           ) : null
         ))}
       </div>
-      {user.role != 'manager' ? (
+      {user?.role != 'manager' ? (
         <h3 className="text-light"> YOU ARE NOT PROVIDE </h3>
       ) : null
       }

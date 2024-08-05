@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import axios from '@/api/axios';
 import './AddNewFax.css';
 import { Header } from '@/layout';
+import { toast } from 'react-toastify';
 
 const AddNewFax = () => {
   const navigate = useNavigate();
@@ -36,10 +37,14 @@ const AddNewFax = () => {
       })
       .then((res) => {
         setDestinations(res?.data.data);
-        setDestinationId = res.data._id;
+        // setDestinationId = res.data._id;
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err)
+        toast.error(err?.response?.data?.message)
+        err?.response?.status == 401 ? (
+          navigate('/')
+        ) : null
       });
     /*
     // Load all subjects and abouts initially

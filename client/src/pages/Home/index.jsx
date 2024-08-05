@@ -26,7 +26,7 @@ const Home = () => {
   // Function to fetch data
   const fetchData = useCallback(() => {
     const token = localStorage.getItem('userToken');
-    const url = user.role === 'user' ? 'faxes/my-faxes' : 'faxes';
+    const url = user?.role === 'user' ? 'faxes/my-faxes' : 'faxes';
     axios
       .get(url, {
         headers: {
@@ -40,9 +40,12 @@ const Home = () => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error('حدث خطأ ');
+        toast.error(err?.response?.data?.message)
+        err?.response?.status == 401 ? (
+          navigate('/')
+        ) : null
       });
-  }, [user.role]);
+  }, [user?.role]);
 
   // Function to fetch search results
   // Function to fetch search results
@@ -57,7 +60,7 @@ const Home = () => {
     if (endDate) searchParams.append('endDate', formatDate(endDate));
 
     let url = '';
-    if (user.role === 'user') {
+    if (user?.role === 'user') {
       url = `faxes/searchesByUser?${searchParams.toString()}`;
     } else {
       url = `faxes/searchesByAdmin?${searchParams.toString()}`;
@@ -84,7 +87,7 @@ const Home = () => {
     faxTypeSearch,
     startDate,
     endDate,
-    user.role,
+    user?.role,
   ]);
 
   // Refresh data on location change
@@ -249,7 +252,7 @@ const Home = () => {
         <h2 className="fs-1 fw-bold text-light shadow p-3 mb-5 bg-body-light rounded text-center">
           جميع الفكسات
         </h2>
-        {user.role === 'admin' && (
+        {user?.role === 'admin' && (
           <Link to={'/addNewFax'}>
             <button
               type="button"
@@ -259,7 +262,7 @@ const Home = () => {
             </button>
           </Link>
         )}
-        {user.role === 'user' && (
+        {user?.role === 'user' && (
           <Link to={'/addNewFax'}>
             <button
               type="button"
@@ -376,7 +379,7 @@ const Home = () => {
                       <td className="p-3">{item?.faxType}</td>
                       <td className="p-3">{item?.date.slice(0, 10)}</td>
                       <td className="p-3">
-                        {user.role === 'admin' && (
+                        {user?.role === 'admin' && (
                           <Link to={`/update/${item._id}`} state={{ item }}>
                             <button className="btn btn-success mx-2 px-4">
                               تعديل
@@ -388,7 +391,7 @@ const Home = () => {
                             تفاصيل
                           </button>
                         </Link>
-                        {user.role === 'admin' && (
+                        {user?.role === 'admin' && (
                           <button
                             onClick={() => handleDelete(item._id)}
                             className="btn btn-danger mx-2 px-4"

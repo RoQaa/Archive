@@ -4,6 +4,7 @@ import axios from '@/api/axios';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import { Header } from '@/layout';
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
@@ -31,8 +32,12 @@ const DetailsFax = () => {
           console.log('Fetched Fax Details:', response.data.fax);
         } catch (error) {
           if (error.response && error.response.status === 401) {
-            setError('Unauthorized. Please log in again.');
-            navigate('/');
+            toast.error(error?.response?.data?.message)
+            setError('Unauthorized. Please log in again.')
+
+            error?.response?.status == 401 ? (
+              navigate('/')
+            ) : null
           } else if (error.response && error.response.status === 500) {
             setError('Internal server error. Please try again later.');
           } else {
@@ -82,8 +87,8 @@ const DetailsFax = () => {
                   onClick={() => openModal(file)}
                 >
                   {file?.endsWith('.jpg') ||
-                  file?.endsWith('.jpeg') ||
-                  file?.endsWith('.png') ? (
+                    file?.endsWith('.jpeg') ||
+                    file?.endsWith('.png') ? (
                     <img
                       src={`${import.meta.env.VITE_MAIN_IMAGE}${file}`}
                       alt={`fax-file-${index + 1}`}
@@ -128,8 +133,8 @@ const DetailsFax = () => {
         {currentFile && (
           <div className="file-preview-container">
             {currentFile?.endsWith('.jpg') ||
-            currentFile?.endsWith('.jpeg') ||
-            currentFile?.endsWith('.png') ? (
+              currentFile?.endsWith('.jpeg') ||
+              currentFile?.endsWith('.png') ? (
               <img
                 src={`${import.meta.env.VITE_MAIN_IMAGE}${currentFile}`}
                 alt="File preview"

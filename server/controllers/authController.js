@@ -34,7 +34,7 @@ const createSendToken = (user, statusCode, message, res) => {
     data: {
       username: user.username,
 
-      role: user.role,
+      role: user?.role,
     },
     token,
   });
@@ -129,7 +129,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req.user?.role)) {
       return next(
         new AppError("ليس لديك الصلاحية للقيام بهذة العملية", 401),
       );

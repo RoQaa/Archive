@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import axios from '@/api/axios';
 import { Header } from '@/layout';
+import { toast } from 'react-toastify';
 
 const UpdatedFax = () => {
   const navigate = useNavigate();
@@ -54,6 +55,10 @@ const UpdatedFax = () => {
     } catch (error) {
       console.error(error);
       setFileUploadError('Failed to upload files');
+      toast.error(error?.response?.data?.message)
+      error?.response?.status == 401 ? (
+        navigate('/')
+      ) : null
       return [];
     }
   };

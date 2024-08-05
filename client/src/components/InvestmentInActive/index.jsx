@@ -10,7 +10,7 @@ const InvestmentInActive = () => {
   const { user } = useAuth();
   useEffect(() => {
     setLoading(true)
-    if (user.role =='manager') {
+    if (user?.role =='manager') {
       axios.get(`/invest/inactive`)
         .then((response) => {
           setInvestment(response.data)
@@ -131,7 +131,7 @@ const InvestmentInActive = () => {
             </Link>
           ) : null
         ))}
-        {user.role !='manager' ? (
+        {user?.role !='manager' ? (
           <h3 className="text-light"> YOU ARE NOT PROVIDE </h3>
         ) : null
         }

@@ -1,10 +1,10 @@
 import { Header } from '@/layout';
 import axios from '@/api/axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Await, useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
-import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './users.css';
 
 const Users = () => {
@@ -19,10 +19,18 @@ const Users = () => {
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
   const [editUsername, setEditUsername] = useState('');
   const [editRole, setEditRole] = useState('');
-  const [state, setstate] = useState(false)
+  const [state, setState] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const navigate = useNavigate()
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (userIdToDelete !== null) {
+      handleDelete(userIdToDelete);
+    }
+  }, [state, userIdToDelete]);
 
   const fetchData = () => {
     const token = localStorage.getItem('userToken');
@@ -44,7 +52,10 @@ const Users = () => {
       })
       .catch((err) => {
         console.log(err);
-        toast.error('حدث خطأ');
+        toast.error(err?.response?.data?.message)
+        err?.response?.status == 401 ? (
+          navigate('/')
+        ) : null
       });
   };
 
@@ -53,10 +64,9 @@ const Users = () => {
     setModalType(type);
     if (type === 'editUser' && user) {
       setEditUsername(user.username);
-      setEditRole(user.role);
+      setEditRole(user?.role);
     }
   };
-  console.log('data', data);
 
   const closeModal = () => {
     setModalType(null);
@@ -178,56 +188,31 @@ const Users = () => {
       });
   };
 
-  const handleDelete = (userId) => {
-    const confirmDelete = () => {
-      const token = localStorage.getItem('userToken');
-      axios
-        .patch(`user/deleteUser/${userId}`,{
-          active: state
-
-        }, { //active = true ,false
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          }
-
-        },
-        )
-        .then((res) => {
-          toast.success(res.data?.message);
-          fetchData();
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error(err.response.data.message);
-        });
-    };
-
-    toast(
-      ({ closeToast }) => (
-        <div>
-          <p>هل أنت متأكد أنك تريد حذف هذا المستخدم؟</p>
-          <button
-            className="btn btn-danger mx-2"
-            onClick={() => {
-              confirmDelete();
-              closeToast();
-            }}
-          >
-            تأكيد
-          </button>
-          <button className="btn btn-secondary mx-2" onClick={closeToast}>
-            إلغاء
-          </button>
-        </div>
-      ),
-      {
-        autoClose: false,
-      }
-    );
+  const handleDelete = async (userId) => {
+    const token = localStorage.getItem('userToken');
+    await axios
+      .patch(`user/deleteUser/${userId}`, {
+        active: state
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      })
+      .then((res) => {
+        fetchData();
+        toast.success(res.data?.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message);
+      });
   };
-  console.log(state);
 
+  const confirmDelete = (userId, newState) => {
+    setState(newState);
+    setUserIdToDelete(userId);
+  };
 
   return (
     <div className="container bg-light text-center">
@@ -262,7 +247,9 @@ const Users = () => {
               </td>
               <td className="p-3">
                 <button
-                  onClick={() => openModal('password', item)}
+                  onClick={() => {
+                    openModal('password', item)
+                  }}
                   className="btn btn-warning bt-c mx-2 px-4"
                 >
                   تعديل كلمة السر
@@ -275,22 +262,14 @@ const Users = () => {
                 </button>
                 {item?.isActive == true ? (
                   <button
-                    onClick={
-                      () => {
-                        setstate(false)
-                        handleDelete(item._id)
-                      }}
+                    onClick={() => confirmDelete(item._id, false)}
                     className="btn bt-d btn-success mx-2 px-4"
                   >
                     مفعل
                   </button>
                 ) : (
                   <button
-                    onClick={
-                      () => {
-                        setstate(true)
-                        handleDelete(item._id)
-                      }}
+                    onClick={() => confirmDelete(item._id, true)}
                     className="btn bt-d btn-danger mx-2 px-4"
                   >
                     غير مفعل
@@ -306,43 +285,33 @@ const Users = () => {
           <Modal
             isOpen={true}
             onRequestClose={closeModal}
-            contentLabel="Edit User Password"
-            className="dark-mode-modal text-end container p-5"
-            overlayClassName="dark-mode-overlay"
-            style={{ overlay: { top: '10%' } }} // Position the modal from the top
-            closeTimeoutMS={300}
+            contentLabel="تعديل كلمة المرور"
+            className="Modal"
+            overlayClassName="Overlay"
           >
-            <h2>تعديل كلمة المرور للمستخدم {selectedUser?.username}</h2>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div className="form-group">
-                <label htmlFor="password ms-auto">كلمة المرور الجديدة</label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="passwordConfirm">تأكيد كلمة المرور</label>
-                <input
-                  type="password"
-                  id="passwordConfirm"
-                  value={passwordConfirm}
-                  onChange={(e) => setPasswordConfirm(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handlePasswordChange}
-                className="btn btn-primary mt-3"
-              >
-                حفظ التعديلات
-              </button>
-            </form>
-            <button onClick={closeModal} className="btn btn-danger mt-3">
+            <h2>تعديل كلمة السر للمستخدم: {selectedUser.username}</h2>
+            <div className="form-group">
+              <label>كلمة المرور الجديدة:</label>
+              <input
+                type="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>تأكيد كلمة المرور الجديدة:</label>
+              <input
+                type="password"
+                className="form-control"
+                value={passwordConfirm}
+                onChange={(e) => setPasswordConfirm(e.target.value)}
+              />
+            </div>
+            <button onClick={handlePasswordChange} className="btn btn-primary">
+              تعديل كلمة المرور
+            </button>
+            <button onClick={closeModal} className="btn btn-secondary">
               إلغاء
             </button>
           </Modal>
@@ -353,53 +322,42 @@ const Users = () => {
           <Modal
             isOpen={true}
             onRequestClose={closeModal}
-            contentLabel="Create New User"
-            className="dark-mode-modal text-end container p-5"
-            overlayClassName="dark-mode-overlay"
-            style={{ overlay: { top: '10%' } }} // Position the modal from the top
-            closeTimeoutMS={300}
+            contentLabel="إضافة مستخدم جديد"
+            className="Modal"
+            overlayClassName="Overlay"
           >
-            <h2>إنشاء مستخدم جديد</h2>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div className="form-group">
-                <label htmlFor="newUsername">اسم المستخدم</label>
-                <input
-                  type="text"
-                  id="newUsername"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="newPassword">كلمة المرور</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="newPasswordConfirm">تأكيد كلمة المرور</label>
-                <input
-                  type="password"
-                  id="newPasswordConfirm"
-                  value={newPasswordConfirm}
-                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleCreateUser}
-                className="btn btn-primary mt-3"
-              >
-                إنشاء مستخدم
-              </button>
-            </form>
-            <button onClick={closeModal} className="btn btn-danger mt-3">
+            <h2>إضافة مستخدم جديد</h2>
+            <div className="form-group">
+              <label>اسم المستخدم:</label>
+              <input
+                type="text"
+                className="form-control"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>كلمة المرور:</label>
+              <input
+                type="password"
+                className="form-control"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>تأكيد كلمة المرور:</label>
+              <input
+                type="password"
+                className="form-control"
+                value={newPasswordConfirm}
+                onChange={(e) => setNewPasswordConfirm(e.target.value)}
+              />
+            </div>
+            <button onClick={handleCreateUser} className="btn btn-primary">
+              إضافة مستخدم جديد
+            </button>
+            <button onClick={closeModal} className="btn btn-secondary">
               إلغاء
             </button>
           </Modal>
@@ -410,51 +368,41 @@ const Users = () => {
           <Modal
             isOpen={true}
             onRequestClose={closeModal}
-            contentLabel="Edit User"
-            className="dark-mode-modal text-end container p-5"
-            overlayClassName="dark-mode-overlay"
-            style={{ overlay: { top: '10%' } }} // Position the modal from the top
-            closeTimeoutMS={300}
+            contentLabel="تعديل المستخدم"
+            className="Modal"
+            overlayClassName="Overlay"
           >
-            <h2>تعديل المستخدم {selectedUser?.username}</h2>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div className="form-group">
-                <label htmlFor="editUsername">اسم المستخدم</label>
-                <input
-                  type="text"
-                  id="editUsername"
-                  value={editUsername}
-                  onChange={(e) => setEditUsername(e.target.value)}
-                  className="form-control"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="editRole">الدور</label>
-                <select
-                  id="editRole"
-                  value={editRole}
-                  onChange={(e) => setEditRole(e.target.value)}
-                  className="form-control"
-                >
-                  <option value="user">مستخدم</option>
-                  <option value="admin">مسئول</option>
-                </select>
-              </div>
-              <button
-                type="button"
-                onClick={handleEditUser}
-                className="btn btn-primary mt-3"
+            <h2>تعديل المستخدم: {selectedUser.username}</h2>
+            <div className="form-group">
+              <label>اسم المستخدم:</label>
+              <input
+                type="text"
+                className="form-control"
+                value={editUsername}
+                onChange={(e) => setEditUsername(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>الدور:</label>
+              <select
+                className="form-control"
+                value={editRole}
+                onChange={(e) => setEditRole(e.target.value)}
               >
-                حفظ التعديلات
-              </button>
-            </form>
-            <button onClick={closeModal} className="btn btn-danger mt-3">
+                <option value="user">مستخدم</option>
+                <option value="admin">مسئول</option>
+              </select>
+            </div>
+            <button onClick={handleEditUser} className="btn btn-primary">
+              تعديل المستخدم
+            </button>
+            <button onClick={closeModal} className="btn btn-secondary">
               إلغاء
             </button>
           </Modal>
         )
       }
-    </div >
+    </div>
   );
 };
 

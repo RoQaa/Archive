@@ -25,7 +25,10 @@ const Header = () => {
         setUserRole(response.data.data.role);
         setUserName(response.data.data.username);
       } catch (error) {
-        console.error('Failed to fetch user profile:', error);
+        console.error('Failed to fetch user profile:', error)
+        error?.response?.status == 401 ? (
+          navigate('/')
+        ) : null
       }
     };
 
@@ -71,9 +74,8 @@ const Header = () => {
               <li className="nav-item">
                 <Link
                   to="/home"
-                  className={`nav-link ${
-                    location.pathname === '/home' ? 'active-page' : ''
-                  } text-light fw-bolder`}
+                  className={`nav-link ${location.pathname === '/home' ? 'active-page' : ''
+                    } text-light fw-bolder`}
                   aria-current="page"
                 >
                   الصفحة الرئيسية
@@ -83,9 +85,8 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     to={'/users'}
-                    className={`nav-link ${
-                      location.pathname === '/users' ? 'active-page' : ''
-                    } text-light fw-bolder`}
+                    className={`nav-link ${location.pathname === '/users' ? 'active-page' : ''
+                      } text-light fw-bolder`}
                     aria-current="page"
                   >
                     المستخدمين
@@ -95,9 +96,8 @@ const Header = () => {
               <li className="nav-item">
                 <Link
                   to={'/features'}
-                  className={`nav-link ${
-                    location.pathname === '/features' ? 'active-page' : ''
-                  } text-light fw-bolder`}
+                  className={`nav-link ${location.pathname === '/features' ? 'active-page' : ''
+                    } text-light fw-bolder`}
                   aria-current="page"
                 >
                   اضافة مواضيع و جهات

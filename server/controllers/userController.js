@@ -56,7 +56,7 @@ exports.deleteUserByAdmin = catchAsync(async (req, res, next) => {
 
   const state = await User.findById(req.params.id)
   if(state.role==='admin') return next(new AppError(`لا يمكن التعديل حالة المسئول`,400))
- const user = await User.findByIdAndUpdate(req.params.id,{isActive:req.body.active},{new:true,runValidators:true})
+ const user = await User.findByIdAndUpdate(req.params.id,{isActive:req.body.active},{new:true,runValidators:false})
   if (!user) {
     return next(new AppError(`هذا المستخدم غير موجود`, 404))
   }
