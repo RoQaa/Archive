@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const destinationSchema = new mongoose.Schema({
   name: {
     type: String,
+    trim:true,
     required: true,
     unique: true,
-    trim:true
+    
   },
 
 

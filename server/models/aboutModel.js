@@ -19,7 +19,7 @@ const aboutSchema = new mongoose.Schema({
 });
 
 
-aboutSchema.index({ name: "text" });
+//aboutSchema.index({ name: "text" });
 
 aboutSchema.pre(/^find/, function (next) {
   this.populate({ path: "subject" }).select('-__v')
