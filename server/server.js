@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const https = require('https'); // Use https instead of http
 
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -9,12 +11,18 @@ process.on('uncaughtException', (err) => {
 
 dotenv.config({ path: `./config.env` });
 
-const http = require('http');
 const app = require(`./app`);
-const server = http.createServer(app);
 
+// Read the SSL certificate and key
+const sslOptions = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
 
-const DB = process.env.DATABASE
+// Create an HTTPS server
+const server = https.createServer(sslOptions, app);
+
+const DB = process.env.DATABASE;
 mongoose.set("strictQuery", true);
 mongoose
   .connect(DB)
@@ -22,12 +30,11 @@ mongoose
     console.log('DB connection Successfully');
   });
 
-
-
 const port = process.env.PORT || 5000;
-const host =process.env.HOST
-server.listen(port,host, () => {
-  console.log(`App running on ${host}:${port}`);
+const host = process.env.HOST;
+
+server.listen(port, host, () => {
+  console.log(`App running on https://${host}:${port}`);
 });
 
 process.on('unhandledRejection', (err) => {

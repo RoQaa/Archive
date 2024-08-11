@@ -10,19 +10,6 @@
 },
 {
   "_id": {
-    "$oid": "66afe2a4b79d3a06e66f2dbd"
-  },
-  "username": "ayman",
-  "role": "user",
-  "password": "$2a$12$EEG0MPEctEM77f7uC4.qquYFzU4WWPZME0rgy1hUs4JR9EDS.Xqui",
-  "isActive": true,
-  "__v": 0,
-  "passwordChangedAt": {
-    "$date": "2024-08-05T11:37:59.039Z"
-  }
-},
-{
-  "_id": {
     "$oid": "66b071b0d06811d96c4014e1"
   },
   "username": "مجندين",
