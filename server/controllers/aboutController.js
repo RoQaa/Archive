@@ -10,6 +10,7 @@ exports.createAbout = catchAsync(async (req, res, next) => {
     ...req.body,
 
   };
+  newInventory.user=req.user.id;
   const doc = await About.create(newInventory);
 
   res.status(201).json({
@@ -27,7 +28,7 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
     filter.name = { $regex: name, $options: "i" };
   }
   filter.subject = req.params.id;
-
+  filter.user=req.user.id
 
   const data = await About.find(filter)
   if (!data || data.length === 0) return next(new AppError(`لا نوجد بيانات لعرضها`, 404));
@@ -40,7 +41,7 @@ exports.getAbouts = catchAsync(async (req, res, next) => {
 });
 
 exports.getOneAbout = catchAsync(async (req, res, next) => {
-  const doc = await About.findById(req.params.id);
+  const doc = await About.findOne({_id:req.params.id,user:req.user.id});
 
   if (!doc) return next(new AppError("هذا العنصر غير موجود", 404));
   res.status(200).json({

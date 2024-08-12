@@ -10,6 +10,7 @@ const aboutSchema = new mongoose.Schema({
   },
 
 
+  user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},
 
   subject: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +21,7 @@ const aboutSchema = new mongoose.Schema({
 
 
 //aboutSchema.index({ name: "text" });
-aboutSchema.index({ name: 1, subject: 1 }, { unique: true });
+aboutSchema.index({ name: 1, subject: 1,user:1 }, { unique: true });
 
 aboutSchema.pre(/^find/, function (next) {
   this.populate({ path: "subject" }).select('-__v')

@@ -8,8 +8,9 @@ exports.createSubject = catchAsync(async (req, res, next) => {
   const newInventory = {
     ...req.body,
   };
+  newInventory.user=req.user.id
   const doc = await Subject.create(newInventory);
-    await About.create({name:"لا يوجد",subject:doc._id})
+    await About.create({name:"لا يوجد",subject:doc._id,user:req.user.id})
   res.status(201).json({
     status: true,
     message: "تم انشاء الموضوع",
@@ -25,7 +26,7 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
     filter.name = { $regex: name, $options: "i" };
   }
   filter.destination = req.params.id;
-
+  filter.user=req.user.id
   const data = await Subject.find(filter).select("-__v");
   if (!data || data.length === 0) return next(new AppError(`لا توجد بيانات`, 404));
 
@@ -37,7 +38,7 @@ exports.getSubjects = catchAsync(async (req, res, next) => {
 });
 
 exports.getOneSubject = catchAsync(async (req, res, next) => {
-  const doc = await Subject.findById(req.params.id);
+  const doc = await Subject.findOne({_id:req.params.id,user:req.user.id});
 
   if (!doc) return next(new AppError("هذا الموضوع غير موجود", 404));
   res.status(200).json({

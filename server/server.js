@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const fs = require('fs');
-const https = require('https'); // Use https instead of http
+const http = require('http'); // Use https instead of http
 
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -20,7 +20,7 @@ const sslOptions = {
 };
 
 // Create an HTTPS server
-const server = https.createServer(sslOptions, app);
+const server = http.createServer( app);
 
 const DB = process.env.DATABASE;
 mongoose.set("strictQuery", true);
@@ -34,7 +34,7 @@ const port = process.env.PORT || 5000;
 const host = process.env.HOST;
 
 server.listen(port, host, () => {
-  console.log(`App running on https://${host}:${port}`);
+  console.log(`App running on http://${host}:${port}`);
 });
 
 process.on('unhandledRejection', (err) => {
